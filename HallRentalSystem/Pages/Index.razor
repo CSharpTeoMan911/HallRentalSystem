@@ -1,4 +1,9 @@
-﻿@page "/"
+﻿@using Classes.DTO;
+@using System.Text;
+@using Controllers;
+@inject IJSRuntime JS
+@inject NavigationManager Navigation_Manager;
+@page "/"
 
 <PageTitle>Index</PageTitle>
 
@@ -7,3 +12,23 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+
+@code{
+    protected async override void OnAfterRender(bool firstRender)
+    {
+        StringBuilder string_concatenator = new StringBuilder();
+
+        if(Program.Is_API_Testing_Mode == true)
+        {
+            Navigation_Manager.NavigateTo("/swagger/index.html", forceLoad:true);
+        }
+
+        HttpClient client = new HttpClient();
+        client.BaseAddress = new Uri("https://localhost:7158/");
+        var r = await client.PostAsync("auth/login/insert", null);
+
+        System.Diagnostics.Debug.WriteLine(await r.Content.ReadAsStringAsync());
+
+    }
+}
