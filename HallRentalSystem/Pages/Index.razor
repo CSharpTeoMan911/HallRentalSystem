@@ -1,34 +1,31 @@
 ﻿@using Classes.DTO;
 @using System.Text;
 @using Controllers;
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+@using HallRentalSystem.Components;
 @inject IJSRuntime JS
 @inject NavigationManager Navigation_Manager;
+@inject ProtectedLocalStorage LocalStorage;
+@inherits Classes.Shared_Data;
 @page "/"
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<div class="index_page_skeleton">
+    <h1 class="handwritten_page_title">Hall &nbsp;Rentals</h1>
+    <Expandable_Home_Page_Container/>
+</div>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
 
 
 @code{
-    protected async override void OnAfterRender(bool firstRender)
+
+    protected override async void OnAfterRender(bool firstRender)
     {
-        StringBuilder string_concatenator = new StringBuilder();
+        base.OnAfterRender(firstRender);
 
-        if(Program.Is_API_Testing_Mode == true)
-        {
-            Navigation_Manager.NavigateTo("/swagger/index.html", forceLoad:true);
-        }
-
-        HttpClient client = new HttpClient();
-        client.BaseAddress = new Uri("https://localhost:7158/");
-        var r = await client.PostAsync("auth/login/insert", null);
-
-        System.Diagnostics.Debug.WriteLine(await r.Content.ReadAsStringAsync());
-
+        if (await Shared_Functions.AuthenticationStateManagerFunctions.Get_If_User_Is_Logged_In(LocalStorage) == true)
+            StateHasChanged();
     }
 }

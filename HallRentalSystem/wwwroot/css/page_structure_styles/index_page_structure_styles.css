@@ -1,0 +1,17 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Ephesis&display=swap');
+
+h1.handwritten_page_title {
+    align-self: center;
+    font-family: 'Ephesis', cursive;
+    font-weight: bold;
+    font-size:calc(30px + 5vmin);
+}
+
+div.index_page_skeleton {
+    display:flex;
+    max-width:90%;
+    flex-direction:column;
+    align-self:center;
+    justify-self:center;
+    align-content:center;
+}

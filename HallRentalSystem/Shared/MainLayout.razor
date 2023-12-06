@@ -1,19 +1,28 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager Navigation_Manager;
 
 <PageTitle>HallRentalSystem</PageTitle>
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
+<div class="main_page_structure">
+    <div style="margin-bottom:10px;">
+        <NavMenu/>
     </div>
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        <div class="page_content_structure">
+            <div class="page_content">
+                @Body
+            </div>
         </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
     </main>
 </div>
+
+@code{
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (Program.Is_API_Testing_Mode == true)
+            Navigation_Manager.NavigateTo("/swagger/index.html", forceLoad: true);
+    }
+}

@@ -2,14 +2,21 @@ using HallRentalSystem.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.OpenApi.Models;
+using HallRentalSystem.Classes;
+using System.Runtime.CompilerServices;
 
 namespace HallRentalSystem
 {
-    internal class Program
+
+    internal class Program:Classes.Firebase
     {
+        protected static string authentication_state = "Login";
         public static bool Is_API_Testing_Mode;
+
         private static void Main(string[] args)
         {
+            InitiateFirebaseDatabase();
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -33,7 +40,7 @@ namespace HallRentalSystem
             }
             else
             {
-                Enable_Or_Disable_Swagger(app);
+                //Enable_Or_Disable_Swagger(app);
             }
 
             app.UseHttpsRedirection();

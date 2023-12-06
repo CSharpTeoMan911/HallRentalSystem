@@ -1,0 +1,19 @@
+﻿div.main_page_structure {
+    display: block;
+    width: 100vw;
+    min-height: 100vh;
+    background: linear-gradient(to right, #a8a8a8, #eaeaea);
+    background: -moz-linear-gradient(to right, #a8a8a8, #eaeaea);
+    background: -webkit-linear-gradient(to right, #a8a8a8, #eaeaea);
+}
+
+div.page_content_structure {
+    height:100%;
+    width:100%;
+}
+
+div.page_content {
+    display: flex;
+    flex-direction: column;
+    align-self:center;
+}
