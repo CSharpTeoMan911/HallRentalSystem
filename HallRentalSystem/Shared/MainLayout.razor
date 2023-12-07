@@ -1,9 +1,10 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager Navigation_Manager;
+@inject IJSRuntime JS
 
 <PageTitle>HallRentalSystem</PageTitle>
 
-<div class="main_page_structure">
+<div id="main_page_structure_div" class="main_page_structure">
     <div style="margin-bottom:10px;">
         <NavMenu/>
     </div>
@@ -18,9 +19,13 @@
 </div>
 
 @code{
-    protected override void OnAfterRender(bool firstRender)
+    protected override async void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
+
+        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
+        await module.InvokeAsync<string>("GradientFluctuationAnimationCancellation");
+        await module.InvokeAsync<string>("GradientFluctuationAnimation", "main_page_structure_div", "40", "65", "50");
 
         if (Program.Is_API_Testing_Mode == true)
             Navigation_Manager.NavigateTo("/swagger/index.html", forceLoad: true);

@@ -6,30 +6,30 @@ namespace HallRentalSystem.Controllers
 {
     [Route("/auth")]
     [ApiController]
-    public class Authentication_Controller : Controller, CRUD_Strategy<Customers, Customers, Customers, Customers, ActionResult<string>>
+    public class Authentication_Controller : Controller, CRUD_Strategy<Customers, string, Customers, string, ActionResult<string>>
     {
         [HttpDelete("delete-account")]
-        public Task<ActionResult<string>> Delete(Customers? data)
+        public Task<ActionResult<string>> Delete([FromQuery] string? data)
         {
-            throw new NotImplementedException();
+            return Task.FromResult<ActionResult<string>>("OK Delete");
         }
 
         [HttpGet("get-account")]
-        public Task<ActionResult<string>> Get(Customers? data)
+        public Task<ActionResult<string>> Get([FromQuery] string? data)
         {
-            throw new NotImplementedException();
+            return Task.FromResult<ActionResult<string>>(Content("OK Get"));
         }
 
         [HttpPost("insert-account")]
-        public Task<ActionResult<string>> Insert(Customers? data)
+        public Task<ActionResult<string>> Insert([FromQuery] Customers? data)
         {
-            throw new NotImplementedException();
+            return Task.FromResult<ActionResult<string>>("OK Insert");
         }
 
         [HttpPut("update-account")]
-        public Task<ActionResult<string>> Update(Customers? data)
+        public Task<ActionResult<string>> Update([FromQuery] Customers? data)
         {
-            throw new NotImplementedException();
+            return Task.FromResult<ActionResult<string>>("OK Update");
         }
     }
 }

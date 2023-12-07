@@ -2,9 +2,9 @@
     display: block;
     width: 100vw;
     min-height: 100vh;
-    background: linear-gradient(to right, #a8a8a8, #eaeaea);
-    background: -moz-linear-gradient(to right, #a8a8a8, #eaeaea);
-    background: -webkit-linear-gradient(to right, #a8a8a8, #eaeaea);
+    background: linear-gradient(to right, #242424, 40%, #6d6c6c 75%);
+    background: -moz-linear-gradient(to right, #333, 40%, #b4b2b2 75%);
+    background: -webkit-linear-gradient(to right, #333, 40%, #b4b2b2 75%);
 }
 
 div.page_content_structure {

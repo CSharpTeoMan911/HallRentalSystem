@@ -21,7 +21,7 @@
             }
         }
 
-        public Task<ReturnType> Get(InsertType? data)
+        public Task<ReturnType> Get(GetType? data)
         {
             if (_Strategy != null)
             {
@@ -33,7 +33,7 @@
             }
         }
 
-        public Task<ReturnType> Insert(GetType? data)
+        public Task<ReturnType> Insert(InsertType? data)
         {
             if (_Strategy != null)
             {
