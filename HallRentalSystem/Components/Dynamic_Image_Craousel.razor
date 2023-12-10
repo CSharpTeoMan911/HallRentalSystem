@@ -1,0 +1,33 @@
+﻿
+<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="max-width:30%;align-self:center;">
+    <div class="carousel-inner" style="border-radius:10px;">
+        @for (int i = 0; i < image_sources.Count; i++)
+        {
+            if(active == false)
+            {
+                <div class="carousel-item active">
+                    <img src="@image_sources[i].Item1" class="d-block w-100" alt="@image_sources[i].Item2">
+                </div>
+                active = true;
+            }
+            else
+            {
+                <div class="carousel-item">
+                    <img src="@image_sources[i].Item1" class="d-block w-100" alt="@image_sources[i].Item2">
+                </div>
+            }
+        }
+    </div>
+    <button class="carousel-control-prev" type="button" data-target="#carouselExampleControls" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-target="#carouselExampleControls" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    </button>
+</div>
+
+@code {
+    [Parameter]
+    public List<Tuple<string, string>> image_sources { get; set; } = new List<Tuple<string, string>>();
+    public bool active = false;
+}

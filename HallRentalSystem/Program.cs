@@ -40,7 +40,14 @@ namespace HallRentalSystem
             }
             else
             {
-                //Enable_Or_Disable_Swagger(app);
+                // COMMAND LINE SWAGGER API TESTING MODE
+                //
+                Enable_Or_Disable_Swagger(app);
+
+
+                // PROGRAMATICALLY SET SWAGGER API TESTING MODE
+                //
+                //Enable_Or_Disable_Swagger_Programatically(app, "y");
             }
 
             app.UseHttpsRedirection();
@@ -65,6 +72,27 @@ namespace HallRentalSystem
             string? input = Console.ReadLine()?.ToLower();
             Console.Clear();
 
+            switch (input)
+            {
+                case "y":
+                    app.UseSwagger();
+                    app.UseSwaggerUI(c =>
+                    {
+                        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                    });
+                    Is_API_Testing_Mode = true;
+                    break;
+                case "n":
+                    return;
+                default:
+                    Enable_Or_Disable_Swagger(app);
+                    break;
+            }
+        }
+
+
+        private static void Enable_Or_Disable_Swagger_Programatically(WebApplication app, string input)
+        {
             switch (input)
             {
                 case "y":
