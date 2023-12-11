@@ -1,4 +1,4 @@
-using HallRentalSystem.Data;
+﻿using HallRentalSystem.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.OpenApi.Models;
@@ -45,9 +45,9 @@ namespace HallRentalSystem
                 Enable_Or_Disable_Swagger(app);
 
 
-                // PROGRAMATICALLY SET SWAGGER API TESTING MODE
+                // PROGRAMATICALLY SET SWAGGER API TESTING MODE ( "y" for yes; "n" for no; )
                 //
-                //Enable_Or_Disable_Swagger_Programatically(app, "y");
+                //Enable_Or_Disable_Swagger_Programatically(app, "n");
             }
 
             app.UseHttpsRedirection();
@@ -56,12 +56,9 @@ namespace HallRentalSystem
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                app.MapControllers();
-                app.MapBlazorHub();
-                app.MapFallbackToPage("/_Host");
-            });
+            app.MapControllers();
+            app.MapBlazorHub();
+            app.MapFallbackToPage("/_Host");
 
             app.Run();
         }

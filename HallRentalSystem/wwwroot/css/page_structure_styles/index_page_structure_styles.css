@@ -30,10 +30,9 @@ div.main_index_page_panel_content {
     width: 100%;
     height: 100%;
     margin-bottom: 20px;
-    background: url('https://paparadu.my.canva.site/hallrentalservice/images/41b93c6080475e1ba10e6d1884c2e8b5.jpg');
-    background-size: 100% 100%;
+    background: linear-gradient(to right, #494848, #9a9a9a);
     opacity:0.5;
-    overflow-y: scroll;
+    overflow-y: auto;
     padding: 10px;
 }
 
