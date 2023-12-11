@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Firebase.Database;
+using Firebase.Storage;
 using System.Text;
 using System.Text.Unicode;
 
@@ -9,20 +10,25 @@ namespace HallRentalSystem.Classes
     public class Firebase : Attribute
     {
         private static readonly string env_file_name = "FirebaseEnv.json";
-        private static readonly string env_file_format = "{\r\n  \"FirebaseDatabaseURL\": \"YOUR_DATABASE_URL\",\r\n  \"FirebaseSecret\": \"YOUR_DATABASE_SECRET\"\n  ....\n  ....\n  ....\r\n}\r\n";
+        private static readonly string env_file_format = "{\r\n  \"FirebaseDatabaseURL\": \"YOUR_DATABASE_URL\",\r\n  \"FirebaseBucketURL\" : \"YOUR_STORAGE_BUCKET_URL\",\r\n  \"FirebaseSecret\": \"YOUR_FIREBASE_PROJECT_API_SECRET\"\r\n}";
 
         public static FirebaseClient? firebaseClient = null;
+        public static FirebaseStorage? firebaseStorage = null;
 
         public Firebase()
         {
 
         }
 
-        protected static async void InitiateFirebaseDatabase()
+        protected static async void InitiateFirebaseDatabaseAndStorage()
         {
             Firebase_Variables variables = await GetFirebaseEnvironmentValues();
+
             firebaseClient = new FirebaseClient(variables.FirebaseDatabaseURL, new FirebaseOptions { AuthTokenAsyncFactory = Task<string?> () => { return Task.FromResult(variables.FirebaseSecret); } });
+            //firebaseStorage = new FirebaseStorage()
         }
+
+
 
 
         private static async Task<Firebase_Variables> GetFirebaseEnvironmentValues()

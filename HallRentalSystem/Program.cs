@@ -15,7 +15,7 @@ namespace HallRentalSystem
 
         private static void Main(string[] args)
         {
-            InitiateFirebaseDatabase();
+            InitiateFirebaseDatabaseAndStorage();
 
             var builder = WebApplication.CreateBuilder(args);
 
