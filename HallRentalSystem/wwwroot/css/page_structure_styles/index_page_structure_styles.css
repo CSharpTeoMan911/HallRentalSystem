@@ -30,9 +30,37 @@ div.main_index_page_panel_content {
     width: 100%;
     height: 100%;
     margin-bottom: 20px;
-    background: linear-gradient(to right, #000000bc, #2c2c2cc9);
-    overflow-y: scroll;
+    background: linear-gradient(to right, #494848, #9a9a9a);
+    opacity:0.5;
+    overflow-y: auto;
     padding: 10px;
+}
+
+/* width */
+.main_index_page_panel_content::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.main_index_page_panel_content::-webkit-scrollbar-track {
+    background: black;
+    border-radius:10px;
+}
+
+/* Handle */
+.main_index_page_panel_content::-webkit-scrollbar-thumb {
+    background: #888;
+    background-color: black; /* color of the scroll thumb */
+    border-radius: 20px; /* roundness of the scroll thumb */
+    border: 3px solid grey;
+}
+
+/* Handle on hover */
+.main_index_page_panel_content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    background-color: white; /* color of the scroll thumb */
+    border-radius: 20px; /* roundness of the scroll thumb */
+    border: 3px solid grey;
 }
 
 .custom_jumbotron {
@@ -41,5 +69,5 @@ div.main_index_page_panel_content {
     margin-top: 30px;
     justify-self:flex-end;
     align-self: center;
-    height:72vh;
+    height:80vh;
 }

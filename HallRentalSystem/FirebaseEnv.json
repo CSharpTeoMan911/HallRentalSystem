@@ -1,4 +1,5 @@
 {
-  "FirebaseDatabaseURL": "!!! NOT SET !!!",
-  "FirebaseSecret": "!!! NOT SET !!!"
+  "FirebaseDatabaseURL": "https://hallrentalproject-default-rtdb.europe-west1.firebasedatabase.app",
+  "FirebaseBucketURL": "hallrentalproject.appspot.com",
+  "FirebaseSecret": "Z2IbnC04EKNZVtWsEq4mYx3mpv9hCzb4E5aEn3Me"
 }

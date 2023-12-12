@@ -1,4 +1,4 @@
-using HallRentalSystem.Data;
+﻿using HallRentalSystem.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.OpenApi.Models;
@@ -15,7 +15,7 @@ namespace HallRentalSystem
 
         private static void Main(string[] args)
         {
-            InitiateFirebaseDatabase();
+            InitiateFirebaseDatabaseAndStorage();
 
             var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +40,7 @@ namespace HallRentalSystem
             }
             else
             {
-               Enable_Or_Disable_Swagger(app);
+                Enable_Or_Disable_Swagger(app);
             }
 
             app.UseHttpsRedirection();
@@ -49,12 +49,9 @@ namespace HallRentalSystem
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                app.MapControllers();
-                app.MapBlazorHub();
-                app.MapFallbackToPage("/_Host");
-            });
+            app.MapControllers();
+            app.MapBlazorHub();
+            app.MapFallbackToPage("/_Host");
 
             app.Run();
         }
@@ -65,6 +62,27 @@ namespace HallRentalSystem
             string? input = Console.ReadLine()?.ToLower();
             Console.Clear();
 
+            switch (input)
+            {
+                case "y":
+                    app.UseSwagger();
+                    app.UseSwaggerUI(c =>
+                    {
+                        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                    });
+                    Is_API_Testing_Mode = true;
+                    break;
+                case "n":
+                    return;
+                default:
+                    Enable_Or_Disable_Swagger(app);
+                    break;
+            }
+        }
+
+
+        private static void Enable_Or_Disable_Swagger_Programatically(WebApplication app, string input)
+        {
             switch (input)
             {
                 case "y":
