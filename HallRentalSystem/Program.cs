@@ -42,7 +42,7 @@ namespace HallRentalSystem
             {
                 // COMMAND LINE SWAGGER API TESTING MODE
                 //
-                Enable_Or_Disable_Swagger(app);
+                //Enable_Or_Disable_Swagger(app);
 
 
                 // PROGRAMATICALLY SET SWAGGER API TESTING MODE ( "y" for yes; "n" for no; )
