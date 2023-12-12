@@ -1,6 +1,7 @@
 # Dependencies
-![Dependencies](https://github.com/CSharpTeoMan911/HallRentalSystem/assets/87245086/1bd7c426-72a0-4db0-b547-3d946d0edf3e)
+![Dependencies](https://github.com/CSharpTeoMan911/HallRentalSystem/assets/87245086/2f57440d-e0eb-44d1-ac51-36c83ef0dfb6)
 * FirebaseDatabase.net
+* FirebaseStorage.net
 * Newtonsoft.Json
 * Swashbuckle.AspNetCore
 
