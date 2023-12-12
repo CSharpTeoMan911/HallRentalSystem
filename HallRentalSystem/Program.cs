@@ -40,7 +40,7 @@ namespace HallRentalSystem
             }
             else
             {
-                Enable_Or_Disable_Swagger(app);
+                //Enable_Or_Disable_Swagger(app);
             }
 
             app.UseHttpsRedirection();
