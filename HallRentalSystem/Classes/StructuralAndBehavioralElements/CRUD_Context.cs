@@ -1,4 +1,4 @@
-﻿namespace HallRentalSystem.Classes
+﻿namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
 {
     public class CRUD_Context<InsertType, GetType, UpdateType, DeleteType, ReturnType> : CRUD_Strategy<InsertType, GetType, UpdateType, DeleteType, ReturnType>
     {

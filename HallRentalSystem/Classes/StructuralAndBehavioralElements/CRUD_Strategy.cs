@@ -1,4 +1,4 @@
-﻿namespace HallRentalSystem.Classes
+﻿namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
 {
     public interface CRUD_Strategy<InsertType, GetType, UpdateType, DeleteType, ReturnType>
     {

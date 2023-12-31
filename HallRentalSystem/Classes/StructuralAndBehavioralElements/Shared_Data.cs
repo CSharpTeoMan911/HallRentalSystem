@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
-namespace HallRentalSystem.Classes
+namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
 {
     public class Shared_Data : ComponentBase
     {
         protected static string authentication_state = "Login";
         protected class Shared_Functions
         {
-            public class AuthenticationStateManagerFunctions: AuthenticationStateManager
+            public class AuthenticationStateManagerFunctions : AuthenticationStateManager
             {
                 public static async Task<bool> Get_If_User_Is_Logged_In(ProtectedLocalStorage LocalStorage)
                 {
-                    if(await _Get_If_User_Is_Logged_In(LocalStorage) == true)
+                    if (await _Get_If_User_Is_Logged_In(LocalStorage) == true)
                     {
                         if (authentication_state != "Logout")
                         {

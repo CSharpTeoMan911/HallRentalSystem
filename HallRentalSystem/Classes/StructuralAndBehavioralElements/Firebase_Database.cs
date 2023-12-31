@@ -1,13 +1,12 @@
-﻿using Newtonsoft.Json;
-using Firebase.Database;
+﻿using Firebase.Database;
 using Firebase.Storage;
+using Newtonsoft.Json;
 using System.Text;
-using System.Text.Unicode;
 
-namespace HallRentalSystem.Classes
+namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
 {
     [AttributeUsage(AttributeTargets.All)]
-    public class Firebase : Attribute
+    public class Firebase_Database : Attribute
     {
         private static readonly string env_file_name = "FirebaseEnv.json";
         private static readonly string env_file_format = "{\r\n  \"FirebaseDatabaseURL\": \"YOUR_DATABASE_URL\",\r\n  \"FirebaseBucketURL\" : \"YOUR_STORAGE_BUCKET_URL\",\r\n  \"FirebaseSecret\": \"YOUR_FIREBASE_PROJECT_API_SECRET\"\r\n}";
@@ -15,17 +14,16 @@ namespace HallRentalSystem.Classes
         public static FirebaseClient? firebaseClient = null;
         public static FirebaseStorage? firebaseStorage = null;
 
-        public Firebase()
+        public Firebase_Database()
         {
 
         }
 
-        protected static async void InitiateFirebaseDatabaseAndStorage()
+        protected static async void InitiateFirebaseDatabase()
         {
             Firebase_Variables variables = await GetFirebaseEnvironmentValues();
 
             firebaseClient = new FirebaseClient(variables.FirebaseDatabaseURL, new FirebaseOptions { AuthTokenAsyncFactory = Task<string?> () => { return Task.FromResult(variables.FirebaseSecret); } });
-            //firebaseStorage = new FirebaseStorage()
         }
 
 
@@ -67,7 +65,7 @@ namespace HallRentalSystem.Classes
 
 
             if (variables == null)
-                    variables = new Firebase_Variables();
+                variables = new Firebase_Variables();
 
             return variables;
         }

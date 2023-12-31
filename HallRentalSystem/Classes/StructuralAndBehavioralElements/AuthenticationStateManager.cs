@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
-namespace HallRentalSystem.Classes
+namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
 {
     public class AuthenticationStateManager
     {

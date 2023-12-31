@@ -1,4 +1,4 @@
-﻿namespace HallRentalSystem.Classes.DTO
+﻿namespace HallRentalSystem.Classes
 {
     public class Bookings
     {
