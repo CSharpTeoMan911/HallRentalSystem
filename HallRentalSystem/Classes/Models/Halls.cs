@@ -1,6 +1,6 @@
-﻿namespace HallRentalSystem.Classes
+﻿namespace HallRentalSystem.Classes.Models
 {
-    public class Hall_ID
+    public class Hall_ID_Value
     {
         public string? Name { get; set; }
         public string? Location { get; set; }
@@ -8,8 +8,6 @@
         public List<string>? Hall_Pictures { get; set; }
         public List<string>? Amenities { get; set; }
     }
-    public class Halls
-    {
-        public Dictionary<string, Hall_ID>? Hall_Id { get; set; }
-    }
+
+    public class Halls:Dictionary<string, Hall_ID_Value> { }
 }

@@ -9,27 +9,27 @@ namespace HallRentalSystem.Controllers
     public class Authentication_Controller : Controller, CRUD_API_Strategy<Customers, string, Customers, string>
     {
         [HttpDelete("delete-account")]
-        public Task<ActionResult<string>> Delete([FromQuery] string? data)
+        public Task<ActionResult<string?>> Delete([FromQuery] string? data)
         {
-            return Task.FromResult<ActionResult<string>>(Content("OK Get"));
+            return Task.FromResult<ActionResult<string?>>(Content("OK Get"));
         }
 
         [HttpGet("get-account")]
-        public Task<ActionResult<string>> Get([FromQuery] string? data)
+        public Task<ActionResult<string?>> Get([FromQuery] string? data)
         {
-            return Task.FromResult<ActionResult<string>>(Content("OK Get"));
+            return Task.FromResult<ActionResult<string?>>(Content("OK Get"));
         }
 
         [HttpPost("insert-account")]
-        public Task<ActionResult<string>> Insert([FromQuery] Customers? data)
+        public Task<ActionResult<string?>> Insert([FromQuery] Customers? data)
         {
-            return Task.FromResult<ActionResult<string>>(Content("OK Get"));
+            return Task.FromResult<ActionResult<string?>>(Content("OK Get"));
         }
 
         [HttpPut("update-account")]
-        public Task<ActionResult<string>> Update([FromQuery] Customers? data)
+        public Task<ActionResult<string?>> Update([FromQuery] Customers? data)
         {
-            return Task.FromResult<ActionResult<string>>(Content("OK Get"));
+            return Task.FromResult<ActionResult<string?>>(Content("OK Get"));
         }
     }
 }
