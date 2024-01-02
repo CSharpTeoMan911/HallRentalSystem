@@ -30,7 +30,8 @@ namespace HallRentalSystem.Controllers
         [HttpGet("get-halls-page")]
         public async Task<ActionResult<string?>> Get([FromQuery] Halls_Pagination? data)
         {
-            int elements_per_page = 3;
+            Console.WriteLine("Location: " + data.location_filter);
+            int elements_per_page = 50;
             string? serialised_result = null;
 
             switch (data?.page_index)

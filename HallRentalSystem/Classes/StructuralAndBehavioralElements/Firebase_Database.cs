@@ -22,7 +22,6 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
         protected static async void InitiateFirebaseDatabase()
         {
             Firebase_Variables variables = await GetFirebaseEnvironmentValues();
-
             firebaseClient = new FirebaseClient(variables.FirebaseDatabaseURL, new FirebaseOptions { AuthTokenAsyncFactory = Task<string?> () => { return Task.FromResult(variables.FirebaseSecret); } });
         }
 
@@ -79,6 +78,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
             {
                 byte[] file_contents = Convert.FromBase64String(Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(new Firebase_Variables(), Formatting.Indented))));
                 await file_writer.WriteAsync(file_contents, 0, file_contents.Length);
+                await file_writer.FlushAsync();
             }
             catch
             {

@@ -10,6 +10,16 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Page_Navigati
     {
         public static async Task<string?> Navigate_To_Previous_Page(Halls_Pagination data, int elements_per_page)
         {
+            string? serialised_json_result = null;
+            string? serialised_result = null;
+
+            ChildQuery? reference = Firebase_Database.firebaseClient?.Child("Halls/Hall_ID");
+            OrderQuery ordered_values = reference.OrderBy("Location");
+
+            if (data.previous_pages_tokens != null)
+            {
+
+            }
             return "";
         }
 
@@ -23,15 +33,15 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Page_Navigati
 
             if (reference != null)
             {
-                if (data.page_token != null)
+                if (data.current_page_token != null)
                 {
                     if (data.location_filter != null)
                     {
-                        serialised_json_result = await ordered_values.EqualTo(data.location_filter).LimitToFirst(elements_per_page).StartAt(data.page_token).OnceAsJsonAsync(); ;
+                        serialised_json_result = await ordered_values.EqualTo(data.location_filter).LimitToFirst(elements_per_page).StartAt(data.current_page_token).OnceAsJsonAsync(); ;
                     }
                     else
                     {
-                        serialised_json_result = await ordered_values.LimitToFirst(elements_per_page).StartAt(data.page_token).OnceAsJsonAsync();
+                        serialised_json_result = await ordered_values.LimitToFirst(elements_per_page).StartAt(data.current_page_token).OnceAsJsonAsync();
                     }
                 }
                 else
@@ -57,7 +67,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Page_Navigati
                     //////////////////
                     // SERVER DEBUG //
                     //////////////////
-                    Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(halls, Newtonsoft.Json.Formatting.Indented));
+                    //Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(halls, Newtonsoft.Json.Formatting.Indented));
 
                     IEnumerable<string>? keys = halls?.Keys;
 
@@ -103,6 +113,50 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Page_Navigati
 
         public static async Task<string?> Navigate_To_Next_Page(Halls_Pagination data, int elements_per_page)
         {
+            string? serialised_json_result = null;
+            string? serialised_result = null;
+
+            ChildQuery? reference = Firebase_Database.firebaseClient?.Child("Halls/Hall_ID");
+            OrderQuery ordered_values = reference.OrderBy("Location");
+            
+            if (reference != null)
+            {
+                if (data.next_page_token != null)
+                {
+                    if (data.location_filter != null)
+                    {
+                        serialised_json_result = await ordered_values.EqualTo(data.location_filter).LimitToFirst(elements_per_page).StartAt(data.next_page_token).OnceAsJsonAsync(); ;
+                    }
+                    else
+                    {
+                        serialised_json_result = await ordered_values.LimitToFirst(elements_per_page).StartAt(data.next_page_token).OnceAsJsonAsync();
+                    }
+
+                    if (serialised_json_result != null)
+                    {
+                        Halls_Result? result = new Halls_Result();
+                        Halls? halls = new Halls();
+
+                        halls = Newtonsoft.Json.JsonConvert.DeserializeObject<Halls>(serialised_json_result);
+
+                        //////////////////
+                        // SERVER DEBUG //
+                        //////////////////
+                        Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(halls, Newtonsoft.Json.Formatting.Indented));
+
+                        IEnumerable<string>? keys = halls?.Keys;
+
+                        if (halls != null && keys?.Count() > 0)
+                        {
+                            if (keys.ElementAt(keys.Count() - 1) != data.current_page_token)
+                            {
+
+                            }
+                        }
+                    }
+                }
+            }
+
             return "";
         }
     }
