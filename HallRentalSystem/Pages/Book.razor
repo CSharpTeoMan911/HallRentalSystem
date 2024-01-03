@@ -54,64 +54,15 @@
         Halls_Pagination p = new Halls_Pagination();
         p.location_filter = "London";
 
-        TestObject obj = new TestObject();
-        obj.s = "Hall test string";
-        obj.t = new List<InnerTestObject>()
-        {
-            new InnerTestObject()
-            {
-                sTring = "Testing query formater",
-                t = new List<string>()
-                {
-                    "query formater test 1",
-                    "query formater test 2",
-                    "query formater test 3"
-                }
-            },
-            new InnerTestObject()
-            {
-                sTring = "Testing query formater",
-                t = new List<string>()
-                {
-                    "query formater test 4",
-                    "query formater test 5",
-                    "query formater test 6"
-                }
-            }
-        };
-        obj.trasnsistiveObject = new TrasnsistiveObject()
-        {
-            t = new List<InnerTestObject>()
-            {
-                new InnerTestObject()
-                {
-                    sTring = "Testing transistive query formater",
-                    t = new List<string>()
-                    {
-                        "query transistive formater test 1",
-                        "query transistive formater test 2",
-                        "query transistive formater test 3"
-                    }
-                },
-                new InnerTestObject()
-                {
-                    sTring = "Testing transistive query formater",
-                    t = new List<string>()
-                    {
-                        "query transistive formater test 4",
-                        "query transistive formater test 5",
-                        "query transistive formater test 6"
-                    }
-                }
-            }
-        };
-
-
-
+        // FORMAT THE OBJECT INTO A QUERY STRING AND SEND IT TO THE API ENDPOINT
         System.Net.Http.HttpClient client = new HttpClient();
         client.BaseAddress = new Uri(Navigation_Manager.BaseUri);
-       
-        HttpResponseMessage m = await client.GetAsync("auth/get-account?" + (await Query_Formater.ObjectQueryFormatter<TestObject>(obj)));
+
+        //await Query_Formater.ObjectQueryFormatter<TestObject>(obj);
+
+        HttpResponseMessage m = await client.GetAsync("auth/get-account?");
+
+        // READ THE API ENDPOINT RESPONSE 
         Console.WriteLine(await m.Content.ReadAsStringAsync());
     }
 

@@ -4,25 +4,6 @@ using System.Text;
 
 namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters
 {
-    public class InnerTestObject
-    {
-        public string sTring { get; set; }
-        public List<string> t { get; set; }
-    }
-
-    public class TrasnsistiveObject
-    {
-        public List<InnerTestObject>? t { get; set; }
-    }
-    public class TestObject
-    {
-        public string? s { get; set; }
-
-        public TrasnsistiveObject? trasnsistiveObject { get; set; }
-
-        public List<InnerTestObject>? t { get; set; }
-    }
-
     public class Query_Formater
     {
         public static async Task<string> ObjectQueryFormatter<Object>(Object? value)
@@ -59,29 +40,59 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters
                 // STORE THE CURRENT PROPRIETY OF THE "JArray" OBJECT
                 JToken current_element = json_value.ElementAt(i);
 
+                // BUILD THE ARRAYS CURRENT PROPRIETY NAME
+
+                // IF THE ARRAY IS NOT THE CHILD OF AN OBJECT THE PROPRIETY NAME WILL BE SET BY
+                // USING THE ARRAY PROPRIETY NAME IS SET IN THE "Query_Object_Parameters_Extractor"
+                // METHOD AND PASSED TO THIS METHOD THROUGH THE "name" PARAMETER.
+                // (e.g. arrayValues[0], arrayValues[1] ...)
+
+                // IF THE ARRAY IS THE CHILD OF AN OBJECT THE PARENT TO CHILD RELATION IS SET IN THE
+                // "Query_Object_Parameters_Extractor" METHOD AND PASSED TO THIS METHOD THROUGH
+                // THE "name" PARAMETER.
+                // (e.g. object1.arrayValues[0], object1.arrayValues[1] ...)
+                // (e.g. object1.object2.arrayValues[0], object1.object2.arrayValues[1] ...)
+
                 name_builder.Append(name);
                 name_builder.Append("[");
                 name_builder.Append(i);
                 name_builder.Append("]");
 
+                // STORE THE PROCESSED PROPRIETY NAME IN A VARIABLE
                 string name_result = name_builder.ToString();
+
+                // CLEAR THE "StringBuilder" OBJECT
                 name_builder.Clear();
 
+                // IF THE CURRENT PROPRIETY IS A JSON OBJECT
                 if (current_element.Type == JTokenType.Object)
                 {
+                    // CALL THE "Query_Object_Parameters_Extractor" METHOD AND PASS THE CURRENT OBJECT AS THE
+                    // "JObject" OBJECT, THE "query" "StringBuilder" AS A REFERENCE, AND THE "name_result".
                     await Query_Object_Parameters_Extractor(query, (JObject)current_element, name_result);
                 }
+                // IF THE CURRENT PROPRIETY IS A JSON ARRAY
                 else if (current_element.Type == JTokenType.Array)
                 {
+                    // PERFORM RECURSION TO EXTRACT THE VALUES
+                    // FROM THE CURRENT "JArray" PROPRIETY.
                     await Query_Array_Parameters_Extractor(query, (JArray)current_element, name_result);
                 }
                 else
                 {
+                    // FORMAT THE NAME OF THE PROPRIETY AND ITS VALUE AND ADD THEM IN THE "query" "StringBuilder"
+                    // (e.g. PROPRIETY NAME: Query Test;
+                    //       PROPRIETY VALUE: Testing;
+                    //       RESULTING VALUE: Query+Test=Testing)
+
                     query.Append(System.Web.HttpUtility.UrlEncode(name_result));
                     query.Append("=");
                     query.Append(System.Web.HttpUtility.UrlEncode(json_value.ElementAt(i).ToString()));
                 }
 
+                // IF THE CURRENT JSON PROPRIETY IS NOT THE LAST ONE, APPEND "&"
+                // TO CONCATENATE THE PRECEDING ELEMENTS TO IT
+                // (e.g Query+Test=Testing&PRECEDING=1 )
                 if (i < json_value.Count - 1)
                 {
                     query.Append("&");
@@ -179,8 +190,8 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters
             }
             finally
             {
+                // DEALLOCATE THE "proprieties_enumerator" OBJECT FROM MEMORY
                 proprieties_enumerator?.Dispose();
-                name_builder.Clear();
             }
 
             return true;
