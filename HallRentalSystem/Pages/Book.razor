@@ -41,6 +41,8 @@
 
 
 @code{
+    private int page_index = 0;
+
     protected override async void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
@@ -51,19 +53,30 @@
 
     private async void LocationOnChange(string? value)
     {
+        StringBuilder url_formatter = new StringBuilder();
+
         Halls_Pagination p = new Halls_Pagination();
-        p.location_filter = "London";
+        p.location_filter = value;
+        p.page_index = page_index;
+
+        string object_formated_to_http_query_format = await Query_Formater.ObjectQueryFormatter<Halls_Pagination>(p);
 
         // FORMAT THE OBJECT INTO A QUERY STRING AND SEND IT TO THE API ENDPOINT
         System.Net.Http.HttpClient client = new HttpClient();
         client.BaseAddress = new Uri(Navigation_Manager.BaseUri);
 
-        //await Query_Formater.ObjectQueryFormatter<TestObject>(obj);
+        url_formatter.Append("halls/get-halls-page?");
+        url_formatter.Append(object_formated_to_http_query_format);
 
-        HttpResponseMessage m = await client.GetAsync("auth/get-account?");
+
+        HttpResponseMessage m = await client.GetAsync(url_formatter.ToString());
+        string halls_page = await m.Content.ReadAsStringAsync();
 
         // READ THE API ENDPOINT RESPONSE 
-        Console.WriteLine(await m.Content.ReadAsStringAsync());
+        Console.WriteLine(halls_page);
+
+        Halls_Result? halls_payload = new Halls_Result();
+        halls_payload = Newtonsoft.Json.JsonConvert.DeserializeObject<Halls_Result>(halls_page);
     }
 
     private void HallOnChange(string? value)

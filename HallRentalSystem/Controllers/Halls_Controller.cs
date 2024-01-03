@@ -1,11 +1,7 @@
-﻿using Firebase.Database.Query;
-using HallRentalSystem.Classes.Models;
-using HallRentalSystem.Classes.StructuralAndBehavioralElements.Page_Navigation;
+﻿using HallRentalSystem.Classes.StructuralAndBehavioralElements.Page_Navigation;
 using HallRentalSystem.Classes.API_Parameters;
 using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography.Xml;
-using System;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,6 +27,7 @@ namespace HallRentalSystem.Controllers
         public async Task<ActionResult<string?>> Get([FromQuery] Halls_Pagination? data)
         {
             Console.WriteLine("Location: " + data.location_filter);
+            Console.WriteLine("Page: " + data.page_index);
             int elements_per_page = 50;
             string? serialised_result = null;
 

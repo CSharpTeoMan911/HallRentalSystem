@@ -1,8 +1,6 @@
 ﻿using Firebase.Database.Query;
 using HallRentalSystem.Classes.API_Parameters;
 using HallRentalSystem.Classes.Models;
-using System.Security.Cryptography.Xml;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Page_Navigation
 {
