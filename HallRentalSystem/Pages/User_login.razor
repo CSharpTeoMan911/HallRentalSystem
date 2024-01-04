@@ -1,20 +1,24 @@
-﻿@using Classes;
+﻿@using Classes.DTO;
 @using System.Text;
 @using Controllers;
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 @using HallRentalSystem.Components;
-@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 @inject IJSRuntime JS
 @inject NavigationManager Navigation_Manager;
 @inject ProtectedLocalStorage LocalStorage;
-@page "/"
+@inherits Classes.Shared_Data;
+@page "/User_login"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Login</PageTitle>
 
 
-<div class="index_page_skeleton">
-    <h1 class="handwritten_page_title">Hall Rentals</h1>
-    <Expandable_Home_Page_Container/>
+<div class="index_page_skeleton" style="text-align:center;">
+
+    <h1 class="handwritten_page_title">Login </h1>
+    <Login_Component></Login_Component>
+    
+    
+    
 </div>
 
 
@@ -23,7 +27,8 @@
     protected override async void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
-        if (await Shared_Data.auth_manager.Get<bool>(LocalStorage) == true)
+
+        if (await Shared_Functions.AuthenticationStateManagerFunctions.Get_If_User_Is_Logged_In(LocalStorage) == true)
             StateHasChanged();
     }
 }
