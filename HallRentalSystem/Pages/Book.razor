@@ -1,12 +1,15 @@
-﻿@using HallRentalSystem.Classes.DTO;
+﻿@using HallRentalSystem.Classes;
 @using System.Text;
 @using Controllers;
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 @using HallRentalSystem.Components;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+@using HallRentalSystem.Classes.API_Parameters;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
 @inject IJSRuntime JS
 @inject NavigationManager Navigation_Manager;
 @inject ProtectedLocalStorage LocalStorage;
-@inherits Classes.Shared_Data;
+@inherits Shared_Data;
 @page "/book"
 
 
@@ -15,14 +18,14 @@
 
 <div class="index_page_skeleton">
     <h1 class="handwritten_page_title">Book a Hall</h1>
-    <select class="form-select" aria-label="Default select example" style="width: 200px; height: 40px; font-size: 16px; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">
-        <option selected>Select Location</option>
-        <option value="1">London</option>
-        <option value="2">Crawley</option>
-        <option value="3">Liverpool</option>
-        <option value="4">Manchester</option>
+    <select @onchange=@((changed_value)=>LocationOnChange(changed_value?.Value?.ToString())) class="form-select" aria-label="Default select example" style="width: 200px; height: 40px; font-size: 16px; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">
+        <option selected>All</option>
+        <option value="London">London</option>
+        <option value="Crawley">Crawley</option>
+        <option value="Liverpool">Liverpool</option>
+        <option value="Manchester">Manchester</option>
     </select>
-    <select class="form-select" aria-label="Default select example" style="width: 200px; height: 40px; font-size: 16px; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">
+    <select @onchange=@((changed_value)=>HallOnChange(changed_value?.Value?.ToString())) class="form-select" aria-label="Default select example" style="width: 200px; height: 40px; font-size: 16px; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">
         <option selected>Select Hall</option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -38,11 +41,48 @@
 
 
 @code{
+    private int page_index = 0;
+
     protected override async void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
-
-        if (await Shared_Functions.AuthenticationStateManagerFunctions.Get_If_User_Is_Logged_In(LocalStorage) == true)
+        if (await Shared_Data.auth_manager.Get<bool>(LocalStorage) == true)
             StateHasChanged();
+    }
+
+    private async void LocationOnChange(string? value)
+    {
+        
+        //Shared_Data.Shared_Functions.PageContextControls.
+         
+        StringBuilder url_formatter = new StringBuilder();
+
+        Halls_Pagination p = new Halls_Pagination();
+        p.location_filter = value;
+        p.page_index = page_index;
+
+        string object_formated_to_http_query_format = await Query_Formater.ObjectQueryFormatter<Halls_Pagination>(p);
+
+        // FORMAT THE OBJECT INTO A QUERY STRING AND SEND IT TO THE API ENDPOINT
+        System.Net.Http.HttpClient client = new HttpClient();
+        client.BaseAddress = new Uri(Navigation_Manager.BaseUri);
+
+        url_formatter.Append("halls/get-halls-page?");
+        url_formatter.Append(object_formated_to_http_query_format);
+
+
+        HttpResponseMessage m = await client.GetAsync(url_formatter.ToString());
+        string halls_page = await m.Content.ReadAsStringAsync();
+
+        // READ THE API ENDPOINT RESPONSE 
+        Console.WriteLine(halls_page);
+
+        Halls_Result? halls_payload = new Halls_Result();
+        halls_payload = Newtonsoft.Json.JsonConvert.DeserializeObject<Halls_Result>(halls_page);
+    }
+
+    private void HallOnChange(string? value)
+    {
+        Console.WriteLine(value);
     }
 }
