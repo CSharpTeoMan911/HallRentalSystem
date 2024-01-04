@@ -61,13 +61,13 @@
         p.location_filter = value;
         p.page_index = page_index;
 
-        string object_formated_to_http_query_format = await Query_Formater.ObjectQueryFormatter<Halls_Pagination>(p);
-
         // FORMAT THE OBJECT INTO A QUERY STRING AND SEND IT TO THE API ENDPOINT
         System.Net.Http.HttpClient client = new HttpClient();
         client.BaseAddress = new Uri(Navigation_Manager.BaseUri);
 
         url_formatter.Append("halls/get-halls-page?");
+
+        string object_formated_to_http_query_format = await Query_Formater.ObjectQueryFormatter<Halls_Pagination>(p);
         url_formatter.Append(object_formated_to_http_query_format);
 
 
