@@ -94,7 +94,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
 
         private static string File_Path_Builder()
         {
-            StringBuilder path_builder = new StringBuilder(new DirectoryInfo(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName);
+            StringBuilder path_builder = new StringBuilder(new DirectoryInfo(Environment.CurrentDirectory)?.Parent?.Parent?.FullName);
 
             switch (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
             {
