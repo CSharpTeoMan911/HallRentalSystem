@@ -1,7 +1,5 @@
 ﻿using Firebase.Database;
-using Firebase.Storage;
 using Newtonsoft.Json;
-using System.Diagnostics;
 using System.Text;
 
 namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
@@ -10,10 +8,9 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
     public class Firebase_Database : Attribute
     {
         private static readonly string env_file_name = "FirebaseEnv.json";
-        private static readonly string env_file_format = "{\r\n  \"FirebaseDatabaseURL\": \"YOUR_DATABASE_URL\",\r\n  \"FirebaseBucketURL\" : \"YOUR_STORAGE_BUCKET_URL\",\r\n  \"FirebaseSecret\": \"YOUR_FIREBASE_PROJECT_API_SECRET\"\r\n}";
+        private static readonly string env_file_format = "{\r\n  \"FirebaseDatabaseURL\": \"YOUR_DATABASE_URL\",\r\n  \"FirebaseSecret\": \"YOUR_FIREBASE_PROJECT_API_SECRET\"\r\n}";
 
         public static FirebaseClient? firebaseClient = null;
-        public static FirebaseStorage? firebaseStorage = null;
 
         public Firebase_Database()
         {
