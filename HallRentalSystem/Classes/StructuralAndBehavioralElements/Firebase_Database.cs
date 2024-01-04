@@ -1,6 +1,7 @@
 ﻿using Firebase.Database;
 using Firebase.Storage;
 using Newtonsoft.Json;
+using System.Diagnostics;
 using System.Text;
 
 namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
@@ -34,7 +35,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
 
             try
             {
-                FileStream file_reader = File.OpenRead(env_file_name);
+                FileStream file_reader = File.OpenRead(File_Path_Builder());
 
                 try
                 {
@@ -72,7 +73,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
 
         private static async void Create_Env_File()
         {
-            FileStream file_writer = File.OpenWrite(env_file_name);
+            FileStream file_writer = File.OpenWrite(File_Path_Builder());
 
             try
             {
@@ -88,6 +89,25 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
             {
                 file_writer?.Dispose();
             }
+        }
+
+
+        private static string File_Path_Builder()
+        {
+            StringBuilder path_builder = new StringBuilder(new DirectoryInfo(Environment.CurrentDirectory)?.Parent?.Parent?.FullName);
+
+            switch (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+            {
+                case true:
+                    path_builder.Append('/');
+                    break;
+                case false:
+                    path_builder.Append('\\');
+                    break;
+            }
+            path_builder.Append(env_file_name);
+
+            return path_builder.ToString();
         }
     }
 }
