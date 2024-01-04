@@ -2,7 +2,6 @@
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 @inject NavigationManager Navigation_Manager;
 @inject ProtectedLocalStorage LocalStorage;
-@inherits Shared_Data;
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-black">
     <a class="navbar-brand" style="margin-left:20px;" href="#">Hall Rentals</a>
@@ -14,7 +13,7 @@
             <a class="nav-link active" href="#">Home</a>
             <a class="nav-link" href="#">Services</a>
             <a class="nav-link" href="#">Contacts</a>
-            <a class="nav-link" href="#">@authentication_state</a>
+            <a class="nav-link" href="" @onclick=AuthStateManagement>@Shared_Data.authentication_state</a>
         </div>
     </div>
 </nav>
@@ -24,7 +23,26 @@
     {
         base.OnAfterRender(firstRender);
 
-        if (await Shared_Functions.AuthenticationStateManagerFunctions.Get_If_User_Is_Logged_In(LocalStorage) == true)
+        if (await Shared_Data.auth_manager.Get<bool>(LocalStorage) == true)
             StateHasChanged();
+    }
+
+    private async void AuthStateManagement()
+    {
+        if (Shared_Data.authentication_state == Shared_Data.AuthState.Logout)
+        {
+            Shared_Data.authentication_state = Shared_Data.AuthState.Login;
+
+            //////////////////////////////////////////////////////////////////////////////
+            // !!! IMPLEMENT THE API CALL TO INITIATE THE LOGOUT ON THE SERVER HERE !!! //
+            //////////////////////////////////////////////////////////////////////////////
+
+            await Shared_Data.auth_manager.Delete<bool>(LocalStorage);
+            StateHasChanged();
+        }
+        else
+        {
+            Navigation_Manager.NavigateTo("/login", true);
+        }
     }
 }

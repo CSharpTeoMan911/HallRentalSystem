@@ -7,7 +7,6 @@
 @inject IJSRuntime JS
 @inject NavigationManager Navigation_Manager;
 @inject ProtectedLocalStorage LocalStorage;
-@inherits Shared_Data;
 @page "/"
 
 <PageTitle>Home</PageTitle>
@@ -25,7 +24,7 @@
     {
         base.OnAfterRender(firstRender);
 
-        if (await Shared_Functions.AuthenticationStateManagerFunctions.Get_If_User_Is_Logged_In(LocalStorage) == true)
+        if (await Shared_Data.auth_manager.Get<bool>(LocalStorage) == true)
             StateHasChanged();
     }
 }

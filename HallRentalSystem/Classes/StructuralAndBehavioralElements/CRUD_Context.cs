@@ -1,19 +1,20 @@
 ﻿namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
 {
-    public class CRUD_Context<InsertType, GetType, UpdateType, DeleteType, ReturnType> : CRUD_Strategy<InsertType, GetType, UpdateType, DeleteType, ReturnType>
+    public class CRUD_Context<InsertType, GetType, UpdateType, DeleteType> : CRUD_Strategy<InsertType, GetType, UpdateType, DeleteType>
     {
-        private CRUD_Strategy<InsertType, GetType, UpdateType, DeleteType, ReturnType>? _Strategy;
+        private CRUD_Strategy<InsertType, GetType, UpdateType, DeleteType>? _Strategy;
 
-        public CRUD_Context(CRUD_Strategy<InsertType, GetType, UpdateType, DeleteType, ReturnType> Strategy)
+        public CRUD_Context(CRUD_Strategy<InsertType, GetType, UpdateType, DeleteType> Strategy)
         {
             _Strategy = Strategy;
         }
 
-        public Task<ReturnType> Delete(DeleteType? data)
+
+        public Task<ReturnType?> Delete<ReturnType>(DeleteType? data)
         {
             if (_Strategy != null)
             {
-                return _Strategy.Delete(data);
+                return _Strategy.Delete<ReturnType>(data);
             }
             else
             {
@@ -21,11 +22,11 @@
             }
         }
 
-        public Task<ReturnType> Get(GetType? data)
+        public Task<ReturnType?> Get<ReturnType>(GetType? data)
         {
             if (_Strategy != null)
             {
-                return _Strategy.Get(data);
+                return _Strategy.Get<ReturnType>(data);
             }
             else
             {
@@ -33,11 +34,11 @@
             }
         }
 
-        public Task<ReturnType> Insert(InsertType? data)
+        public Task<ReturnType?> Insert<ReturnType>(InsertType? data)
         {
             if (_Strategy != null)
             {
-                return _Strategy.Insert(data);
+                return _Strategy.Insert<ReturnType>(data);
             }
             else
             {
@@ -45,11 +46,11 @@
             }
         }
 
-        public Task<ReturnType> Update(UpdateType? data)
+        public Task<ReturnType?> Update<ReturnType>(UpdateType? data)
         {
             if (_Strategy != null)
             {
-                return _Strategy.Update(data);
+                return _Strategy.Update<ReturnType>(data);
             }
             else
             {

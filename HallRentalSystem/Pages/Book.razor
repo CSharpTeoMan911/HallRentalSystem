@@ -47,12 +47,15 @@
     {
         base.OnAfterRender(firstRender);
 
-        if (await Shared_Functions.AuthenticationStateManagerFunctions.Get_If_User_Is_Logged_In(LocalStorage) == true)
+        if (await Shared_Data.auth_manager.Get<bool>(LocalStorage) == true)
             StateHasChanged();
     }
 
     private async void LocationOnChange(string? value)
     {
+        
+        //Shared_Data.Shared_Functions.PageContextControls.
+
         StringBuilder url_formatter = new StringBuilder();
 
         Halls_Pagination p = new Halls_Pagination();
