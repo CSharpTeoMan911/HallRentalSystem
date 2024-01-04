@@ -1,5 +1,5 @@
 # Dependencies
-![Dependencies](https://github.com/CSharpTeoMan911/HallRentalSystem/assets/87245086/2f57440d-e0eb-44d1-ac51-36c83ef0dfb6)
+![Dependencies](https://github.com/CSharpTeoMan911/HallRentalSystem/assets/87245086/22ed47df-5e08-4aca-a8cd-49068a20db92)
 * FirebaseDatabase.net
 * FirebaseStorage.net
 * Newtonsoft.Json
