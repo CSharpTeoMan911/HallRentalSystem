@@ -1,6 +1,4 @@
-﻿using HallRentalSystem.Classes.StructuralAndBehavioralElements;
-
-namespace HallRentalSystem.Classes
+﻿namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
 {
     public class HallsPaginationStateManager : CRUD_Strategy<string, string, string, string>
     {
