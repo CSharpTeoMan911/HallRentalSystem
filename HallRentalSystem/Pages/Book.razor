@@ -46,7 +46,6 @@
     protected override async void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
-
         if (await Shared_Data.auth_manager.Get<bool>(LocalStorage) == true)
             StateHasChanged();
     }
