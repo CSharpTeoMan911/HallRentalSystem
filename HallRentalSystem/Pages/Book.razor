@@ -41,7 +41,7 @@
     protected override async void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
-
+         
         if (await Shared_Functions.AuthenticationStateManagerFunctions.Get_If_User_Is_Logged_In(LocalStorage) == true)
             StateHasChanged();
     }
