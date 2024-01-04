@@ -1,4 +1,4 @@
-﻿namespace HallRentalSystem.Classes
+﻿namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
 {
     public class Firebase_Variables
     {
