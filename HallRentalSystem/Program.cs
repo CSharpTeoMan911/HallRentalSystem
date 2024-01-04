@@ -2,20 +2,20 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.OpenApi.Models;
-using HallRentalSystem.Classes;
 using System.Runtime.CompilerServices;
+using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 
 namespace HallRentalSystem
 {
 
-    internal class Program:Classes.Firebase
+    internal class Program:Firebase_Database
     {
         protected static string authentication_state = "Login";
         public static bool Is_API_Testing_Mode;
 
         private static void Main(string[] args)
         {
-            InitiateFirebaseDatabaseAndStorage();
+            InitiateFirebaseDatabase();
 
             var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +47,7 @@ namespace HallRentalSystem
 
                 // PROGRAMATICALLY SET SWAGGER API TESTING MODE ( "y" for yes; "n" for no; )
                 //
-                //Enable_Or_Disable_Swagger_Programatically(app, "n"); 
+                //Enable_Or_Disable_Swagger_Programatically(app, "y"); 
             }
 
             app.UseHttpsRedirection();
