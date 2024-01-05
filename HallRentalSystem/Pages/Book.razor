@@ -52,13 +52,16 @@
 
     private async void LocationOnChange(string? value)
     {
-        
+
         //Shared_Data.Shared_Functions.PageContextControls.
-         
+
         StringBuilder url_formatter = new StringBuilder();
 
         Halls_Pagination p = new Halls_Pagination();
-        p.location_filter = value;
+        if (value != "All")
+        {
+            p.location_filter = value;
+        }
         p.page_index = page_index;
 
         // FORMAT THE OBJECT INTO A QUERY STRING AND SEND IT TO THE API ENDPOINT
