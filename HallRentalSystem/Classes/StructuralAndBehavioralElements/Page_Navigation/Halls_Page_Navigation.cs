@@ -98,9 +98,10 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Page_Navigati
                                     {
                                         result.next_page_token = next_page_keys.ElementAt(next_page_keys.Count() - 1);
                                     }
-                                    serialised_result = Newtonsoft.Json.JsonConvert.SerializeObject(result, Newtonsoft.Json.Formatting.Indented);
                                 }
                             }
+
+                            serialised_result = Newtonsoft.Json.JsonConvert.SerializeObject(result, Newtonsoft.Json.Formatting.Indented);
                         }
                     }
                 }

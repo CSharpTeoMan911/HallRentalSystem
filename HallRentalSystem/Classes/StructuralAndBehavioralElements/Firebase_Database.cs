@@ -93,14 +93,18 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
         {
             StringBuilder path_builder = new StringBuilder(new DirectoryInfo(Environment.CurrentDirectory)?.Parent?.Parent?.FullName);
 
-            switch (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows))
+            if(System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX)==true)
             {
-                case true:
-                    path_builder.Append('/');
-                    break;
-                case false:
-                    path_builder.Append('\\');
-                    break;
+                path_builder.Append('/');
+            }
+            else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows)==true)
+            {
+                path_builder.Append('/');
+            }
+            else
+            {
+                path_builder.Append('\\');
+
             }
             path_builder.Append(env_file_name);
 
