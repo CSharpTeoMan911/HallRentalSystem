@@ -26,6 +26,12 @@
         <option value="Manchester">Manchester</option>
     </select>
     <select @onchange=@((changed_value)=>HallOnChange(changed_value?.Value?.ToString())) class="form-select" aria-label="Default select example" style="width: 200px; height: 40px; font-size: 16px; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">
+        
+@*      @for (int i = 0; i < s.Count; i++)
+        {
+            <option value=@s.ElementAt(i)>@s.ElementAt(i)</option>
+        } *@
+
         <option selected>Select Hall</option>
         <option value="1">1</option>
         <option value="2">2</option>
@@ -42,6 +48,14 @@
 
 @code{
     private int page_index = 0;
+    /*
+    List<string> s = new List<string>()
+    {
+        "London",
+        "Manchester",
+        "Bucharest"
+    };
+    */
 
     protected override async void OnAfterRender(bool firstRender)
     {
@@ -52,13 +66,16 @@
 
     private async void LocationOnChange(string? value)
     {
-        
+
         //Shared_Data.Shared_Functions.PageContextControls.
-         
+
         StringBuilder url_formatter = new StringBuilder();
 
         Halls_Pagination p = new Halls_Pagination();
-        p.location_filter = value;
+        if (value != "All")
+        {
+            p.location_filter = value;
+        }
         p.page_index = page_index;
 
         // FORMAT THE OBJECT INTO A QUERY STRING AND SEND IT TO THE API ENDPOINT
