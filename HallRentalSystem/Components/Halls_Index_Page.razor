@@ -1,0 +1,15 @@
+﻿<div>
+    @for (int i = 0; i < image_sources.Count; i++)
+    {
+        <img src="@image_sources.ElementAt(i).Item1" alt="@image_sources.ElementAt(i).Item2" />
+    }
+</div>
+@code {
+    private List<Tuple<string, string>> image_sources = new List<Tuple<string, string>>()
+    {
+        new Tuple<string, string>( "https://assets-global.website-files.com/5f5f802796e665f5a78839b3/64d7c58b42d2421f9c2c3d9a_64d524fa89cdd9b6bbe648ac_64904f72f7fb16d8aac66630_Party%2525252520Package.webp", "Nice hall"),
+        new Tuple<string, string>( "https://images.prismic.io/storefront/6cce1106-627d-495d-8100-5e2936ce01f8_cheap_halls.jpg", "Nice hall"),
+        new Tuple<string, string>( "https://imagedelivery.net/ePR8PyKf84wPHx7_RYmEag/015573c7-532e-4cbc-9b63-635eff4b1f00/86", "Nice hall"),
+        new Tuple<string, string>( "https://sepan-banquet.com/wp-content/uploads/halls-for-rent-in-los-angeles-480x360.jpg", "Nice hall")
+    };
+}
