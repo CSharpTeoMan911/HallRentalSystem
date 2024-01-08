@@ -71,7 +71,7 @@ export async function ExpansionAnimation(element_id, max_width, interval, size_u
 
 function Background_Image_Sizing() {
     let background = document.getElementById("background_image");
-    let main_structure_div = document.getElementById("main_page_structure_div").offsetHeight;
+    let main_structure_div = document.getElementById("main_body").offsetHeight;
     background.style.height = main_structure_div + "px";
 }
 
