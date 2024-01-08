@@ -3,22 +3,53 @@
 @inject NavigationManager Navigation_Manager;
 @inject ProtectedLocalStorage LocalStorage;
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-black">
-    <a class="navbar-brand" style="margin-left:20px;" href="#">Hall Rentals</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" style="margin-left:20px;" href="/" @onclick=@(()=>OnPageNavigation(0))>Hall Rentals</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation" style="margin-left:20px;margin-right:20px;">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav" style="margin-left:20px;">
-            <a class="nav-link active" href="#">Home</a>
-            <a class="nav-link" href="#">Services</a>
-            <a class="nav-link" href="#">Contacts</a>
-            <a class="nav-link" href="" @onclick=AuthStateManagement>@Shared_Data.authentication_state</a>
+            <a class=@class_names.ElementAt(0) @onclick=@(()=>OnPageNavigation(0)) href="/">Home</a>
+            <a class=@class_names.ElementAt(1) @onclick=@(()=>OnPageNavigation(1)) href="#">Services</a>
+            <a class=@class_names.ElementAt(2) @onclick=@(()=>OnPageNavigation(2)) href="#">Contacts</a>
+            <a class=@class_names.ElementAt(3) href="/" @onclick=@(()=>OnPageNavigation(3))>@Shared_Data.authentication_state</a>
         </div>
     </div>
 </nav>
 
 @code{
+    private static List<string> class_names = new List<string>()
+    {
+        "nav-link active",
+        "nav-link",
+        "nav-link",
+        "nav-link"
+    };
+
+    string active_class_name = "nav-link active";
+    string non_active_class_name = "nav-link";
+
+
+    private void OnPageNavigation(int index)
+    {
+        @* @onclick=AuthStateManagement>@Shared_Data.authentication_state *@
+
+        for(int i = 0; i < class_names.Count; i++)
+        {
+            if (i == index)
+            {
+                if (index == 3)
+                    AuthStateManagement();
+                class_names[i] = "nav-link active";
+            }
+            else
+            {
+                class_names[i] = "nav-link";
+            }
+        }
+    }
+
     protected override async void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
