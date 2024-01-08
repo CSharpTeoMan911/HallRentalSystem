@@ -1,16 +1,16 @@
-﻿var expansion_animation_interval = undefined;
-var gradient_fluctuation_interval = undefined;
+﻿let expansion_animation_interval = undefined;
+let gradient_fluctuation_interval = undefined;
+let background_image_sizing = undefined;
 let current_width = 0;
 let current_gradient = 0;
 let switch_gradient_offset = false;
-
 
 // GRADIENT FLUCTUATION ANIMATION
 //
 // [ BEGIN ]
 async function GradientFluctuationAnimationImplementation(element_id, initial_gradient, final_gradient) {
     let element = document.getElementById(element_id);
-    element.style.background = "linear-gradient(to right, #242424, " + current_gradient + "%, #6d6c6c 75%)";
+    element.style.background = "linear-gradient(to right, rgb(22, 22, 22), " + current_gradient + "%, #999999 75%)";
 
     switch (switch_gradient_offset) {
         case true:
@@ -59,6 +59,30 @@ async function ExpansionAnimationImplementation(element_id, max_width, size_unit
 
 export async function ExpansionAnimation(element_id, max_width, interval, size_unit) {
     expansion_animation_interval = await setInterval(async () => { await ExpansionAnimationImplementation(element_id, max_width, size_unit) }, interval);
+}
+
+// [ END ]
+
+
+
+// BACKGROUND IMAGE SIZING
+//
+// [ START ]
+
+function Background_Image_Sizing() {
+    let background = document.getElementById("background_image");
+    let main_structure_div = document.getElementById("main_page_structure_div").offsetHeight;
+    background.style.height = main_structure_div + "px";
+}
+
+export async function Clear_Background_Image_Sizing() {
+    if (background_image_sizing !== undefined) {
+        await clearInterval(background_image_sizing);
+    }
+}
+
+export async function Set_Background_Image_Sizing() {
+    background_image_sizing = await setInterval(async () => { await Background_Image_Sizing(); }, 1);
 }
 
 // [ END ]

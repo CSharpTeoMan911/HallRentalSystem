@@ -1,10 +1,22 @@
 ﻿div.main_page_structure {
+    z-index:1;
     display: block;
     width: 100vw;
     min-height: 100vh;
-    background: linear-gradient(to right, #242424, 40%, #6d6c6c 75%);
-    background: -moz-linear-gradient(to right, #333, 40%, #b4b2b2 75%);
-    background: -webkit-linear-gradient(to right, #333, 40%, #b4b2b2 75%);
+    background: linear-gradient(to left, rgb(22, 22, 22) 20%, rgb(219, 219, 219) 80%);
+    background: -moz-linear-gradient(to left, rgb(22, 22, 22) 20%, rgb(219, 219, 219) 80%);
+    background: -webkit-linear-gradient(to left, rgb(22, 22, 22) 20%, rgb(219, 219, 219) 80%);
+}
+
+div.main_background_image_style {
+    position: absolute;
+    z-index: 0;
+    background-image: url("https://images.pixexid.com/a-futuristic-city-designed-using-gothic-architecture-k4zwosr1.jpeg");
+    image-rendering: optimizeSpeed;
+    opacity: 0.4;
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
 }
 
 div.page_content_structure {
