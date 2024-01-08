@@ -8,17 +8,20 @@
 @inject ProtectedLocalStorage LocalStorage;
 @page "/User_login"
 
-<PageTitle>Login</PageTitle>
+<PageTitle>Login in</PageTitle>
 
 
 <div class="index_page_skeleton" style="text-align:center;">
-    <h1 class="handwritten_page_title">Login </h1>
+
+    <h1 class="handwritten_page_title"> Login in </h1>
+
     <Login_Component></Login_Component>
 </div>
 
 
 
-@code{
+
+@code {
     protected override async void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
