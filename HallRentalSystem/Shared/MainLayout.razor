@@ -3,12 +3,11 @@
 @inject IJSRuntime JS
 
 <PageTitle>HallRentalSystem</PageTitle>
-
+<div id="background_image" class="main_background_image_style"></div>
 <div id="main_page_structure_div" class="main_page_structure">
     <div style="margin-bottom:10px;">
         <NavMenu/>
     </div>
-
     <main>
         <div class="page_content_structure">
             <div class="page_content">
@@ -17,15 +16,16 @@
         </div>
     </main>
 </div>
-
 @code{
     protected override async void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
 
-        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
-        await module.InvokeAsync<string>("GradientFluctuationAnimationCancellation");
-        await module.InvokeAsync<string>("GradientFluctuationAnimation", "main_page_structure_div", "40", "65", "50");
+        IJSObjectReference animations_module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
+        await animations_module.InvokeAsync<string>("GradientFluctuationAnimationCancellation");
+        await animations_module.InvokeAsync<string>("GradientFluctuationAnimation", "main_page_structure_div", "40", "65", "50");
+        await animations_module.InvokeAsync<string>("Clear_Background_Image_Sizing");
+        await animations_module.InvokeAsync<string>("Set_Background_Image_Sizing");
 
         if (Program.Is_API_Testing_Mode == true)
             Navigation_Manager.NavigateTo("/swagger/index.html", forceLoad: true);
