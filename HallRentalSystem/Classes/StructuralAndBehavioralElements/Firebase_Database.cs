@@ -8,7 +8,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
     public class Firebase_Database : Attribute
     {
         private static readonly string env_file_name = "FirebaseEnv.json";
-        private static readonly string env_file_format = "{\r\n  \"FirebaseDatabaseURL\": \"https://hallrentalproject-default-rtdb.europe-west1.firebasedatabase.app\",\r\n  \"FirebaseSecret\": \"Z2IbnC04EKNZVtWsEq4mYx3mpv9hCzb4E5aEn3Me\"\r\n}";
+        private static readonly string env_file_format = "{\r\n  \"FirebaseDatabaseURL\": \"YOUR_DATABASE_URL\",\r\n  \"FirebaseSecret\": \"YOUR_FIREBASE_PROJECT_API_SECRET\"\r\n}";
 
         public static FirebaseClient? firebaseClient = null;
 
