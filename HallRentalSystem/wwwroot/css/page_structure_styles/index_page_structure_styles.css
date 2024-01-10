@@ -1,10 +1,12 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Nunito&family=Roboto+Condensed:wght@100&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@500&family=Roboto+Condensed:wght@100&display=swap');
+
 
 h1.handwritten_page_title {
     align-self: center;
     font-family: 'Nunito', sans-serif;
-    font-size: calc(25px + 2vw);
-    background: linear-gradient( to right, #e5e5e5, #9a9a9a);
+    font-weight: 500;
+    font-size: calc(40px + 2vw);
+    background: linear-gradient( to right, #FFFFFF, #F2F2F2);
     background-clip: text;
     -webkit-background-clip: text;
     -moz-background-clip: text;
@@ -23,16 +25,54 @@ div.index_page_skeleton {
 
 div.main_index_page_panel_content {
     display: flex;
+    flex-direction: column;
     border-radius: 10px;
+    align-self: center;
+    justify-self: center;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 20px;
+    background-color: #3D3C3C;
+    opacity: 53%;
+}
+
+div.main_index_page_panel_content_display_block {
+    display: inline-block;
+    vertical-align: top;
+    text-align:center;
+    justify-items: center;
+    width: fit-content;
+    align-self: center;
+    justify-self: center;
+    justify-content: center;
+}
+
+div.main_index_page_panel_content_block {
+    width: 900px;
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+}
+
+div.main_index_page_panel_content_blocks {
+    vertical-align: top;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-self: center;
+    align-content: center;
+    justify-content: center;
+    align-self: center;
+}
+
+div.button_cover {
+    display: flex;
     flex-direction: column;
     align-content: center;
-    align-self: center;
+    justify-content: center;
     width: 100%;
     height: 100%;
-    margin-bottom: 20px;
-    background: linear-gradient(to right, #000000, #2E2E2E);
-    overflow-y: auto;
-    padding: 10px;
+    background: linear-gradient(to right, rgba(61, 57, 50, 0.6), rgba(91, 90, 90, 0.6));
 }
 
 /* width */
@@ -62,6 +102,34 @@ div.main_index_page_panel_content {
     border: 3px solid grey;
 }
 
+/* width */
+.main_article_style::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+.main_article_style::-webkit-scrollbar-track {
+    background: black;
+    border-radius: 10px;
+}
+
+/* Handle */
+.main_article_style::-webkit-scrollbar-thumb {
+    background: #888;
+    background-color: black; /* color of the scroll thumb */
+    border-radius: 20px; /* roundness of the scroll thumb */
+    border: 3px solid grey;
+}
+
+/* Handle on hover */
+.main_article_style::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    background-color: white; /* color of the scroll thumb */
+    border-radius: 20px; /* roundness of the scroll thumb */
+    border: 3px solid grey;
+}
+
+
 .custom_jumbotron {
     border-radius: 20px;
     width: 0%;
@@ -72,5 +140,50 @@ div.main_index_page_panel_content {
 }
 
 article.main_article_style {
-    color:white
+    color: white;
+    text-align: left;
+    height: 70vh;
+    width: 100%;
+    padding: 5%;
+    font-family: 'League Spartan', sans-serif;
+    font-weight: bolder;
+    font-size: 2.8vw;
+    overflow-y: auto;
 }
+
+button.main_page_button_1 {
+    padding: 0%;
+    height: 35vh;
+    width: 100%;
+    border-width: 0px;
+    justify-self: center;
+    align-self: center;
+    background-color: transparent;
+    background-image: url("https://images.unsplash.com/photo-1597053108350-0fe16904068b?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+button.main_page_button_2 {
+    padding:0%;
+    height: 35vh;
+    width: 100%;
+    border-width:0px;
+    justify-self: center;
+    align-self: center;
+    background-color: transparent;
+    background-image: url("https://images.unsplash.com/uploads/1413222992504f1b734a6/1928e537?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
+p.label {
+    align-self: center;
+    justify-self: center;
+    font-family: 'League Spartan', sans-serif;
+    font-weight: bolder;
+    font-size: 5vw;
+    color:white;
+}
+

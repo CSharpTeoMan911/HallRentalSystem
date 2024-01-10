@@ -3,17 +3,36 @@
 
 <div id="index_page_jumbotron" class="jumbotron custom_jumbotron">
     <div class="main_index_page_panel_content">
-        <Dynamic_Image_Craousel image_sources="@image_sources"/>
-        <article class="main_article_style">
-            Are you in need of a perfect venue for your upcoming event? Look no further! Our hall rentals website is here to make your search for the ideal event space a breeze. Whether you're organizing a wedding reception, corporate conference, or a birthday party, our platform offers a wide selection of halls available for rent.
+        <div class="main_index_page_panel_content_display_block">
+            <div id="content_block_1" class="main_index_page_panel_content_block">
+                <div class="main_index_page_panel_content_blocks">
+                    <button class="main_page_button_1">
+                        <div class="button_cover">
+                            <p class="label">Booking</p>
+                        </div>
+                        @* <img src="https://images.unsplash.com/photo-1597053108350-0fe16904068b?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="width:200px;background-size: cover;" /> *@
+                    </button>
 
-            With our user-friendly search and filter options, finding the perfect venue is just a few clicks away. Simply enter your desired location, event type, capacity, and budget, and let our website do the rest. Each hall listing provides detailed information, including amenities, pricing, and availability, along with high-quality photos and virtual tours.
-
-            But don't just take our word for it! Read reviews and ratings from previous customers to gain insights into the experience and quality of each venue. Once you've found the perfect hall, our integrated booking system allows you to check availability, request quotes, and make secure online payments.
-
-            Say goodbye to the hassle of searching for event spaces. Visit our hall rentals website today and discover the perfect venue for your next event!
-
-        </article>
+                    <button class="main_page_button_2">
+                        <div class="button_cover">
+                            <p class="label">Contacts</p>
+                        </div>
+                        @* <img src="https://images.unsplash.com/uploads/1413222992504f1b734a6/1928e537?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="width:200px;background-size: cover;" /> *@
+                    </button>
+                </div>
+            </div>
+            <div id="content_block_2" class="main_index_page_panel_content_block">
+                <div class="main_index_page_panel_content_blocks">
+                    <article class="main_article_style">
+                        Are you in need of a perfect venue for your upcoming event? Look no further! Our hall rentals website is here to make your search for the ideal event space a breeze.
+                        Are you in need of a perfect venue for your upcoming event? Look no further! Our hall rentals website is here to make your search for the ideal event space a breeze.
+                        Are you in need of a perfect venue for your upcoming event? Look no further! Our hall rentals website is here to make your search for the ideal event space a breeze.
+                        Are you in need of a perfect venue for your upcoming event? Look no further! Our hall rentals website is here to make your search for the ideal event space a breeze.
+                        Are you in need of a perfect venue for your upcoming event? Look no further! Our hall rentals website is here to make your search for the ideal event space a breeze.
+                    </article>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -30,6 +49,6 @@
     {
         base.OnAfterRender(firstRender);
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
-        var e =  await module.InvokeAsync<string>("ExpansionAnimation",  "index_page_jumbotron", "90", "10", "%" );
+        await module.InvokeAsync<string>("ExpansionAnimation",  "index_page_jumbotron", "90", "10", "%" );
     }
 }

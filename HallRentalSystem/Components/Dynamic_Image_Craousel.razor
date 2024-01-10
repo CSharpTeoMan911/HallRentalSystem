@@ -1,29 +1,23 @@
 ﻿
-<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="max-width:30%;align-self:center;">
-    <div class="carousel-inner" style="border-radius:10px;">
+<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="width:40%;align-self:center;">
+    <div class="carousel-inner">
         @for (int i = 0; i < image_sources.Count; i++)
         {
             if(active == false)
             {
-                <div class="carousel-item active">
+                <div class="carousel-item active" data-interval="3000">
                     <img src="@image_sources[i].Item1" class="d-block w-100" alt="@image_sources[i].Item2">
                 </div>
                 active = true;
             }
             else
             {
-                <div class="carousel-item">
+                <div class="carousel-item" data-interval="3000">
                     <img src="@image_sources[i].Item1" class="d-block w-100" alt="@image_sources[i].Item2">
                 </div>
             }
         }
     </div>
-    <button class="carousel-control-prev" type="button" data-target="#carouselExampleControls" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-target="#carouselExampleControls" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    </button>
 </div>
 
 @code {
