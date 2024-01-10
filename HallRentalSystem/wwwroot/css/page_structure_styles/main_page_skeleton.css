@@ -1,11 +1,11 @@
 ﻿div.main_page_structure {
-    z-index:1;
+    z-index: 1;
     display: block;
     width: 100vw;
     min-height: 100vh;
-    background: linear-gradient(to left, rgb(22, 22, 22) 20%, rgb(219, 219, 219) 80%);
-    background: -moz-linear-gradient(to left, rgb(22, 22, 22) 20%, rgb(219, 219, 219) 80%);
-    background: -webkit-linear-gradient(to left, rgb(22, 22, 22) 20%, rgb(219, 219, 219) 80%);
+    background: linear-gradient(to left, rgb(22, 22, 22) 20%, rgb(201, 201, 201) 80%);
+    background: -moz-linear-gradient(to left, rgb(22, 22, 22) 20%, rgb(201, 201, 201) 80%);
+    background: -webkit-linear-gradient(to left, rgb(22, 22, 22) 20%, rgb(201, 201, 201) 80%);
 }
 
 div.main_background_image_style {
@@ -20,6 +20,7 @@ div.main_background_image_style {
 }
 
 div.page_content_structure {
+    z-index:2;
     height:100%;
     width:100%;
 }
@@ -27,5 +28,5 @@ div.page_content_structure {
 div.page_content {
     display: flex;
     flex-direction: column;
-    align-self:center;
+    align-self: center;
 }
