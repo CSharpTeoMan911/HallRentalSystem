@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@500&family=Roboto+Condensed:wght@100&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Roboto+Condensed:wght@100&display=swap');
 
 
 h1.handwritten_page_title {
@@ -72,34 +72,7 @@ div.button_cover {
     justify-content: center;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to right, rgba(61, 57, 50, 0.6), rgba(91, 90, 90, 0.6));
-}
-
-/* width */
-.main_index_page_panel_content::-webkit-scrollbar {
-    width: 10px;
-}
-
-/* Track */
-.main_index_page_panel_content::-webkit-scrollbar-track {
-    background: black;
-    border-radius:10px;
-}
-
-/* Handle */
-.main_index_page_panel_content::-webkit-scrollbar-thumb {
-    background: #888;
-    background-color: black; /* color of the scroll thumb */
-    border-radius: 20px; /* roundness of the scroll thumb */
-    border: 3px solid grey;
-}
-
-/* Handle on hover */
-.main_index_page_panel_content::-webkit-scrollbar-thumb:hover {
-    background: #555;
-    background-color: white; /* color of the scroll thumb */
-    border-radius: 20px; /* roundness of the scroll thumb */
-    border: 3px solid grey;
+    background: linear-gradient(to right, rgba(61, 57, 50, 0.65), rgba(91, 90, 90, 0.65));
 }
 
 /* width */
@@ -140,13 +113,13 @@ div.button_cover {
 }
 
 article.main_article_style {
-    color: white;
+    color: #E4E4E4;
     text-align: left;
     height: 70vh;
     width: 100%;
     padding: 5%;
     font-family: 'League Spartan', sans-serif;
-    font-weight: bolder;
+    font-weight: 400;
     font-size: 2.8vw;
     overflow-y: auto;
 }
@@ -182,8 +155,8 @@ p.label {
     align-self: center;
     justify-self: center;
     font-family: 'League Spartan', sans-serif;
-    font-weight: bolder;
+    font-weight:700;
     font-size: 5vw;
-    color:white;
+    color: white;
 }
 

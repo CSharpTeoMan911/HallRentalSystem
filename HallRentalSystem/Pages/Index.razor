@@ -25,9 +25,5 @@
         base.OnAfterRender(firstRender);
         if (await Shared_Data.auth_manager.Get<bool>(LocalStorage) == true)
             StateHasChanged();
-
-        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
-        await module.InvokeAsync<string>("Clear_Resize_Home_Page_Elements");
-        await module.InvokeAsync<string>("Set_Resize_Home_Page_Elements");
     }
 }

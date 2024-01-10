@@ -1,4 +1,5 @@
 ﻿@using HallRentalSystem.Components;
+@inject NavigationManager NavigationManager;
 @inject IJSRuntime JS
 
 <div id="index_page_jumbotron" class="jumbotron custom_jumbotron">
@@ -6,15 +7,15 @@
         <div class="main_index_page_panel_content_display_block">
             <div id="content_block_1" class="main_index_page_panel_content_block">
                 <div class="main_index_page_panel_content_blocks">
-                    <button class="main_page_button_1">
-                        <div class="button_cover">
+                    <button class="main_page_button_1" @onmouseenter=@(()=>MouseEnter("button_cover_1")) @onmouseleave=@(()=>MouseLeave("button_cover_1")) @onclick=@(()=>NavigateToPage("/book", "button_cover_1"))>
+                        <div id="button_cover_1" class="button_cover">
                             <p class="label">Booking</p>
                         </div>
                         @* <img src="https://images.unsplash.com/photo-1597053108350-0fe16904068b?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="width:200px;background-size: cover;" /> *@
                     </button>
 
-                    <button class="main_page_button_2">
-                        <div class="button_cover">
+                    <button class="main_page_button_2" @onmouseenter=@(()=>MouseEnter("button_cover_2")) @onmouseleave=@(()=>MouseLeave("button_cover_2")) @onclick=@(() =>NavigateToPage("/contacts", "button_cover_2"))>
+                        <div id="button_cover_2" class="button_cover">
                             <p class="label">Contacts</p>
                         </div>
                         @* <img src="https://images.unsplash.com/uploads/1413222992504f1b734a6/1928e537?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" style="width:200px;background-size: cover;" /> *@
@@ -24,11 +25,14 @@
             <div id="content_block_2" class="main_index_page_panel_content_block">
                 <div class="main_index_page_panel_content_blocks">
                     <article class="main_article_style">
-                        Are you in need of a perfect venue for your upcoming event? Look no further! Our hall rentals website is here to make your search for the ideal event space a breeze.
-                        Are you in need of a perfect venue for your upcoming event? Look no further! Our hall rentals website is here to make your search for the ideal event space a breeze.
-                        Are you in need of a perfect venue for your upcoming event? Look no further! Our hall rentals website is here to make your search for the ideal event space a breeze.
-                        Are you in need of a perfect venue for your upcoming event? Look no further! Our hall rentals website is here to make your search for the ideal event space a breeze.
-                        Are you in need of a perfect venue for your upcoming event? Look no further! Our hall rentals website is here to make your search for the ideal event space a breeze.
+                        Are you in need of a perfect venue for your upcoming event? Look no further! Our hall rentals website is here to make your search for the ideal event space a breeze. Whether you're organizing a wedding reception, corporate conference, or a birthday party, our platform offers a wide selection of halls available for rent.
+
+                        With our user-friendly search and filter options, finding the perfect venue is just a few clicks away. Simply enter your desired location, event type, capacity, and budget, and let our website do the rest. Each hall listing provides detailed information, including amenities, pricing, and availability, along with high-quality photos and virtual tours.
+
+                        But don't just take our word for it! Read reviews and ratings from previous customers to gain insights into the experience and quality of each venue. Once you've found the perfect hall, our integrated booking system allows you to check availability, request quotes, and make secure online payments.
+
+                        Say goodbye to the hassle of searching for event spaces. Visit our hall rentals website today and discover the perfect venue for your next event!
+
                     </article>
                 </div>
             </div>
@@ -37,18 +41,34 @@
 </div>
 
 @code {
-    public List<Tuple<string, string>> image_sources = new List<Tuple<string, string>>()
+
+    private async void NavigateToPage(string page, string element_id)
     {
-        new Tuple<string, string>( "https://assets-global.website-files.com/5f5f802796e665f5a78839b3/64d7c58b42d2421f9c2c3d9a_64d524fa89cdd9b6bbe648ac_64904f72f7fb16d8aac66630_Party%2525252520Package.webp", "Nice hall"),
-        new Tuple<string, string>( "https://images.prismic.io/storefront/6cce1106-627d-495d-8100-5e2936ce01f8_cheap_halls.jpg", "Nice hall"),
-        new Tuple<string, string>( "https://imagedelivery.net/ePR8PyKf84wPHx7_RYmEag/015573c7-532e-4cbc-9b63-635eff4b1f00/86", "Nice hall"),
-        new Tuple<string, string>( "https://sepan-banquet.com/wp-content/uploads/halls-for-rent-in-los-angeles-480x360.jpg", "Nice hall")
-    };
+        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
+        await module.InvokeAsync<string>("Clear_Set_Button_Focus_Effect", element_id);
+        await module.InvokeAsync<string>("Clear_Resize_Home_Page_Elements");
+        NavigationManager.NavigateTo(page);
+    }
+
+    private async void MouseEnter(string element_id)
+    {
+        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
+        await module.InvokeAsync<string>("Set_Button_Focus_Effect", element_id);
+        await module.InvokeAsync<string>("Clear_Resize_Home_Page_Elements");
+    }
+
+    private async void MouseLeave(string element_id)
+    {
+        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
+        await module.InvokeAsync<string>("Clear_Set_Button_Focus_Effect", element_id);
+    }
 
     protected override async void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
         await module.InvokeAsync<string>("ExpansionAnimation",  "index_page_jumbotron", "90", "10", "%" );
+        await module.InvokeAsync<string>("Clear_Resize_Home_Page_Elements");
+        await module.InvokeAsync<string>("Set_Resize_Home_Page_Elements");
     }
 }
