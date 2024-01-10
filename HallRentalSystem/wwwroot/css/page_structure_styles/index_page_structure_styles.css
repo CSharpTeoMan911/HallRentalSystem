@@ -32,7 +32,7 @@ div.main_index_page_panel_content {
     justify-content: center;
     width: 100%;
     margin-bottom: 20px;
-    background-color: #3D3C3C;
+    background-color: rgb(36, 35, 35);
     opacity: 53%;
 }
 
@@ -113,7 +113,7 @@ div.button_cover {
 }
 
 article.main_article_style {
-    color: #E4E4E4;
+    color: white;
     text-align: left;
     height: 70vh;
     width: 100%;

@@ -1,8 +1,8 @@
-﻿let expansion_animation_interval = undefined;
-let gradient_fluctuation_interval = undefined;
-let background_image_sizing = undefined;
-let home_page_elements_resizing = undefined;
-let home_page_button_focus = undefined;
+﻿var expansion_animation_interval = undefined;
+var gradient_fluctuation_interval = undefined;
+var background_image_sizing = undefined;
+var home_page_elements_resizing = undefined;
+var home_page_button_focus = undefined;
 
 let current_width = 0;
 let current_gradient = 0;
@@ -13,7 +13,7 @@ let current_alpha = 0.65;
 // GRADIENT FLUCTUATION ANIMATION
 //
 // [ BEGIN ]
-async function GradientFluctuationAnimationImplementation(element_id, initial_gradient, final_gradient) {
+function GradientFluctuationAnimationImplementation(element_id, initial_gradient, final_gradient) {
     let element = document.getElementById(element_id);
     element.style.background = "linear-gradient(to right, rgb(22, 22, 22), " + current_gradient + "%, #7D7D7D 75%)";
 
@@ -34,13 +34,13 @@ async function GradientFluctuationAnimationImplementation(element_id, initial_gr
     }
 }
 
-export async function GradientFluctuationAnimationCancellation() {
-    await clearInterval(gradient_fluctuation_interval);
+export function GradientFluctuationAnimationCancellation() {
+    clearInterval(gradient_fluctuation_interval);
 }
 
-export async function GradientFluctuationAnimation(element_id, initial_gradient, final_gradient, interval) {
+export function GradientFluctuationAnimation(element_id, initial_gradient, final_gradient, interval) {
     current_gradient = initial_gradient;
-    gradient_fluctuation_interval = await setInterval(async () => { await GradientFluctuationAnimationImplementation(element_id, initial_gradient, final_gradient); }, interval);
+    gradient_fluctuation_interval = setInterval(() => { GradientFluctuationAnimationImplementation(element_id, initial_gradient, final_gradient); }, interval);
 }
 
 // [ END ]
@@ -50,22 +50,35 @@ export async function GradientFluctuationAnimation(element_id, initial_gradient,
 // ELEMENT EXPANSION ANIMATION
 //
 // [ BEGIN ]
-async function ExpansionAnimationImplementation(element_id, max_width, size_unit) {
+function ExpansionAnimationImplementation(element_id, max_width, size_unit) {
+    console.log("Expanded");
     let element = document.getElementById(element_id);
-    if (current_width < max_width) {
-        element.style.width = current_width + size_unit;
+    try {
+        if (current_width < max_width) {
+            element.style.width = current_width + size_unit;
+        }
+        else {
+            console.log("Else");
+            clearInterval(expansion_animation_interval);
+        }
+        current_width++;
     }
-    else {
-        element.style.width = "90%";
-        await clearInterval(expansion_animation_interval);
+    catch {
+        clearInterval(expansion_animation_interval);
     }
-    current_width++;
 }
 
-export async function ExpansionAnimation(element_id, max_width, interval, size_unit) {
+export function ClearExpansionAnimation(element_id) {
+    current_width = 0;
     let element = document.getElementById(element_id);
-    element.style.width = "0%";
-    expansion_animation_interval = await setInterval(async () => { await ExpansionAnimationImplementation(element_id, max_width, size_unit) }, interval);
+    if (element != null) {
+        element.style.width = "0%";
+        clearInterval(expansion_animation_interval);
+    }
+}
+
+export function ExpansionAnimation(element_id, max_width, interval, size_unit) {
+    expansion_animation_interval = setInterval(() => { ExpansionAnimationImplementation(element_id, max_width, size_unit) }, interval);
 }
 
 // [ END ]
@@ -82,14 +95,14 @@ function Background_Image_Sizing() {
     background.style.height = main_structure_div + "px";
 }
 
-export async function Clear_Background_Image_Sizing() {
+export function Clear_Background_Image_Sizing() {
     if (background_image_sizing !== undefined) {
-        await clearInterval(background_image_sizing);
+        clearInterval(background_image_sizing);
     }
 }
 
-export async function Set_Background_Image_Sizing() {
-    background_image_sizing = await setInterval(async () => { await Background_Image_Sizing(); }, 1);
+export function Set_Background_Image_Sizing() {
+    background_image_sizing = setInterval(() => { Background_Image_Sizing(); }, 1);
 }
 
 // [ END ]
@@ -121,14 +134,14 @@ function Resize_Home_Page_Elements() {
     }
 }
 
-export async function Clear_Resize_Home_Page_Elements() {
+export function Clear_Resize_Home_Page_Elements() {
     if (home_page_elements_resizing !== undefined) {
-        await clearInterval(home_page_elements_resizing);
+        clearInterval(home_page_elements_resizing);
     }
 }
 
-export async function Set_Resize_Home_Page_Elements() {
-    home_page_elements_resizing = await setInterval(async () => { await Resize_Home_Page_Elements(); }, 100);
+export function Set_Resize_Home_Page_Elements() {
+    home_page_elements_resizing = setInterval(() => { Resize_Home_Page_Elements(); }, 100);
 }
 
 // [ END ]
@@ -139,26 +152,32 @@ export async function Set_Resize_Home_Page_Elements() {
 //
 // [ START ]
 
-async function Button_Focus_Effect(element_id) {
+function Button_Focus_Effect(element_id) {
     let button_cover = document.getElementById(element_id);
     if (home_page_button_focus !== undefined) {
         if (current_alpha > 0.3) {
             current_alpha = current_alpha - 0.1;
-            console.log(current_alpha);
-            button_cover.style.background = "linear-gradient(to right, rgba(61, 57, 50, " + current_alpha + "), rgba(91, 90, 90, " + current_alpha + "))";
+            try {
+                button_cover.style.background = "linear-gradient(to right, rgba(61, 57, 50, " + current_alpha + "), rgba(91, 90, 90, " + current_alpha + "))";
+            }
+            catch {
+                clearInterval(home_page_button_focus);
+            }
         }
     }
 }
-export async function Clear_Set_Button_Focus_Effect(element_id) {
+export function Clear_Set_Button_Focus_Effect(element_id) {
     if (home_page_button_focus !== undefined) {
-        await clearInterval(home_page_button_focus);
+        clearInterval(home_page_button_focus);
     }
     let button_cover = document.getElementById(element_id);
-    button_cover.style.background = "linear-gradient(to right, rgba(61, 57, 50, 0.65), rgba(91, 90, 90, 0.65))";
-    current_alpha = 0.65;
+    if (button_cover != null) {
+        button_cover.style.background = "linear-gradient(to right, rgba(61, 57, 50, 0.65), rgba(91, 90, 90, 0.65))";
+        current_alpha = 0.65;
+    }
 }
-export async function Set_Button_Focus_Effect(element_id) {
-    home_page_button_focus = await setInterval(async () => { await Button_Focus_Effect(element_id); }, 100);
+export function Set_Button_Focus_Effect(element_id) {
+    home_page_button_focus = setInterval(() => { Button_Focus_Effect(element_id); }, 100);
 }
 
 // [ END ]

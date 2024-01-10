@@ -1,4 +1,5 @@
 ﻿@using HallRentalSystem.Components;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 @inject NavigationManager NavigationManager;
 @inject IJSRuntime JS
 
@@ -41,7 +42,42 @@
 </div>
 
 @code {
+    /*
+    private void NavigateToPage(string page, string element_id)
+    {
+        if (Shared_Data.animations != null)
+        {
+             Shared_Data.animations.ButtonAnimation(Animations.Operation.Clear, element_id);
+             Shared_Data.animations.ExpansionAnimation(Animations.Operation.Clear);
+             Shared_Data.animations.ElementResizeAnimation(Animations.Operation.Clear);
+        }
+        NavigationManager.NavigateTo(page);
+    }
 
+    private void MouseEnter(string element_id)
+    {
+        if (Shared_Data.animations != null)
+            Shared_Data.animations.ButtonAnimation(Animations.Operation.Initiate, element_id);
+    }
+
+    private void MouseLeave(string element_id)
+    {
+        if (Shared_Data.animations != null)
+            Shared_Data.animations.ButtonAnimation(Animations.Operation.Initiate, element_id);
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (Shared_Data.animations != null)
+        {
+            Shared_Data.animations.ExpansionAnimation(Animations.Operation.Initiate);
+            Shared_Data.animations.ElementResizeAnimation(Animations.Operation.Initiate);
+        }
+    }
+    */
+    
     private async void NavigateToPage(string page, string element_id)
     {
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
@@ -51,24 +87,25 @@
     }
 
     private async void MouseEnter(string element_id)
-    {
+        {
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
         await module.InvokeAsync<string>("Set_Button_Focus_Effect", element_id);
         await module.InvokeAsync<string>("Clear_Resize_Home_Page_Elements");
     }
 
     private async void MouseLeave(string element_id)
-    {
+        {
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
         await module.InvokeAsync<string>("Clear_Set_Button_Focus_Effect", element_id);
     }
 
     protected override async void OnAfterRender(bool firstRender)
-    {
+        {
         base.OnAfterRender(firstRender);
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
         await module.InvokeAsync<string>("ExpansionAnimation",  "index_page_jumbotron", "90", "10", "%" );
         await module.InvokeAsync<string>("Clear_Resize_Home_Page_Elements");
         await module.InvokeAsync<string>("Set_Resize_Home_Page_Elements");
     }
+    
 }
