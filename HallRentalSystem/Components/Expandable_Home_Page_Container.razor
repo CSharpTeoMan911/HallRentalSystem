@@ -26,6 +26,7 @@
             <div id="content_block_2" class="main_index_page_panel_content_block">
                 <div class="main_index_page_panel_content_blocks">
                     <article class="main_article_style">
+                        <h1 class="handwritten_page_title">Hall Rentals</h1>
                         Are you in need of a perfect venue for your upcoming event? Look no further! Our hall rentals website is here to make your search for the ideal event space a breeze. Whether you're organizing a wedding reception, corporate conference, or a birthday party, our platform offers a wide selection of halls available for rent.
 
                         With our user-friendly search and filter options, finding the perfect venue is just a few clicks away. Simply enter your desired location, event type, capacity, and budget, and let our website do the rest. Each hall listing provides detailed information, including amenities, pricing, and availability, along with high-quality photos and virtual tours.
@@ -87,20 +88,20 @@
     }
 
     private async void MouseEnter(string element_id)
-        {
+    {
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
         await module.InvokeAsync<string>("Set_Button_Focus_Effect", element_id);
         await module.InvokeAsync<string>("Clear_Resize_Home_Page_Elements");
     }
 
     private async void MouseLeave(string element_id)
-        {
+    {
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
         await module.InvokeAsync<string>("Clear_Set_Button_Focus_Effect", element_id);
     }
 
     protected override async void OnAfterRender(bool firstRender)
-        {
+    {
         base.OnAfterRender(firstRender);
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
         await module.InvokeAsync<string>("ExpansionAnimation",  "index_page_jumbotron", "90", "10", "%" );

@@ -1,11 +1,12 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Roboto+Condensed:wght@100&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&family=League+Spartan:wght@400;500&family=Roboto+Condensed:wght@100&display=swap');
 
 
 h1.handwritten_page_title {
     align-self: center;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 500;
-    font-size: calc(40px + 2vw);
+    font-family: 'League Spartan', sans-serif;
+    font-weight: bold;
+    font-size: calc(40px + 2.3vw);
+    margin-bottom: 30px;
     background: linear-gradient( to right, #FFFFFF, #F2F2F2);
     background-clip: text;
     -webkit-background-clip: text;
@@ -15,12 +16,13 @@ h1.handwritten_page_title {
 }
 
 div.index_page_skeleton {
-    display:flex;
-    width:100%;
-    flex-direction:column;
-    align-self:center;
-    justify-self:center;
-    align-content:center;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-self: center;
+    justify-self: center;
+    align-content: center;
+    padding-top: 80px;
 }
 
 div.main_index_page_panel_content {
@@ -72,7 +74,7 @@ div.button_cover {
     justify-content: center;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to right, rgba(61, 57, 50, 0.65), rgba(91, 90, 90, 0.65));
+    background: linear-gradient(to right, rgba(61, 57, 50, 0.55), rgba(91, 90, 90, 0.55));
 }
 
 /* width */
@@ -118,9 +120,9 @@ article.main_article_style {
     height: 70vh;
     width: 100%;
     padding: 5%;
-    font-family: 'League Spartan', sans-serif;
+    font-family: 'JetBrains Mono', monospace;
     font-weight: 400;
-    font-size: 2.8vw;
+    font-size: calc(6px + 1.8vw);
     overflow-y: auto;
 }
 

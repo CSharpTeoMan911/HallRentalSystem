@@ -73,8 +73,8 @@ export function ClearExpansionAnimation(element_id) {
     let element = document.getElementById(element_id);
     if (element != null) {
         element.style.width = "0%";
-        clearInterval(expansion_animation_interval);
     }
+    clearInterval(expansion_animation_interval);
 }
 
 export function ExpansionAnimation(element_id, max_width, interval, size_unit) {
@@ -172,7 +172,7 @@ export function Clear_Set_Button_Focus_Effect(element_id) {
     }
     let button_cover = document.getElementById(element_id);
     if (button_cover != null) {
-        button_cover.style.background = "linear-gradient(to right, rgba(61, 57, 50, 0.65), rgba(91, 90, 90, 0.65))";
+        button_cover.style.background = "linear-gradient(to right, rgba(61, 57, 50, 0.55), rgba(91, 90, 90, 0.55))";
         current_alpha = 0.65;
     }
 }
