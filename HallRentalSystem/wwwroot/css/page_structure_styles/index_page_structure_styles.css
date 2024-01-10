@@ -7,22 +7,9 @@ h1.handwritten_page_title {
     font-weight: bold;
     font-size: calc(40px + 2.3vw);
     margin-bottom: 30px;
-    background: linear-gradient( to right, #FFFFFF, #F2F2F2);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -moz-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    -moz-text-fill-color: transparent;
-}
-
-div.index_page_skeleton {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    align-self: center;
-    justify-self: center;
-    align-content: center;
-    padding-top: 80px;
+    color: white;
+    -webkit-text-stroke: 1px #F8F8F8;
+    text-shadow: 6px 4px 2px black;
 }
 
 div.main_index_page_panel_content {
@@ -108,9 +95,9 @@ div.button_cover {
 .custom_jumbotron {
     border-radius: 20px;
     width: 0%;
-    margin-top: 30px;
+    margin-top: 110px;
     margin-bottom: 30px;
-    justify-self:flex-end;
+    justify-self: flex-end;
     align-self: center;
 }
 
@@ -157,8 +144,10 @@ p.label {
     align-self: center;
     justify-self: center;
     font-family: 'League Spartan', sans-serif;
-    font-weight:700;
+    font-weight: 700;
     font-size: 5vw;
     color: white;
+    -webkit-text-stroke: 1px #F8F8F8;
+    text-shadow: 6px 4px 20px black;
 }
 
