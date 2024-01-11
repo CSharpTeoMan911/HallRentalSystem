@@ -123,7 +123,7 @@ function Resize_Home_Page_Elements() {
             if (index_page_jumbotron !== null) {
                 if (main_page_button_1 !== null) {
                     if (main_page_button_2 !== null) {
-                        if (index_page_jumbotron.offsetWidth <= 1600) {
+                        if (index_page_jumbotron.offsetWidth <= 1200) {
                             content_block_1.style.width = "100%";
                             content_block_2.style.width = "100%";
                             main_page_button_1.style.height = "20vh";

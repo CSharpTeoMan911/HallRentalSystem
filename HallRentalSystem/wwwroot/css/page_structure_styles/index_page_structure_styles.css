@@ -37,7 +37,7 @@ div.main_index_page_panel_content_display_block {
 }
 
 div.main_index_page_panel_content_block {
-    width: 900px;
+    width: 49.8%;
     display: inline-block;
     vertical-align: top;
     height: 100%;
@@ -111,6 +111,8 @@ article.main_article_style {
     font-weight: 400;
     font-size: calc(6px + 1.8vw);
     overflow-y: auto;
+    -webkit-text-stroke: 1px #F8F8F8;
+    text-shadow: 6px 4px 1px black;
 }
 
 button.main_page_button_1 {
