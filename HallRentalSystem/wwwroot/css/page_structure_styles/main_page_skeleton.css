@@ -30,3 +30,13 @@ div.page_content {
     flex-direction: column;
     align-self: center;
 }
+
+div.index_page_skeleton {
+    display: flex;
+    z-index: 1;
+    width: 100%;
+    flex-direction: column;
+    align-self: center;
+    justify-self: center;
+    align-content: center;
+}
