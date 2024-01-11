@@ -11,8 +11,8 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav" style="margin-left:20px;">
             <a class=@class_names.ElementAt(0) @onclick=@(()=>OnPageNavigation(0)) href="/">Home</a>
-            <a class=@class_names.ElementAt(1) @onclick=@(()=>OnPageNavigation(1)) href="#">Booking</a>
-            <a class=@class_names.ElementAt(2) @onclick=@(()=>OnPageNavigation(2)) href="#">Contacts</a>
+            <a class=@class_names.ElementAt(1) @onclick=@(()=>OnPageNavigation(1)) href="/book">Booking</a>
+            <a class=@class_names.ElementAt(2) @onclick=@(()=>OnPageNavigation(2)) href="/contacts">Contacts</a>
             <a class=@class_names.ElementAt(3) href="/" @onclick=@(()=>OnPageNavigation(3))>@Shared_Data.authentication_state</a>
         </div>
     </div>
