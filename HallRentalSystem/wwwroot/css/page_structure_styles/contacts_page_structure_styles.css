@@ -1,1 +1,102 @@
-﻿
+﻿@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500&display=swap");
+
+div.contacts_container {
+    display: flex;
+    width:100%;
+    flex-direction: column;
+    align-content:center;
+    justify-content:center;
+}
+
+div.contacts_main_container {
+    align-self: center;
+    justify-self:center;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+div.contacts_map_container {
+    display: inline-block;
+}
+
+div.contacts_context_container {
+    display: inline-block;
+}
+
+div.main_container_segment {
+    vertical-align: top;
+    display: inline-block;
+    width: 49.8%;
+}
+
+div.main_container_segment_content {
+    display: flex;
+    flex-direction: column;
+    align-self:center;
+    align-content:center;
+    width: 100%;
+}
+
+div.location_map {
+    align-self: center;
+    width: 90%;
+    height: 95%;
+    border-radius: 5px;
+}
+
+div.contact_details {
+    display:flex;
+    align-self:center;
+    flex-direction:column;
+    margin-left:120px;
+    width:100%;
+}
+
+div.contact_details_section {
+    margin-top:10px;
+    margin-bottom:10px;
+}
+
+.contacts_jumbotron {
+    margin-top: 40px;
+    background-color: #2e2e2e;
+    align-self: center;
+    width: 90%;
+    height: 100%;
+    opacity: 65%;
+    border-radius: 10px;
+}
+
+h1.contacts_page_heading {
+    color: white;
+    width: fit-content;
+    align-self: center;
+    justify-self: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    font-size: calc(65px + 1vw);
+    -webkit-text-stroke: 1px #F8F8F8;
+    text-shadow: 10px 4px 1px black;
+    margin-top: 20px;
+    margin-bottom: 80px;
+}
+
+h2.contact_details_section_heading {
+    color: #e8e8e8;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    font-size: calc(35px + 1vw);
+    -webkit-text-stroke: 1px #F8F8F8;
+    text-shadow: 7px 4px 1px black;
+}
+
+p.contact_details_section_detail {
+    color: #e2e2e2;
+    width: 90%;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 300;
+    font-size: calc(15px + 1vw);
+    -webkit-text-stroke: 1px #e2e2e2;
+    text-shadow: 5px 4px 1px black;
+}

@@ -1,8 +1,9 @@
-﻿var expansion_animation_interval = undefined;
-var gradient_fluctuation_interval = undefined;
-var background_image_sizing = undefined;
-var home_page_elements_resizing = undefined;
-var home_page_button_focus = undefined;
+﻿let expansion_animation_interval = undefined;
+let gradient_fluctuation_interval = undefined;
+let background_image_sizing = undefined;
+let home_page_elements_resizing = undefined;
+let home_page_button_focus = undefined;
+let contacts_page_elements_resizing = undefined;
 
 let current_width = 0;
 let current_gradient = 0;
@@ -123,7 +124,7 @@ function Resize_Home_Page_Elements() {
             if (index_page_jumbotron !== null) {
                 if (main_page_button_1 !== null) {
                     if (main_page_button_2 !== null) {
-                        if (index_page_jumbotron.offsetWidth <= 1200) {
+                        if (index_page_jumbotron.offsetWidth <= 1150) {
                             content_block_1.style.width = "100%";
                             content_block_2.style.width = "100%";
                             main_page_button_1.style.height = "20vh";
@@ -152,6 +153,44 @@ export function Clear_Resize_Home_Page_Elements() {
 
 export function Set_Resize_Home_Page_Elements() {
     home_page_elements_resizing = setInterval(() => { Resize_Home_Page_Elements(); }, 100);
+}
+
+// [ END ]
+
+
+
+// RESIZE CONTACTS PAGE ELEMENTS
+//
+// [ START ]
+
+function Resize_Contacts_Page_Elemets() {
+    let contacts_page_jumbotron = document.getElementById("contacts_page_jumbotron");
+    let main_container_segment_1 = document.getElementById("main_container_segment_1");
+    let main_container_segment_2 = document.getElementById("main_container_segment_2");
+    let location_map = document.getElementById("location_map");
+
+    location_map.style.height = (main_container_segment_2.offsetHeight * 96 / 100) + "px";
+
+    if (contacts_page_jumbotron.offsetWidth <= 1250) {
+        main_container_segment_1.style.width = "100%";
+        main_container_segment_2.style.width = "100%";
+        main_container_segment_2.style.marginTop = "40px";
+    }
+    else {
+        main_container_segment_1.style.width = "49.8%";
+        main_container_segment_2.style.width = "49.8%";
+        main_container_segment_2.style.marginTop = "0px";
+    }
+}
+
+export function Clear_Resize_Contacts_Page_Elemets() {
+    if (contacts_page_elements_resizing !== null) {
+        clearInterval(contacts_page_elements_resizing);
+    }
+}
+
+export function Set_Resize_Contacts_Page_Elemets() {
+    contacts_page_elements_resizing = setInterval(() => { Resize_Contacts_Page_Elemets(); }, 100)
 }
 
 // [ END ]
