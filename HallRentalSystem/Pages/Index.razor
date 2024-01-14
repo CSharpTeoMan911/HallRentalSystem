@@ -5,24 +5,75 @@
 @using HallRentalSystem.Components;
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 @inject IJSRuntime JS
-@inject NavigationManager Navigation_Manager;
+@inject IJSRuntime JS
+@inject NavigationManager NavigationManager;
 @inject ProtectedLocalStorage LocalStorage;
 @page "/"
 
 <PageTitle>Home</PageTitle>
 
 
-<div class="index_page_skeleton">
-    <Expandable_Home_Page_Container/>
+<div id="index_page_jumbotron" class="jumbotron custom_jumbotron">
+    <div class="main_index_page_panel_content">
+        <div class="main_index_page_panel_content_display_block">
+            <div id="content_block_1" class="main_index_page_panel_content_block">
+                <div class="main_index_page_panel_content_blocks">
+                    <button id="main_page_button_1" class="main_page_button_1" @onmouseenter=@(()=>MouseEnter("button_cover_1")) @onmouseleave=@(()=>MouseLeave("button_cover_1")) @onclick=@(()=>NavigateToPage("/book", "button_cover_1"))>
+                        <div id="button_cover_1" class="button_cover">
+                            <p class="label">Booking</p>
+                        </div>
+                    </button>
+
+                    <button id="main_page_button_2" class="main_page_button_2" @onmouseenter=@(()=>MouseEnter("button_cover_2")) @onmouseleave=@(()=>MouseLeave("button_cover_2")) @onclick=@(() =>NavigateToPage("/contacts", "button_cover_2"))>
+                        <div id="button_cover_2" class="button_cover">
+                            <p class="label">Contacts</p>
+                        </div>
+                    </button>
+                </div>
+            </div>
+            <div id="content_block_2" class="main_index_page_panel_content_block">
+                <div class="main_index_page_panel_content_blocks">
+                    <article class="main_article_style">
+                        <h1 class="handwritten_page_title">Hall Rentals</h1>
+                        Are you in need of a perfect venue for your upcoming event? Look no further! Our hall rentals website is here to make your search for the ideal event space a breeze. Whether you're organizing a wedding reception, corporate conference, or a birthday party, our platform offers a wide selection of halls available for rent.
+
+                        With our user-friendly search and filter options, finding the perfect venue is just a few clicks away. Simply enter your desired location, event type, capacity, and budget, and let our website do the rest. Each hall listing provides detailed information, including amenities, pricing, and availability, along with high-quality photos and virtual tours.
+
+                        But don't just take our word for it! Read reviews and ratings from previous customers to gain insights into the experience and quality of each venue. Once you've found the perfect hall, our integrated booking system allows you to check availability, request quotes, and make secure online payments.
+
+                        Say goodbye to the hassle of searching for event spaces. Visit our hall rentals website today and discover the perfect venue for your next event!
+
+                    </article>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
+@code {
 
-
-@code{
     protected override async void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
         if (await Shared_Data.auth_manager.Get<bool>(LocalStorage) == true)
             StateHasChanged();
     }
+
+    private void NavigateToPage(string page, string element_id)
+    {
+        NavigationManager.NavigateTo(page);
+    }
+
+    private async void MouseEnter(string element_id)
+    {
+        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
+        await module.InvokeAsync<string>("Set_Button_Focus_Effect", element_id);
+    }
+
+    private async void MouseLeave(string element_id)
+    {
+        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
+        await module.InvokeAsync<string>("Clear_Set_Button_Focus_Effect", element_id);
+    }
+
 }
