@@ -15,8 +15,7 @@
 
 <PageTitle>Home</PageTitle>
 
-
-<div class="index_page_skeleton">
+<div style="display:flex;flex-direction:column;">
     <h1 class="handwritten_page_title">Book a Hall</h1>
     <select @onchange=@((changed_value)=>LocationOnChange(changed_value?.Value?.ToString())) class="form-select" aria-label="Default select example" style="width: 200px; height: 40px; font-size: 16px; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">
         <option selected>All</option>
@@ -26,10 +25,10 @@
         <option value="Manchester">Manchester</option>
     </select>
     <select @onchange=@((changed_value)=>HallOnChange(changed_value?.Value?.ToString())) class="form-select" aria-label="Default select example" style="width: 200px; height: 40px; font-size: 16px; padding: 5px 10px; border: 1px solid #ccc; border-radius: 4px;">
-        
-@*      @for (int i = 0; i < s.Count; i++)
+
+        @*      @for (int i = 0; i < s.Count; i++)
         {
-            <option value=@s.ElementAt(i)>@s.ElementAt(i)</option>
+        <option value=@s.ElementAt(i)>@s.ElementAt(i)</option>
         } *@
 
         <option selected>Select Hall</option>
@@ -43,7 +42,6 @@
     <h1 class="handwritten_page_title">calendar for choosing the date</h1>
     <button>book</button>
 </div>
-
 
 
 @code{
