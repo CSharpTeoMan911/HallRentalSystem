@@ -4,16 +4,16 @@
 @inject ProtectedLocalStorage LocalStorage;
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" style="margin-left:20px;" href="/" @onclick=@(()=>OnPageNavigation(0))>Hall Rentals</a>
+    <a class="navbar-brand" style="margin-left:20px;font-size:28px;" href="/" @onclick=@(()=>OnPageNavigation(0))>Hall Rentals</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation" style="margin-left:20px;margin-right:20px;">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav" style="margin-left:20px;">
-            <a class=@class_names.ElementAt(0) @onclick=@(()=>OnPageNavigation(0)) href="/">Home</a>
-            <a class=@class_names.ElementAt(1) @onclick=@(()=>OnPageNavigation(1)) href="/book">Booking</a>
-            <a class=@class_names.ElementAt(2) @onclick=@(()=>OnPageNavigation(2)) href="/contacts">Contacts</a>
-            <a class=@class_names.ElementAt(3) href="/" @onclick=@(()=>OnPageNavigation(3))>@Shared_Data.authentication_state</a>
+            <a style="font-size:23px;" class=@class_names.ElementAt(0) @onclick=@(()=>OnPageNavigation(0)) href="/">Home</a>
+            <a style="font-size:23px;" class=@class_names.ElementAt(1) @onclick=@(()=>OnPageNavigation(1)) href="/book">Booking</a>
+            <a style="font-size:23px;" class=@class_names.ElementAt(2) @onclick=@(()=>OnPageNavigation(2)) href="/contacts">Contacts</a>
+            <a style="font-size:23px;" class=@class_names.ElementAt(3) href="/" @onclick=@(()=>OnPageNavigation(3))>@Shared_Data.authentication_state</a>
         </div>
     </div>
 </nav>
@@ -73,7 +73,7 @@
         }
         else
         {
-            Navigation_Manager.NavigateTo("/login", true);
+            Navigation_Manager.NavigateTo("/log-in", true);
         }
     }
 }
