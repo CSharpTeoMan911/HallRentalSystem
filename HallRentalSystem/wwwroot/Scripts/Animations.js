@@ -273,8 +273,6 @@ export function Set_Button_Focus_Effect(element_id) {
 
 function AuthGradientFluctuation() {
     let auth_jumbotron = document.getElementById("auth_jumbotron");
-    console.log("!!! ANIMATION !!!");
-    console.log(auth_jumbotron.style.background);
 
     if (auth_jumbotron !== null) {
         auth_jumbotron.style.background = "linear-gradient(to left, #969696 20%, white " + current_auth_gradient + "%)";
