@@ -9,16 +9,26 @@
 @inject IJSRuntime JS
 @inject NavigationManager Navigation_Manager;
 @inject ProtectedLocalStorage LocalStorage;
-@page "/sign-in"
+@page "/sign-up"
 
-<PageTitle>Sign In</PageTitle>
+<div class="jumbotron auth_jumbotron">
+    <div class="main_auth_container">
+        <h1 class="auth_page_header">
+            Sign Up
+        </h1>
 
-<h3>SignIn</h3>
+        <AuthPanel label="Email" placeholder="Enter your email address" IsPassword=false InputId="email_input" />
 
-@code {
-    protected override void OnAfterRender(bool firstRender)
-    {
-        base.OnAfterRender(firstRender);
+        <br />
+        <br />
 
-    }
-}
+        <AuthPanel label="Password" placeholder="Enter your password" IsPassword=true InputId="password_input" />
+
+        <br />
+        <br />
+
+        <AuthPanel label="Re-Password" placeholder="Enter your password" IsPassword=true InputId="password_input" />
+
+        <AuthAction TransistiveButton="Already have an account? Click here to log in." ActionButton="Register" TransitionTarget="/log-in" />
+    </div>
+</div>
