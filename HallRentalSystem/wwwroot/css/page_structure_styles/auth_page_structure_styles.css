@@ -1,0 +1,105 @@
+﻿@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;700&display=swap");
+
+
+body {
+}
+
+
+.auth_jumbotron {
+    align-self:center;
+    background: linear-gradient(to right, white, #c4c4c4);
+    width: calc(25% + 150px);
+    margin-top: 60px;
+    border-radius: 10px;
+}
+
+div.main_auth_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:center;
+    align-content: center;
+    width: 100%;
+}
+
+div.authpanel_div {
+    width:70%;
+}
+
+div.authaction_div {
+    display: flex;
+    flex-direction: column;
+    align-self:center;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    margin-top: 40px;
+}
+
+h1.auth_page_header {
+    margin-top: 20px;
+    margin-bottom: 60px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: calc(35px + 1vw);
+    color: #373737;
+}
+
+h2.authpanel_header {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    font-size: calc(15px + 1vw);
+    color: #373737;
+}
+
+input.auth_input {
+    position: relative;
+    width: 100%;
+    border-radius: 5px;
+    font-size: calc(6px + 1vw);
+    background-color: grey;
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 300;
+    border-color: black;
+    border-width: 2px;
+}
+
+.auth_input::placeholder {
+    color: #d5d4d4;
+    opacity: 1; /* Firefox */
+}
+
+.auth_input::-ms-input-placeholder { /* Edge 12 -18 */
+    color: #d5d4d4;
+}
+
+button.transistive_button {
+    border-color: transparent;
+    background-color: transparent;
+    color: #004AAD;
+    font-size: calc(6px + 0.5vw);
+}
+
+button.transistive_button:hover {
+   color: #006bfb;
+}
+
+button.action_button {
+    padding-top: calc(1px + 0.2vw);
+    padding-bottom: calc(1px + 0.2vw);
+    padding-left: calc(2px + 1vw);
+    padding-right: calc(2px + 1vw);
+    margin-top: 50px;
+    margin-bottom: calc(3px + 1vw);
+    font-size: calc(15px + 1vw);
+    border-radius: 5px;
+    background: linear-gradient(to right, #1E1D1D, #504F4F);
+    border-color: transparent;
+    border-width: 0px;
+    color: white;
+}
+
+button.action_button:hover {
+    background: #006bfb;
+}
