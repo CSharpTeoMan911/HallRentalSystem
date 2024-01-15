@@ -23,6 +23,8 @@
     {
         IJSObjectReference animations_module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
 
+        await animations_module.InvokeAsync<string>("SetBackgroundImage");
+
         await animations_module.InvokeAsync<string>("GradientFluctuationAnimationCancellation");
         await animations_module.InvokeAsync<string>("Clear_Background_Image_Sizing");
         await animations_module.InvokeAsync<string>("ClearExpansionAnimation", "main_page_structure_div");
