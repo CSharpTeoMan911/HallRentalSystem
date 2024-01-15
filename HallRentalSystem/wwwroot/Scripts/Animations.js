@@ -21,7 +21,7 @@ export function SetBackgroundImage() {
 
     let background_image = document.getElementById("background_image");
     if (background_image !== null) {
-        if (page === "/log-in" || page == "/sign-in") {
+        if (page === "/log-in" || page == "/sign-up") {
             background_image.style.backgroundImage = "url(\"https://ik.imagekit.io/freeflo/production/a18246a8-8491-491b-963d-fad1f060471b.png?tr=w-3840,q-75&alt=media&pr-true\")";
         }
         else {

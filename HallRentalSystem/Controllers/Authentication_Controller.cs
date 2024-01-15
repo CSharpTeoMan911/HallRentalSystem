@@ -24,6 +24,8 @@ namespace HallRentalSystem.Controllers
         [HttpPost("insert-account")]
         public Task<ActionResult<string?>> Insert([FromQuery] Customers? data)
         {
+
+
             return Task.FromResult<ActionResult<string?>>(Content("OK Get"));
         }
 
