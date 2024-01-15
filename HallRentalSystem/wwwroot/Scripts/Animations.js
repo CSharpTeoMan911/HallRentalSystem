@@ -11,6 +11,28 @@ let switch_gradient_offset = false;
 
 let current_alpha = 0.65;
 
+
+// BACKGROUND SELECTION
+//
+// [ BEGIN ]
+
+export function SetBackgroundImage() {
+    let page = window.location.pathname;
+
+    let background_image = document.getElementById("background_image");
+    if (background_image !== null) {
+        if (page === "/log-in" || page == "/sign-in") {
+            background_image.style.backgroundImage = "url(\"https://ik.imagekit.io/freeflo/production/a18246a8-8491-491b-963d-fad1f060471b.png?tr=w-3840,q-75&alt=media&pr-true\")";
+        }
+        else {
+            background_image.style.backgroundImage = "url(\"https://images.pixexid.com/a-futuristic-city-designed-using-gothic-architecture-k4zwosr1.jpeg\")";
+        }
+    }
+}
+
+// [ END ]
+
+
 // GRADIENT FLUCTUATION ANIMATION
 //
 // [ BEGIN ]
@@ -228,5 +250,3 @@ export function Set_Button_Focus_Effect(element_id) {
     current_alpha = 0.55;
     home_page_button_focus = setInterval(() => { Button_Focus_Effect(element_id); }, 10);
 }
-
-// [ END ]

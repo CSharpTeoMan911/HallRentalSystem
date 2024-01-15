@@ -5,7 +5,7 @@ h1.handwritten_page_title {
     align-self: center;
     font-family: 'League Spartan', sans-serif;
     font-weight: bold;
-    font-size: calc(40px + 2.3vw);
+    font-size: calc(36px + 1.8vw);
     margin-bottom: 30px;
     color: white;
     -webkit-text-stroke: 1px #F8F8F8;
@@ -109,7 +109,7 @@ article.main_article_style {
     padding: 5%;
     font-family: 'JetBrains Mono', monospace;
     font-weight: 400;
-    font-size: calc(6px + 1.8vw);
+    font-size: calc(6px + 1.5vw);
     overflow-y: auto;
     -webkit-text-stroke: 1px #F8F8F8;
     text-shadow: 6px 4px 1px black;
@@ -147,7 +147,7 @@ p.label {
     justify-self: center;
     font-family: 'League Spartan', sans-serif;
     font-weight: 700;
-    font-size: 5vw;
+    font-size: calc(36px + 1.8vw);
     color: white;
     -webkit-text-stroke: 1px #F8F8F8;
     text-shadow: 6px 4px 20px black;
