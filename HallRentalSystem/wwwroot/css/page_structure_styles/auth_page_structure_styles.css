@@ -6,9 +6,9 @@ body {
 
 
 .auth_jumbotron {
-    align-self:center;
-    background: linear-gradient(to right, white, #c4c4c4);
-    width: calc(25% + 150px);
+    align-self: center;
+    background: linear-gradient(to left, #969696 20%, white 50%);
+    width: calc(22% + 150px);
     margin-top: 60px;
     border-radius: 10px;
 }
@@ -23,26 +23,29 @@ div.main_auth_container {
 }
 
 div.authpanel_div {
-    width:70%;
+    width:80%;
+    margin-top: calc(10px + 1vw);
 }
 
 div.authaction_div {
     display: flex;
     flex-direction: column;
-    align-self:center;
-    align-items:center;
-    justify-content:center;
-    width:100%;
-    margin-top: 40px;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: calc(15px + 1vw);
 }
 
 h1.auth_page_header {
     margin-top: 20px;
-    margin-bottom: 60px;
+    margin-bottom: calc(10px + 1vw);
     font-family: 'JetBrains Mono', monospace;
     font-weight: 700;
-    font-size: calc(35px + 1vw);
+    font-size: calc(30px + 1.5vw);
     color: #373737;
+    -webkit-text-stroke: 1px #373737;
+    text-shadow: calc(1px + 0.09vw) calc(1px + 0.09vw) 2px black;
 }
 
 h2.authpanel_header {
@@ -50,6 +53,8 @@ h2.authpanel_header {
     font-weight: 500;
     font-size: calc(15px + 1vw);
     color: #373737;
+    -webkit-text-stroke: 1px #373737;
+    text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
 }
 
 input.auth_input {
@@ -57,7 +62,7 @@ input.auth_input {
     width: 100%;
     border-radius: 5px;
     font-size: calc(6px + 1vw);
-    background-color: grey;
+    background-color: #414141;
     color: white;
     font-family: 'JetBrains Mono', monospace;
     font-weight: 300;
@@ -78,11 +83,15 @@ button.transistive_button {
     border-color: transparent;
     background-color: transparent;
     color: #004AAD;
-    font-size: calc(6px + 0.5vw);
+    font-size: calc(7px + 0.5vw);
+    -webkit-text-stroke: 1px #004AAD;
+    text-shadow: 1px 1px 2px black;
 }
 
 button.transistive_button:hover {
-   color: #006bfb;
+    color: #004bff;
+    -webkit-text-stroke: 1px #004bff;
+    text-shadow: 1px 1px 2px black;
 }
 
 button.action_button {
@@ -90,7 +99,7 @@ button.action_button {
     padding-bottom: calc(1px + 0.2vw);
     padding-left: calc(2px + 1vw);
     padding-right: calc(2px + 1vw);
-    margin-top: 50px;
+    margin-top: calc(10px + 1vw);
     margin-bottom: calc(3px + 1vw);
     font-size: calc(15px + 1vw);
     border-radius: 5px;

@@ -4,10 +4,14 @@ let background_image_sizing = undefined;
 let home_page_elements_resizing = undefined;
 let home_page_button_focus = undefined;
 let contacts_page_elements_resizing = undefined;
+let auth_gradient_fluctuation_interval = undefined;
 
 let current_width = 0;
 let current_gradient = 0;
 let switch_gradient_offset = false;
+
+let current_auth_gradient = 0;
+let switch_auth_gradient_offset = false;
 
 let current_alpha = 0.65;
 
@@ -149,8 +153,8 @@ function Resize_Home_Page_Elements() {
                         if (index_page_jumbotron.offsetWidth <= 1150) {
                             content_block_1.style.width = "100%";
                             content_block_2.style.width = "100%";
-                            main_page_button_1.style.height = "20vh";
-                            main_page_button_2.style.height = "20vh";
+                            main_page_button_1.style.height = "12vh";
+                            main_page_button_2.style.height = "12vh";
                             index_page_jumbotron.style.marginTop = "20px";
                         }
                         else {
@@ -191,17 +195,25 @@ function Resize_Contacts_Page_Elemets() {
     let main_container_segment_2 = document.getElementById("main_container_segment_2");
     let location_map = document.getElementById("location_map");
 
-    location_map.style.height = (main_container_segment_2.offsetHeight * 96 / 100) + "px";
+    if (contacts_page_jumbotron !== null) {
+        if (main_container_segment_1 !== null) {
+            if (main_container_segment_2 !== null) {
+                if (location_map !== null) {
+                    location_map.style.height = (main_container_segment_2.offsetHeight * 96 / 100) + "px";
 
-    if (contacts_page_jumbotron.offsetWidth <= 1250) {
-        main_container_segment_1.style.width = "100%";
-        main_container_segment_2.style.width = "100%";
-        main_container_segment_2.style.marginTop = "40px";
-    }
-    else {
-        main_container_segment_1.style.width = "49.8%";
-        main_container_segment_2.style.width = "49.8%";
-        main_container_segment_2.style.marginTop = "0px";
+                    if (contacts_page_jumbotron.offsetWidth <= 1250) {
+                        main_container_segment_1.style.width = "100%";
+                        main_container_segment_2.style.width = "100%";
+                        main_container_segment_2.style.marginTop = "40px";
+                    }
+                    else {
+                        main_container_segment_1.style.width = "49.8%";
+                        main_container_segment_2.style.width = "49.8%";
+                        main_container_segment_2.style.marginTop = "0px";
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -250,3 +262,57 @@ export function Set_Button_Focus_Effect(element_id) {
     current_alpha = 0.55;
     home_page_button_focus = setInterval(() => { Button_Focus_Effect(element_id); }, 10);
 }
+
+// [ END ]
+
+
+
+// AUTH GRADIENT FLUCTUATION ANIMATION
+//
+//
+
+function AuthGradientFluctuation() {
+    let auth_jumbotron = document.getElementById("auth_jumbotron");
+    console.log("!!! ANIMATION !!!");
+    console.log(auth_jumbotron.style.background);
+
+    if (auth_jumbotron !== null) {
+        auth_jumbotron.style.background = "linear-gradient(to left, #969696 20%, white " + current_auth_gradient + "%)";
+
+        switch (switch_auth_gradient_offset) {
+            case true:
+                switch (current_auth_gradient > 50) {
+                    case true:
+                        current_auth_gradient--;
+                        break;
+                    case false:
+                        switch_auth_gradient_offset = false;
+                        break;
+                }
+                break;
+            case false:
+                switch (current_auth_gradient < 100) {
+                    case true:
+                        current_auth_gradient++;
+                        break;
+                    case false:
+                        switch_auth_gradient_offset = true;
+                        break;
+                }
+                break;
+        }
+    }
+}
+
+export function ClearAuthGradientFluctuation() {
+    if (auth_gradient_fluctuation_interval != null) {
+        clearInterval(auth_gradient_fluctuation_interval);
+    }
+}
+
+export function SetAuthGradientFluctuation() {
+    current_auth_gradient = 60;
+    auth_gradient_fluctuation_interval = setInterval(() => { AuthGradientFluctuation(); }, 20)
+}
+
+// [ END ]
