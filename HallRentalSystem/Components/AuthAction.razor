@@ -1,0 +1,32 @@
+﻿@inject NavigationManager NavigationManager
+
+<div class="authaction_div">
+    <button class="transistive_button" @onclick=ImplementTransition>
+        @TransistiveButton
+    </button>
+
+    <button class="action_button" @onclick=ImplementAuthAction>
+        @ActionButton
+    </button>
+</div>
+
+@code {
+    [Parameter]
+    public string? ActionButton { get; set; }
+
+    [Parameter]
+    public string? TransistiveButton { get; set; }
+
+    [Parameter]
+    public string? TransitionTarget { get; set; }
+
+    private void ImplementAuthAction()
+    {
+    }
+
+    private void ImplementTransition()
+    {
+        if (TransitionTarget != null)
+            NavigationManager.NavigateTo(TransitionTarget);
+    }
+}
