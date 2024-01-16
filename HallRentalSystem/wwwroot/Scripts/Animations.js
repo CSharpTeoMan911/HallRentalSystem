@@ -201,7 +201,7 @@ function Resize_Contacts_Page_Elemets() {
                 if (location_map !== null) {
                     location_map.style.height = (main_container_segment_2.offsetHeight * 96 / 100) + "px";
 
-                    if (contacts_page_jumbotron.offsetWidth <= 1250) {
+                    if (contacts_page_jumbotron.offsetWidth <= 1100) {
                         main_container_segment_1.style.width = "100%";
                         main_container_segment_2.style.width = "100%";
                         main_container_segment_2.style.marginTop = "40px";
