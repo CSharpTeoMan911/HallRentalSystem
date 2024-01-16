@@ -13,7 +13,7 @@
 
 <PageTitle>Log In</PageTitle>
 
-<div class="jumbotron auth_jumbotron">
+<div id="auth_jumbotron" class="jumbotron auth_jumbotron">
     <div class="main_auth_container">
         <h1 class="auth_page_header">
             Sign In
@@ -21,11 +21,9 @@
 
         <AuthPanel label="Email" placeholder="Enter your email address" IsPassword=false InputId="email_input"/>
 
-        <br/>
-        <br/>
-
         <AuthPanel label="Password" placeholder="Enter your password" IsPassword=true InputId="password_input"/>
 
+        <br/>
         <AuthAction TransistiveButton="Do not have an account? Click here to register." ActionButton="Log In" TransitionTarget="/sign-up"/>
     </div>
 </div>
