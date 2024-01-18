@@ -1,4 +1,10 @@
-﻿@inject NavigationManager NavigationManager
+﻿@using System.Text;
+@using HallRentalSystem.Classes;
+@using HallRentalSystem.Classes.Models;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JS;
 
 <div class="authaction_div">
     <button class="transistive_button" @onclick=ImplementTransition>
@@ -8,9 +14,19 @@
     <button class="action_button" @onclick=ImplementAuthAction>
         @ActionButton
     </button>
+
+
+    @if (ShowNotification == true)
+    {
+        <Notification_System MessageContent="@MessageContent" NotificationClose="new Notification_System.OnClose(CloseNotification)" Type="@type"/>
+    }
 </div>
 
 @code {
+    private bool ShowNotification;
+    private string? MessageContent;
+    private Notification_System.NotificationType type;
+
     [Parameter]
     public string? ActionButton { get; set; }
 
@@ -20,13 +36,109 @@
     [Parameter]
     public string? TransitionTarget { get; set; }
 
-    private void ImplementAuthAction()
+
+    private async void ImplementAuthAction()
     {
+        string? query = null;
+        string? response = null;
+
+        StringBuilder url_formatter = new StringBuilder();
+
+        HttpClient client = new HttpClient();
+        client.BaseAddress = new Uri(NavigationManager.BaseUri);
+
+        Customer_ID_Value customers = new Customer_ID_Value();
+
+        switch (ActionButton)
+        {
+            case "Log In":
+                
+                break;
+            case "Register":
+                url_formatter.Append("/auth/insert-account?");
+                IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+                string[] result = await module.InvokeAsync<string[]>("GetEmailAndPassword", "email_input", "password_input", "re_password_input");
+
+                if (result.Length == 2)
+                {
+                    customers.Email = result[0];
+                    customers.Password = result[1];
+
+                    query = await Query_Formater.ObjectQueryFormatter<Customer_ID_Value>(customers);
+                    url_formatter.Append(query);
+
+                    HttpResponseMessage response_message = await client.PostAsync(url_formatter.ToString(), null);
+                    response = await response_message.Content.ReadAsStringAsync();
+
+                    switch (response)
+                    {
+                        case "Registration successful":
+                            OnRegistrationSuccessful();
+                            type = Notification_System.NotificationType.Notification;
+                            break;
+                        case "Invalid credentials":
+                            type = Notification_System.NotificationType.Error;
+                            break;
+                        case "Passowrd is less than 10 characters long":
+                            type = Notification_System.NotificationType.Error;
+                            break;
+                        case "Invalid email address":
+                            type = Notification_System.NotificationType.Error;
+                            break;
+                        case "Email already in use":
+                            type = Notification_System.NotificationType.Error;
+                            break;
+                        case "Internal server error":
+                            type = Notification_System.NotificationType.Error;
+                            break;
+                    }
+
+                }
+                else
+                {
+                    type = Notification_System.NotificationType.Error;
+                    response = "Passwords do not match";
+                }
+                break;
+        }
+
+        MessageContent = response;
+        ShowNotification = true;
+        StateHasChanged();
+    }
+
+    public void CloseNotification()
+    {
+        ShowNotification = false;
+        StateHasChanged();
     }
 
     private void ImplementTransition()
     {
         if (TransitionTarget != null)
             NavigationManager.NavigateTo(TransitionTarget);
+    }
+
+    private void OnRegistrationSuccessful()
+    {
+        DateTime registration_time = DateTime.Now;
+
+        System.Threading.Thread thread = new System.Threading.Thread(async() =>
+        {
+            while (true)
+            {
+                if ((DateTime.Now - registration_time).TotalSeconds >= 3)
+                {
+                    await Dispatcher.CreateDefault().InvokeAsync(() =>
+                    {
+                        NavigationManager.NavigateTo("/log-in");
+                    });
+                    break;
+                }
+            }
+        });
+        thread.Priority = ThreadPriority.AboveNormal;
+        thread.IsBackground = true;
+        thread.Start();
     }
 }
