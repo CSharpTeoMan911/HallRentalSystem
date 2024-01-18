@@ -7,7 +7,7 @@ body {
 
 .auth_jumbotron {
     align-self: center;
-    background: linear-gradient(to left, #969696 20%, white 50%);
+    background: linear-gradient(to left, #d0d0d0 20%, white 50%);
     width: calc(22% + 150px);
     margin-top: 60px;
     border-radius: 10px;
