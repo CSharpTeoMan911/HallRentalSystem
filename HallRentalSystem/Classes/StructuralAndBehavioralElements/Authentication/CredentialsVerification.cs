@@ -1,46 +1,42 @@
 ﻿using Firebase.Database.Query;
+using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
 
 namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authentication
 {
 
     public class CredentialsVerification
     {
-        public static async Task<bool> Get_If_Email_Exists(string email)
+        public static async Task<bool> Get_If_Email_Exists(string? email)
         {
             if (Firebase_Database.firebaseClient != null)
             {
-                string? current_page_token = null;
-                ChildQuery reference = Firebase_Database.firebaseClient.Child("Customers/Customers_ID");
-                FilterQuery query = reference.OrderBy("Email").LimitToFirst(100);
-
-
-                while (true)
+                ChildQuery reference = Firebase_Database.firebaseClient.Child("Customers/Customer_ID");
+                FilterQuery query = reference.OrderBy("Email").EqualTo(email).LimitToFirst(1);
+                string result = await query.OnceAsJsonAsync();
+                if (result != null)
                 {
-                    string result = await reference.OrderBy("Email").LimitToFirst(100).OnceAsJsonAsync();
+                    Customers? customers = Newtonsoft.Json.JsonConvert.DeserializeObject<Customers>(result);
 
-                    if (result != null)
+                    if (customers != null)
                     {
-                        Customer_ID_Value? customers_value = null;
-                        Customers? customers = Newtonsoft.Json.JsonConvert.DeserializeObject<Customers>(result);
-                        customers?.TryGetValue(email, out customers_value);
-
-                        if (customers_value != null)
+                        if (customers.Count > 0)
                         {
                             return true;
                         }
-                        else
+                        else 
                         {
-
+                            return false;
                         }
-
                     }
-                    else 
-                    { 
-                        break; 
+                    else
+                    {
+                        return false;
                     }
                 }
-
-                return true;
+                else
+                {
+                    return false;
+                }
             }
             else
             {
@@ -48,19 +44,61 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
             }
         }
 
-        public static async Task<bool> Get_If_Email_And_Password_Are_Valid(string email, string password)
+        public static async Task<bool> Get_If_Email_And_Password_Are_Valid(string? email, string? password)
         {
-            return true;
-        }
+            if (Firebase_Database.firebaseClient != null)
+            {
+                ChildQuery reference = Firebase_Database.firebaseClient.Child("Customers/Customer_ID");
+                FilterQuery query = reference.OrderBy("Email").EqualTo(email).LimitToFirst(1);
+                string result = await query.OnceAsJsonAsync();
+                if (result != null)
+                {
+                    Customers? customers = Newtonsoft.Json.JsonConvert.DeserializeObject<Customers>(result);
 
-        public static async Task<bool> Insert_Account(string email, string password)
-        {
-            return true;
-        }
+                    if (customers != null)
+                    {
+                        if (customers.Count == 1)
+                        {
+                            Customer_ID_Value? customer = new Customer_ID_Value();
+                            customer = customers.ElementAt(0).Value;
 
-        public static async Task<bool> Delete_Account(string email, string password)
-        {
-            return true;
+                            Tuple<string, Type> hash_result = await Sha512Hasher.Hash(password);
+
+                            if (hash_result.Item2 != typeof(Exception))
+                            {
+                                if (customer.Password == hash_result.Item1)
+                                {
+                                    return true;
+                                }
+                                else
+                                {
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

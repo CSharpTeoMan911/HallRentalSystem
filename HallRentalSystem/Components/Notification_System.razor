@@ -1,0 +1,52 @@
+﻿@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+
+<div role="alert" aria-live="assertive" aria-atomic="true" class="toast show notification_system" style="background-color:rgba(255,255,255);" data-autohide="false">
+    <div class="toast-header">
+
+        @if (Type == NotificationType.Error)
+        {
+            <img src="https://cdn-icons-png.flaticon.com/128/463/463612.png" class="notification_type_image" alt="Error notification">
+        }
+        else
+        {
+            <img src="https://cdn-icons-png.flaticon.com/128/2645/2645897.png" class="notification_type_image" alt="Information notification">
+        }
+
+        <strong class="mr-auto eror_type">@Type</strong>
+
+        <div class="notification-system-info">
+            <button type="button" class="ml-2 mb-1 close close_notification" data-dismiss="toast" aria-label="Close" @onclick="OnClosing">
+                <img src="https://cdn-icons-png.flaticon.com/128/1828/1828665.png" class="close_notification_image" alt="Error notification">
+            </button>
+        </div>
+    </div>
+    <div class="toast-body toast-body-custom">
+        <p class="notification_content">
+            @MessageContent
+        </p>
+    </div>
+</div>
+
+@code {
+    public enum NotificationType
+    {
+        Error,
+        Notification
+    }
+
+
+    [Parameter]
+    public string? MessageContent { get; set; }
+
+    public delegate void OnClose();
+    [Parameter]
+    public OnClose? NotificationClose { get; set; }
+
+    [Parameter]
+    public NotificationType Type { get; set; }
+
+    private void OnClosing()
+    {
+        NotificationClose?.Invoke();
+    }
+}

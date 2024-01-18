@@ -1,4 +1,6 @@
-﻿div.main_page_structure {
+﻿@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500&display=swap");
+
+div.main_page_structure {
     z-index: 1;
     display: block;
     width: 100vw;
@@ -39,4 +41,71 @@ div.index_page_skeleton {
     align-self: center;
     justify-self: center;
     align-content: center;
+}
+
+div.notification_system {
+    position:fixed;
+    top:10%;
+    left:50%;
+    transform:translateX(-50%);
+}
+
+div.toast-body-custom {
+    display: flex;
+    align-content:center;
+    align-items:center;
+    justify-content:center;
+}
+
+div.notification-system-info {
+    display: flex;
+    height: 40px;
+    width:100%;
+    align-content:center;
+    justify-content:flex-end;
+}
+
+p.notification_content {
+    align-self: center;
+    justify-self: center;
+    max-width: 100%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    color: #535353
+}
+
+strong.eror_type {
+    align-self: center;
+    margin-top:3px;
+    margin-left:10px;
+    font-size:18px;
+}
+
+img.notification_type_image {
+    width: 23px;
+    height: 23px;
+}
+
+img.close_notification_image {
+    width: 16px;
+    height: 16px;
+    align-self:center;
+    justify-self:center;
+}
+
+button.close_notification {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    border-width: 1px;
+    border-color: red;
+    background-color:transparent;
+    padding: 3px;
+    border-radius: 5px;
+}
+
+button.close_notification:hover {
+    border-color: #ff6666
 }
