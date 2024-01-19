@@ -1,9 +1,13 @@
 ﻿@using System.Text;
 @using HallRentalSystem.Classes;
+@using HallRentalSystem.Classes.API_Payloads;
 @using HallRentalSystem.Classes.Models;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements.Authentication;
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements;
-@inject NavigationManager NavigationManager
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+@inject NavigationManager NavigationManager;
+@inject ProtectedLocalStorage LocalStorage;
 @inject IJSRuntime JS;
 
 <div class="authaction_div">
@@ -39,6 +43,8 @@
 
     private async void ImplementAuthAction()
     {
+        IJSObjectReference? module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+        string[]? result = null;
         string? query = null;
         string? response = null;
 
@@ -52,14 +58,59 @@
         switch (ActionButton)
         {
             case "Log In":
-                
+                url_formatter.Append("/auth/get-account?");
+                result = await module.InvokeAsync<string[]>("GetLoginEmailAndPassword", "email_input", "password_input");
+
+                if (result?.Length == 2)
+                {
+                    customers.Email = result[0];
+                    customers.Password = result[1];
+
+                    query = await Query_Formater.ObjectQueryFormatter<Customer_ID_Value>(customers);
+                    url_formatter.Append(query);
+
+                    HttpResponseMessage response_message = await client.GetAsync(url_formatter.ToString());
+                    response = await response_message.Content.ReadAsStringAsync();
+
+                    switch (response)
+                    {
+                        case "Internal server error":
+                            type = Notification_System.NotificationType.Error;
+                            break;
+                        case "Invalid email or password":
+                            type = Notification_System.NotificationType.Error;
+                            break;
+                        default:
+                            Auth_Result? auth_result = Newtonsoft.Json.JsonConvert.DeserializeObject<Auth_Result>(response);
+                            if (auth_result != null)
+                            {
+                                response = auth_result.Response;
+
+                                if (auth_result.Response == "Internal server error")
+                                {
+                                    type = Notification_System.NotificationType.Error;
+                                }
+                                else
+                                {
+                                    type = Notification_System.NotificationType.Notification;
+                                    OnLoginSuccessful(auth_result.Log_In_Key);
+                                }
+                            }
+                            else
+                            {
+                                response = "Internal server error";
+                                type = Notification_System.NotificationType.Error;
+                            }
+                            break;
+                    }
+                }
+
                 break;
             case "Register":
                 url_formatter.Append("/auth/insert-account?");
-                IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
-                string[] result = await module.InvokeAsync<string[]>("GetEmailAndPassword", "email_input", "password_input", "re_password_input");
+                result = await module.InvokeAsync<string[]>("GetRegisterEmailAndPassword", "email_input", "password_input", "re_password_input");
 
-                if (result.Length == 2)
+                if (result?.Length == 2)
                 {
                     customers.Email = result[0];
                     customers.Password = result[1];
@@ -132,6 +183,35 @@
                     await Dispatcher.CreateDefault().InvokeAsync(() =>
                     {
                         NavigationManager.NavigateTo("/log-in");
+                    });
+                    break;
+                }
+            }
+        });
+        thread.Priority = ThreadPriority.AboveNormal;
+        thread.IsBackground = true;
+        thread.Start();
+    }
+
+
+    private async void OnLoginSuccessful(string? key)
+    {
+        AuthStateManagerParameters parameters = new AuthStateManagerParameters();
+        parameters.localStorage = LocalStorage;
+        parameters.log_in_session_key = key;
+
+        await Shared_Data.auth_manager.Insert<bool>(parameters);
+        DateTime registration_time = DateTime.Now;
+
+        System.Threading.Thread thread = new System.Threading.Thread(async () =>
+        {
+            while (true)
+            {
+                if ((DateTime.Now - registration_time).TotalSeconds >= 3)
+                {
+                    await Dispatcher.CreateDefault().InvokeAsync(() =>
+                    {
+                        NavigationManager.NavigateTo("/book");
                     });
                     break;
                 }
