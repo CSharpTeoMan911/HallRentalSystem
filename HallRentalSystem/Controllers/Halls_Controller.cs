@@ -1,6 +1,7 @@
 ﻿using HallRentalSystem.Classes.StructuralAndBehavioralElements.Page_Navigation;
 using HallRentalSystem.Classes.API_Parameters;
 using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+using HallRentalSystem.Classes.StructuralAndBehavioralElements.Firebase;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

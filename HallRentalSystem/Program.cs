@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.OpenApi.Models;
 using System.Runtime.CompilerServices;
-using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+using HallRentalSystem.Classes.StructuralAndBehavioralElements.Firebase;
 
 namespace HallRentalSystem
 {
 
     internal class Program:Firebase_Database
     {
-        protected static string authentication_state = "Login";
         public static bool Is_API_Testing_Mode;
 
         private static void Main(string[] args)

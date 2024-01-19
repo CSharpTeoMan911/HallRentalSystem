@@ -1,5 +1,8 @@
-﻿@inherits LayoutComponentBase
+﻿@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+@using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+@inherits LayoutComponentBase
 @inject NavigationManager Navigation_Manager;
+@inject ProtectedLocalStorage LocalStorage;
 @inject IJSRuntime JS
 
 <PageTitle>HallRentalSystem</PageTitle>
@@ -42,8 +45,26 @@
         await animations_module.InvokeAsync<string>("SetAuthGradientFluctuation");
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override async void OnAfterRender(bool firstRender)
     {
+        if (await Shared_Data.auth_manager.Get<string>(LocalStorage) != String.Empty)
+        {
+            if (Shared_Data.authentication_state == Shared_Data.AuthState.Login)
+            {
+                Shared_Data.authentication_state = Shared_Data.AuthState.Logout;
+                Navigation_Manager.NavigateTo(Navigation_Manager.Uri, true);
+            }
+        }
+        else
+        {
+            if (Shared_Data.authentication_state == Shared_Data.AuthState.Logout)
+            {
+                Shared_Data.authentication_state = Shared_Data.AuthState.Login;
+                Navigation_Manager.NavigateTo(Navigation_Manager.Uri, true);
+                StateHasChanged();
+            }
+        }
+
         base.OnAfterRender(firstRender);
         if (Program.Is_API_Testing_Mode == true)
             Navigation_Manager.NavigateTo("/swagger/index.html", forceLoad: true);
