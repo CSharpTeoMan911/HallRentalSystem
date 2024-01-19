@@ -1,4 +1,5 @@
 ﻿using Firebase.Database.Query;
+using HallRentalSystem.Classes.StructuralAndBehavioralElements.Firebase;
 using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
 
 namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authentication
@@ -44,61 +45,62 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
             }
         }
 
-        public static async Task<bool> Get_If_Email_And_Password_Are_Valid(string? email, string? password)
+        public static async Task<string> Get_If_Email_And_Password_Are_Valid(string? email, string? password)
         {
+            string result = "Internal server error";
+
             if (Firebase_Database.firebaseClient != null)
             {
                 ChildQuery reference = Firebase_Database.firebaseClient.Child("Customers/Customer_ID");
                 FilterQuery query = reference.OrderBy("Email").EqualTo(email).LimitToFirst(1);
-                string result = await query.OnceAsJsonAsync();
-                if (result != null)
+                string query_result = await query.OnceAsJsonAsync();
+                if (query_result != null)
                 {
-                    Customers? customers = Newtonsoft.Json.JsonConvert.DeserializeObject<Customers>(result);
+                    Customers? customers = Newtonsoft.Json.JsonConvert.DeserializeObject<Customers>(query_result);
 
                     if (customers != null)
                     {
                         if (customers.Count == 1)
                         {
+                            string customer_id = customers.ElementAt(0).Key;
+
                             Customer_ID_Value? customer = new Customer_ID_Value();
                             customer = customers.ElementAt(0).Value;
 
                             Tuple<string, Type> hash_result = await Sha512Hasher.Hash(password);
-
                             if (hash_result.Item2 != typeof(Exception))
                             {
                                 if (customer.Password == hash_result.Item1)
                                 {
-                                    return true;
+                                    return customer_id;
                                 }
                                 else
                                 {
-                                    return false;
+                                    result = "Invalid email or password";
                                 }
                             }
                             else
                             {
-                                return false;
+                                result = "Invalid email or password";
                             }
                         }
                         else
                         {
-                            return false;
+                            result = "Invalid email or password";
                         }
                     }
                     else
                     {
-                        return false;
+                        result = "Invalid email or password";
                     }
                 }
                 else
                 {
-                    return false;
+                    result = "Invalid email or password";
                 }
             }
-            else
-            {
-                return false;
-            }
+
+            return result;
         }
     }
 }

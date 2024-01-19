@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Text;
 
-namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
+namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Firebase
 {
     [AttributeUsage(AttributeTargets.All)]
     public class Firebase_Database : Attribute
@@ -93,11 +93,11 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
         {
             StringBuilder path_builder = new StringBuilder(new DirectoryInfo(Environment.CurrentDirectory)?.Parent?.Parent?.FullName);
 
-            if(System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX)==true)
+            if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX) == true)
             {
                 path_builder.Append('/');
             }
-            else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows)==true)
+            else if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows) == true)
             {
                 path_builder.Append('/');
             }

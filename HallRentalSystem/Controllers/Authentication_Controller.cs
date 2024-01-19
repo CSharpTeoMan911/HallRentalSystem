@@ -18,15 +18,12 @@ namespace HallRentalSystem.Controllers
         [HttpGet("get-account")]
         public async Task<ActionResult<string?>> Get([FromQuery] Customer_ID_Value? data)
         {
-            string? result = "Internal server error";
+            string? result = null;
 
-            if (data != null)
-            {
-                result = await Shared_Data.authentication.Get<string>(data);
-            }
+            result = await Shared_Data.authentication.Get<string>(data);
 
             if (result == null)
-                result = "false";
+                result = "Internal server error";
 
             return (ActionResult<string?>)Content(result);
         }
@@ -34,15 +31,12 @@ namespace HallRentalSystem.Controllers
         [HttpPost("insert-account")]
         public async Task<ActionResult<string?>> Insert([FromQuery] Customer_ID_Value? data)
         {
-            string? result = "Internal server error";
+            string? result = null;
 
-            if (data?.Email != null)
-            {
-                result = await Shared_Data.authentication.Insert<string>(data);
-            }
+            result = await Shared_Data.authentication.Insert<string>(data);
 
             if (result == null)
-                result = "false";
+                result = "Internal server error";
 
             return (ActionResult<string?>)Content(result);
         }
