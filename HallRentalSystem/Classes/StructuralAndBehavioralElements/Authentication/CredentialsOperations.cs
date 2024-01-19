@@ -42,47 +42,24 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
                             log_In_Session.Customer_ID = result;
                             log_In_Session.Expiration_Date = DateTime.Now.AddHours(18);
 
-                            string? log_in_key = await Shared_Data.log_in_session.Insert<string>(reference);
+                            string? log_in_key = await Shared_Data.log_in_session.Insert<string>(log_In_Session);
 
                             if (log_in_key != "Internal server error")
                             {
-                                FirebaseObject<Log_In_Session_ID_Value> reference_result = await reference.PostAsync(log_In_Session);
+                                Auth_Result auth_Result = new Auth_Result();
 
-                                if (reference_result.Object.Expiration_Date == log_In_Session.Expiration_Date)
+                                if (log_in_key != null)
                                 {
-                                    if (reference_result.Object.Customer_ID == log_In_Session.Customer_ID)
-                                    {
-                                        if (reference_result.Object.Log_In_Session_Key == log_In_Session.Log_In_Session_Key)
-                                        {
-                                            Auth_Result auth_Result = new Auth_Result();
-
-                                            if (log_in_key != null)
-                                            {
-                                                auth_Result.Response = "Login successful";
-                                                auth_Result.Log_In_Key = log_in_key;
-                                            }
-                                            else
-                                            {
-                                                auth_Result.Response = "Internal server error";
-                                            }
-
-                                            string serialised_result = Newtonsoft.Json.JsonConvert.SerializeObject(auth_Result);
-                                            return (ReturnType)(object)serialised_result;
-                                        }
-                                        else
-                                        {
-                                            return (ReturnType)(object)"Internal server error";
-                                        }
-                                    }
-                                    else
-                                    {
-                                        return (ReturnType)(object)"Internal server error";
-                                    }
+                                    auth_Result.Response = "Login successful";
+                                    auth_Result.Log_In_Key = log_in_key;
                                 }
                                 else
                                 {
-                                    return (ReturnType)(object)"Internal server error";
+                                    auth_Result.Response = "Internal server error";
                                 }
+
+                                string serialised_result = Newtonsoft.Json.JsonConvert.SerializeObject(auth_Result);
+                                return (ReturnType)(object)serialised_result;
                             }
                             else
                             {
