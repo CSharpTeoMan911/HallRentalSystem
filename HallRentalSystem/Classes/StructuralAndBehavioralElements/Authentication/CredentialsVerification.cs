@@ -1,4 +1,5 @@
 ﻿using Firebase.Database.Query;
+using HallRentalSystem.Classes.StructuralAndBehavioralElements.Firebase;
 using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
 
 namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authentication

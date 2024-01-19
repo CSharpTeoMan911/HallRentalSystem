@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
-namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
+namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Page_Navigation
 {
     public enum PaginationElements
     {

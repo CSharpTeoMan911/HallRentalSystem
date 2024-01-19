@@ -2,6 +2,7 @@
 @using HallRentalSystem.Classes;
 @using HallRentalSystem.Classes.API_Payloads;
 @using HallRentalSystem.Classes.Models;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements.Authentication;
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 @using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
@@ -91,10 +92,8 @@
                                 }
                                 else
                                 {
-                                    await Shared_Data.auth_manager.Insert<bool>(new Tuple<ProtectedLocalStorage, string>(LocalStorage, auth_result.Log_In_Key));
-                                    Shared_Data.authentication_state = Shared_Data.AuthState.Login;
                                     type = Notification_System.NotificationType.Notification;
-                                    OnLoginSuccessful();
+                                    OnLoginSuccessful(auth_result.Log_In_Key);
                                 }
                             }
                             else
@@ -195,8 +194,13 @@
     }
 
 
-    private void OnLoginSuccessful()
+    private async void OnLoginSuccessful(string? key)
     {
+        AuthStateManagerParameters parameters = new AuthStateManagerParameters();
+        parameters.localStorage = LocalStorage;
+        parameters.log_in_session_key = key;
+
+        await Shared_Data.auth_manager.Insert<bool>(parameters);
         DateTime registration_time = DateTime.Now;
 
         System.Threading.Thread thread = new System.Threading.Thread(async () =>
@@ -205,8 +209,6 @@
             {
                 if ((DateTime.Now - registration_time).TotalSeconds >= 3)
                 {
-
-
                     await Dispatcher.CreateDefault().InvokeAsync(() =>
                     {
                         NavigationManager.NavigateTo("/book");

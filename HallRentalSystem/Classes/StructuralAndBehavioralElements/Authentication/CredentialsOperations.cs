@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
 using HallRentalSystem.Classes.Models;
 using HallRentalSystem.Classes.API_Payloads;
+using HallRentalSystem.Classes.StructuralAndBehavioralElements.Firebase;
+using System.Text;
 
 namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authentication
 {
@@ -35,67 +37,42 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
                         if (result != "Invalid email or password")
                         {
                             ChildQuery reference = Firebase_Database.firebaseClient.Child("Log_In_Sessions/Log_In_Session_ID");
-                            string? log_in_key = null;
 
                             Log_In_Session_ID_Value log_In_Session = new Log_In_Session_ID_Value();
                             log_In_Session.Customer_ID = result;
                             log_In_Session.Expiration_Date = DateTime.Now.AddHours(18);
 
-                            for (int i = 0; i < 10; i++)
-                            {
-                                log_in_key = await Random_Log_In_Key_Generator.Generate();
-                                Tuple<string, Type> key_hash_result = await Sha512Hasher.Hash(log_in_key);
-                               
-                                if (key_hash_result.Item2 != typeof(Exception))
-                                {
-                                    FilterQuery query = reference.OrderBy("Log_In_Session_Key").EqualTo(key_hash_result.Item1).LimitToFirst(1);
-                                    string query_result = await query.OnceAsJsonAsync();
-                                    Log_In_Session_ID_Value? extracted_value = Newtonsoft.Json.JsonConvert.DeserializeObject<Log_In_Session_ID_Value>(query_result);
+                            string? log_in_key = await Shared_Data.log_in_session.Insert<string>(reference);
 
-                                    if (extracted_value == null)
+                            if (log_in_key != "Internal server error")
+                            {
+                                FirebaseObject<Log_In_Session_ID_Value> reference_result = await reference.PostAsync(log_In_Session);
+
+                                if (reference_result.Object.Expiration_Date == log_In_Session.Expiration_Date)
+                                {
+                                    if (reference_result.Object.Customer_ID == log_In_Session.Customer_ID)
                                     {
-                                        log_In_Session.Log_In_Session_Key = key_hash_result.Item1;
-                                    }
-                                    else
-                                    {
-                                        if (extracted_value?.Log_In_Session_Key == key_hash_result.Item1)
+                                        if (reference_result.Object.Log_In_Session_Key == log_In_Session.Log_In_Session_Key)
+                                        {
+                                            Auth_Result auth_Result = new Auth_Result();
+
+                                            if (log_in_key != null)
+                                            {
+                                                auth_Result.Response = "Login successful";
+                                                auth_Result.Log_In_Key = log_in_key;
+                                            }
+                                            else
+                                            {
+                                                auth_Result.Response = "Internal server error";
+                                            }
+
+                                            string serialised_result = Newtonsoft.Json.JsonConvert.SerializeObject(auth_Result);
+                                            return (ReturnType)(object)serialised_result;
+                                        }
+                                        else
                                         {
                                             return (ReturnType)(object)"Internal server error";
                                         }
-                                        else
-                                        {
-                                            log_In_Session.Log_In_Session_Key = key_hash_result.Item1;
-                                        }
-                                    }
-                                }
-                                else
-                                {
-                                    return (ReturnType)(object)"Internal server error";
-                                }
-                            }
-
-                            FirebaseObject<Log_In_Session_ID_Value> reference_result = await reference.PostAsync(log_In_Session);
-
-                            if (reference_result.Object.Expiration_Date == log_In_Session.Expiration_Date)
-                            {
-                                if (reference_result.Object.Customer_ID == log_In_Session.Customer_ID)
-                                {
-                                    if (reference_result.Object.Log_In_Session_Key == log_In_Session.Log_In_Session_Key)
-                                    {
-                                        Auth_Result auth_Result = new Auth_Result();
-
-                                        if (log_in_key != null)
-                                        {
-                                            auth_Result.Response = "Login successful";
-                                            auth_Result.Log_In_Key = log_in_key;
-                                        }
-                                        else
-                                        {
-                                            auth_Result.Response = "Internal server error";
-                                        }
-
-                                        string serialised_result = Newtonsoft.Json.JsonConvert.SerializeObject(auth_Result);
-                                        return (ReturnType)(object)serialised_result;
                                     }
                                     else
                                     {
@@ -144,47 +121,56 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
 
                     if (email_validator.IsValid(data.Email) == true)
                     {
-                        if (await CredentialsVerification.Get_If_Email_Exists(data.Email) == false)
+                        if (data.Email != null)
                         {
-                            if (data.Password != null)
+                            if (await CredentialsVerification.Get_If_Email_Exists(data.Email) == false)
                             {
-                                if (data.Password.Length >= 10)
+                                if (data.Password != null)
                                 {
-
-                                    Tuple<string, Type> hash = await Sha512Hasher.Hash(data.Password);
-
-                                    if (hash.Item2 != typeof(Exception))
+                                    if (data.Password.Length >= 10)
                                     {
-                                        data.Password = hash.Item1;
-                                        FirebaseObject<Customer_ID_Value> result = await Firebase_Database.firebaseClient.Child("Customers/Customer_ID").PostAsync(data, false);
+                                        byte[] unformated_email = Encoding.UTF8.GetBytes(data.Email);
+                                        data.Email = Convert.ToBase64String(unformated_email);
 
-                                        if (result.Object != null)
+                                        Tuple<string, Type> hash = await Sha512Hasher.Hash(data.Password);
+
+                                        if (hash.Item2 != typeof(Exception))
                                         {
-                                            return (ReturnType)(object)"Registration successful";
+                                            data.Password = hash.Item1;
+                                            FirebaseObject<Customer_ID_Value> result = await Firebase_Database.firebaseClient.Child("Customers/Customer_ID").PostAsync(data, false);
+
+                                            if (result.Object != null)
+                                            {
+                                                return (ReturnType)(object)"Registration successful";
+                                            }
+                                            else
+                                            {
+                                                return (ReturnType)(object)"Invalid credentials";
+                                            }
                                         }
                                         else
                                         {
-                                            return (ReturnType)(object)"Invalid credentials";
+                                            return (ReturnType)(object)hash.Item1;
                                         }
                                     }
                                     else
                                     {
-                                        return (ReturnType)(object)hash.Item1;
+                                        return (ReturnType)(object)"Passowrd is less than 10 characters long";
                                     }
                                 }
                                 else
                                 {
-                                    return (ReturnType)(object)"Passowrd is less than 10 characters long";
+                                    return (ReturnType)(object)"Internal server error";
                                 }
                             }
                             else
                             {
-                                return (ReturnType)(object)"Invalid email address";
+                                return (ReturnType)(object)"Email already in use";
                             }
                         }
                         else
                         {
-                            return (ReturnType)(object)"Email already in use";
+                            return (ReturnType)(object)"Internal server error";
                         }
                     }
                     else
@@ -199,7 +185,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
             }
             else
             {
-                return (ReturnType)(object)"Internal server error".ToString();
+                return (ReturnType)(object)"Internal server error";
             }
         }
 
