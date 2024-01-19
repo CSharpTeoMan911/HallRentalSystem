@@ -106,9 +106,6 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
                                 {
                                     if (data.Password.Length >= 10)
                                     {
-                                        byte[] unformated_email = Encoding.UTF8.GetBytes(data.Email);
-                                        data.Email = Convert.ToBase64String(unformated_email);
-
                                         Tuple<string, Type> hash = await Sha512Hasher.Hash(data.Password);
 
                                         if (hash.Item2 != typeof(Exception))
