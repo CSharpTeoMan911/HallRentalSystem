@@ -1,8 +1,8 @@
-﻿using HallRentalSystem.Classes.StructuralAndBehavioralElements.Page_Navigation;
-using HallRentalSystem.Classes.API_Parameters;
+﻿using HallRentalSystem.Classes.API_Parameters;
 using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 using HallRentalSystem.Classes.StructuralAndBehavioralElements.Firebase;
 using Microsoft.AspNetCore.Mvc;
+using Firebase.Database.Query;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -11,7 +11,7 @@ namespace HallRentalSystem.Controllers
     [Firebase_Database]
     [ApiController]
     [Route("/halls")]
-    public class Halls_Controller : Controller, CRUD_API_Strategy<string, Halls_Pagination, string, string>
+    public class Halls_Controller : Controller, CRUD_API_Strategy<string, string, string, string>
     {
         [HttpDelete("delete-halls")]
         public Task<ActionResult<string?>> Delete([FromQuery] string? data)
@@ -25,24 +25,20 @@ namespace HallRentalSystem.Controllers
         }
 
         [HttpGet("get-halls-page")]
-        public async Task<ActionResult<string?>> Get([FromQuery] Halls_Pagination? data)
+        public async Task<ActionResult<string?>> Get(string? data)
         {
-            Console.WriteLine("Location: " + data.location_filter);
-            Console.WriteLine("Page: " + data.page_index);
-            int elements_per_page = 50;
             string? serialised_result = null;
 
-            switch (data?.page_index)
+            ChildQuery? reference = Firebase_Database.firebaseClient?.Child("Halls/Hall_ID");
+            OrderQuery ordered_values = reference.OrderBy("Location");
+
+            if (data != null)
             {
-                case -1:
-                    serialised_result = await Halls_Page_Navigation.Navigate_To_Previous_Page(data, elements_per_page);
-                    break;
-                case 0:
-                    serialised_result = await Halls_Page_Navigation.Navigate_To_Current_Page(data, elements_per_page);
-                    break;
-                case 1:
-                    serialised_result = await Halls_Page_Navigation.Navigate_To_Next_Page(data, elements_per_page);
-                    break;
+                serialised_result = await ordered_values.EqualTo(data).OnceAsJsonAsync();
+            }
+            else
+            {
+                serialised_result = await ordered_values.OnceAsJsonAsync();
             }
 
             return new ActionResult<string?>(serialised_result);
