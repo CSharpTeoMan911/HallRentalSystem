@@ -1,27 +1,63 @@
-﻿
-<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="width:40%;align-self:center;">
-    <div class="carousel-inner">
-        @for (int i = 0; i < image_sources.Count; i++)
-        {
-            if(active == false)
-            {
-                <div class="carousel-item active" data-interval="3000">
-                    <img src="@image_sources[i].Item1" class="d-block w-100" alt="@image_sources[i].Item2">
-                </div>
-                active = true;
-            }
-            else
-            {
-                <div class="carousel-item" data-interval="3000">
-                    <img src="@image_sources[i].Item1" class="d-block w-100" alt="@image_sources[i].Item2">
-                </div>
-            }
-        }
+﻿@inject IJSRuntime JS;
+
+<div class="image_element_section">
+    <div id="@element" class="custom_carousel">
+        <a role="button" class=".left_selection_button" @onclick=@(()=>SelectImage(-1))>
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </a>
+        <div style="width:calc(320px + 10vw);">
+
+        </div>
+        <a role="button" class=".right_selection_button" @onclick=@(()=>SelectImage(1))>
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </a>
     </div>
 </div>
 
 @code {
     [Parameter]
-    public List<Tuple<string, string>> image_sources { get; set; } = new List<Tuple<string, string>>();
+    public List<string>? image_sources { get; set; }
+
+    [Parameter]
+    public string element { get; set; }
+
+    private int curent_index = 0;
+
     public bool active = false;
+
+    private async void SetImage(string image)
+    {
+        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+        await module.InvokeAsync<string>("SetElementImage", element, image);
+    }
+
+    private void SelectImage(int i)
+    {
+        switch (i)
+        {
+            case -1:
+                if (curent_index > 0)
+                {
+                    curent_index--;
+                }
+                break;
+            case 1:
+                if (curent_index < image_sources.Count - 1)
+                {
+                    curent_index++;
+                }
+                break;
+        }
+
+        if (image_sources != null)
+        {
+            SetImage(image_sources.ElementAt(curent_index));
+        }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        SelectImage(0);
+    }
 }

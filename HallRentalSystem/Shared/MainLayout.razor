@@ -8,7 +8,7 @@
 <PageTitle>HallRentalSystem</PageTitle>
 <div id="background_image" class="main_background_image_style"></div>
 <div id="main_page_structure_div" class="main_page_structure">
-    <div style="margin-bottom:10px;">
+    <div>
         <NavMenu/>
     </div>
     <main>
@@ -26,23 +26,119 @@
     {
         IJSObjectReference animations_module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
 
-        await animations_module.InvokeAsync<string>("SetBackgroundImage");
+        try
+        {
+            await animations_module.InvokeAsync<string>("SetBookingElementResize");
+        }
+        catch { }
 
-        await animations_module.InvokeAsync<string>("GradientFluctuationAnimationCancellation");
-        await animations_module.InvokeAsync<string>("Clear_Background_Image_Sizing");
-        await animations_module.InvokeAsync<string>("ClearExpansionAnimation", "main_page_structure_div");
-        await animations_module.InvokeAsync<string>("Clear_Set_Button_Focus_Effect", "button_cover_1");
-        await animations_module.InvokeAsync<string>("Clear_Set_Button_Focus_Effect", "button_cover_2");
-        await animations_module.InvokeAsync<string>("Clear_Resize_Home_Page_Elements");
-        await animations_module.InvokeAsync<string>("Clear_Resize_Contacts_Page_Elemets");
-        await animations_module.InvokeAsync<string>("ClearAuthGradientFluctuation");
+        try
+        {
+            await animations_module.InvokeAsync<string>("ClearBookingElementsContainerResize");
+        }
+        catch { }
 
-        await animations_module.InvokeAsync<string>("ExpansionAnimation", "index_page_jumbotron", "90", "10", "%");
-        await animations_module.InvokeAsync<string>("GradientFluctuationAnimation", "main_page_structure_div", "40", "65", "50");
-        await animations_module.InvokeAsync<string>("Set_Background_Image_Sizing");
-        await animations_module.InvokeAsync<string>("Set_Resize_Home_Page_Elements");
-        await animations_module.InvokeAsync<string>("Set_Resize_Contacts_Page_Elemets");
-        await animations_module.InvokeAsync<string>("SetAuthGradientFluctuation");
+        try
+        {
+            await animations_module.InvokeAsync<string>("SetBackgroundImage");
+        }
+        catch { }
+
+        try
+        {
+            await animations_module.InvokeAsync<string>("GradientFluctuationAnimationCancellation");
+        }
+        catch { }
+
+        try
+        {
+            await animations_module.InvokeAsync<string>("Clear_Background_Image_Sizing");
+        }
+        catch { }
+
+        try
+        {
+            await animations_module.InvokeAsync<string>("ClearExpansionAnimation", "main_page_structure_div");
+        }
+        catch { }
+
+        try
+        {
+            await animations_module.InvokeAsync<string>("Clear_Set_Button_Focus_Effect", "button_cover_1");
+        }
+        catch { }
+
+        try
+        {
+            await animations_module.InvokeAsync<string>("Clear_Set_Button_Focus_Effect", "button_cover_2");
+        }
+        catch { }
+
+        try
+        {
+            await animations_module.InvokeAsync<string>("Clear_Resize_Home_Page_Elements");
+        }
+        catch { }
+
+        try
+        {
+            await animations_module.InvokeAsync<string>("Clear_Resize_Contacts_Page_Elemets");
+        }
+        catch { }
+
+        try
+        {
+            await animations_module.InvokeAsync<string>("ClearAuthGradientFluctuation");
+        }
+        catch { }
+
+        try
+        {
+            await animations_module.InvokeAsync<string>("SetBookingElementResize");
+        }
+        catch { }
+
+        try
+        {
+             await animations_module.InvokeAsync<string>("ExpansionAnimation", "index_page_jumbotron", "90", "10", "%");
+        }
+        catch { }
+        
+        try
+        {
+            await animations_module.InvokeAsync<string>("GradientFluctuationAnimation", "main_page_structure_div", "40", "65", "50");
+        }
+        catch { }
+
+        try
+        {
+            await animations_module.InvokeAsync<string>("SetBookingElementsContainerResize");
+        }
+        catch { }
+
+        try
+        {
+            await animations_module.InvokeAsync<string>("Set_Background_Image_Sizing");
+        }
+        catch { }
+
+        try
+        {
+            await animations_module.InvokeAsync<string>("Set_Resize_Home_Page_Elements");
+        }
+        catch { }
+
+        try
+        {
+            await animations_module.InvokeAsync<string>("Set_Resize_Contacts_Page_Elemets");
+        }
+        catch { }
+
+        try
+        {
+            await animations_module.InvokeAsync<string>("SetAuthGradientFluctuation");
+        }
+        catch { }
     }
 
     protected override async void OnAfterRender(bool firstRender)
