@@ -1,0 +1,61 @@
+﻿@using HallRentalSystem.Classes.Models;
+
+<div class="jumbotorn hall_element">
+    <div class="hall_element_inner">
+        <Dynamic_Image_Craousel image_sources="dummy_image_sources" element="@element" />
+
+
+        <div class="details_element_section">
+            <div class="details_div">
+                <h2 class="element_name">@value.Name</h2>
+                <div class="main_details_div">
+                    <div class="details_div_inner">
+                        <br/>
+                        <div class="details_div_inner_section">
+                            <p>Location: </p>
+                            <p>@value.Location</p>
+                        </div>
+                        <br />
+                        <div class="details_div_inner_section">
+                            <p>Price: </p>
+                            <p>@value.Price</p>
+                            <p>/hour</p>
+                        </div>
+                        <br />
+                        <div class="details_div_inner_section">
+                            <p>Capacity: </p>
+                            <p>@value.Capacity</p>
+                        </div>
+                    </div>
+                    <div class="amenities_div">
+                        <br />
+                        Hello
+                    </div>
+                </div>
+                <button class="booking_button">
+                    Book
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Hall_ID_Value value { get; set; }
+
+    [Parameter]
+    public string element { get; set; }
+
+    public List<string> dummy_image_sources = new List<string>()
+    {
+        "https://images.prismic.io/storefront/6cce1106-627d-495d-8100-5e2936ce01f8_cheap_halls.jpg",
+        "https://www.tagvenue.com/images/location-pages/small/1243.jpg",
+        "https://images.squarespace-cdn.com/content/v1/61fa4242070ec54e4f16e077/53a2249d-b1d2-4137-b57f-8c489646bbb8/*+use+ADC_9477.jpeg?format=500w"
+    };
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+    }
+}

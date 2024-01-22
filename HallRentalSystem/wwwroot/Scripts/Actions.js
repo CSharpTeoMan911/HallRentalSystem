@@ -33,3 +33,12 @@ export function GetRegisterEmailAndPassword(email_id, password_id, re_password_i
 
     return return_values;
 }
+
+export function SetElementImage(element_id, image) {
+    let element = document.getElementById(element_id);
+    if (element != null) {
+        console.log(image);
+        element.style.backgroundImage = "url(\"" + image +"\")";
+        console.log(element_id);
+    }
+}
