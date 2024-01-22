@@ -5,6 +5,8 @@ let home_page_elements_resizing = undefined;
 let home_page_button_focus = undefined;
 let contacts_page_elements_resizing = undefined;
 let auth_gradient_fluctuation_interval = undefined;
+let booking_elements_container_resize = undefined;
+let booking_elements_resize = undefined;
 
 let current_width = 0;
 let current_gradient = 0;
@@ -311,6 +313,82 @@ export function ClearAuthGradientFluctuation() {
 export function SetAuthGradientFluctuation() {
     current_auth_gradient = 60;
     auth_gradient_fluctuation_interval = setInterval(() => { AuthGradientFluctuation(); }, 20)
+}
+
+// [ END ]
+
+// BOOKING PAGE ELEMENTS CONTAINER RESIZE
+//
+// [ START ]
+
+function BookingElementsContainerResize() {
+    let halls_container = document.getElementById("halls_container");
+    let halls_nav = document.getElementById("halls_nav");
+    let main_nav = document.getElementById("main_nav");
+    if (halls_container != null) {
+        if (halls_nav != null) {
+            if (main_nav != null) {
+                halls_container.style.height = (window.innerHeight - (main_nav.offsetHeight + halls_nav.offsetHeight)) + "px";
+            }
+        }
+    }
+}
+
+export function ClearBookingElementsContainerResize() {
+    if (booking_elements_container_resize != null) {
+        clearInterval(booking_elements_container_resize);
+    }
+}
+
+export function SetBookingElementsContainerResize() {
+    booking_elements_container_resize = setInterval(() => { BookingElementsContainerResize(); }, 20)
+}
+
+// [ END ]
+
+
+// BOOKING PAGE ELEMENT RESIZE
+//
+// [ START ]
+
+function BookingElementResize() {
+    let halls_container = document.getElementById("halls_container");
+
+    if (halls_container != null) {
+        let image_elements = document.getElementsByClassName("image_element_section");
+        let details_elements = document.getElementsByClassName("details_element_section");
+
+
+        for (let i = 0; i < image_elements.length; i++) {
+            if (halls_container.offsetWidth < 1400) {
+                image_elements[i].style.width = "100%";
+               
+            }
+            else {
+                image_elements[i].style.width = "49.8%";
+            }
+        }
+
+        for (let i = 0; i < details_elements.length; i++) {
+            if (halls_container.offsetWidth < 1400) {
+                details_elements[i].style.width = "100%";
+                details_elements[i].style.height = "fit-content";
+            }
+            else {
+                details_elements[i].style.width = "49.8%";
+                details_elements[i].style.height = "calc(200px + 10vw)";
+            }
+        }
+    }
+}
+export function ClearSetBookingElementResize() {
+    if (booking_elements_container_resize != null) {
+        clearInterval(booking_elements_resize);
+    }
+}
+
+export function SetBookingElementResize() {
+    booking_elements_resize = setInterval(() => { BookingElementResize(); }, 20)
 }
 
 // [ END ]
