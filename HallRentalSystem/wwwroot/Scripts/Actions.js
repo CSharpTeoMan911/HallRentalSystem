@@ -43,7 +43,7 @@ export function SetElementImage(element_id, image) {
     }
 }
 
-export function SetAuthCache(key, option){
+export function AuthCache(key, option){
     switch(option)
     {
         case "Insert":

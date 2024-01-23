@@ -5,6 +5,7 @@
 @using System.Text;
 @inject NavigationManager Navigation_Manager;
 @inject ProtectedLocalStorage LocalStorage;
+@inject JSRuntime JS;
 
 <nav id="main_nav" class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" style="margin-left:20px;font-size:28px;" href="/" @onclick=@(()=>OnPageNavigation(0))>Hall Rentals</a>
@@ -22,6 +23,7 @@
 </nav>
 
 @code{
+    IJSObjectReference? module = null;
 
     public enum AuthState
     {
@@ -65,7 +67,8 @@
 
         try
         {
-            string? serialisedFirebaseKey = await Shared_Data.auth_manager.Get<string>(LocalStorage);
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+            string serialisedFirebaseKey = await module.InvokeAsync<string>("AuthCache", "", "Get");
 
             if (serialisedFirebaseKey != null)
             {
@@ -93,9 +96,11 @@
         {
             authentication_state = AuthState.Login;
 
-            string? serialisedFirebaseKey = await Shared_Data.auth_manager.Get<string>(LocalStorage);
             try
             {
+                module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+                string serialisedFirebaseKey = await module.InvokeAsync<string>("AuthCache", "", "Get");
+
                 if (serialisedFirebaseKey != null)
                 {
                     FirebaseKey? firebaseKey = Newtonsoft.Json.JsonConvert.DeserializeObject<FirebaseKey>(serialisedFirebaseKey);
@@ -109,6 +114,9 @@
                         HttpClient client = Shared_Data.GenerateHttpCLient();
                         client.BaseAddress = new Uri(Navigation_Manager.BaseUri);
                         await client.DeleteAsync(query_builder.ToString());
+
+                        module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+                        await module.InvokeAsync<string>("AuthCache", "", "Delete");
                     }
                 }
             }
@@ -116,7 +124,6 @@
             {
                 Console.WriteLine(E.Message);
             }
-            await Shared_Data.auth_manager.Delete<bool>(LocalStorage);
             StateHasChanged();
         }
         else
