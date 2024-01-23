@@ -50,7 +50,7 @@
 
         StringBuilder url_formatter = new StringBuilder();
 
-        HttpClient client = new HttpClient();
+        HttpClient client = Shared_Data.GenerateHttpCLient();
         client.BaseAddress = new Uri(NavigationManager.BaseUri);
 
         Customer_ID_Value customers = new Customer_ID_Value();
@@ -196,29 +196,31 @@
 
     private async void OnLoginSuccessful(string? key)
     {
-        AuthStateManagerParameters parameters = new AuthStateManagerParameters();
-        parameters.localStorage = LocalStorage;
-        parameters.log_in_session_key = key;
-
-        await Shared_Data.auth_manager.Insert<bool>(parameters);
-        DateTime registration_time = DateTime.Now;
-
-        System.Threading.Thread thread = new System.Threading.Thread(async () =>
+        try
         {
-            while (true)
+            IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+            await module.InvokeAsync<string>("AuthCache", key, "Insert");
+        
+            DateTime registration_time = DateTime.Now;
+
+            System.Threading.Thread thread = new System.Threading.Thread(async () =>
             {
-                if ((DateTime.Now - registration_time).TotalSeconds >= 3)
+                while (true)
                 {
-                    await Dispatcher.CreateDefault().InvokeAsync(() =>
+                    if ((DateTime.Now - registration_time).TotalSeconds >= 3)
                     {
-                        NavigationManager.NavigateTo("/book");
-                    });
-                    break;
+                        await Dispatcher.CreateDefault().InvokeAsync(() =>
+                        {
+                            NavigationManager.NavigateTo("/book", true);
+                        });
+                        break;
+                    }
                 }
-            }
-        });
-        thread.Priority = ThreadPriority.AboveNormal;
-        thread.IsBackground = true;
-        thread.Start();
+            });
+            thread.Priority = ThreadPriority.AboveNormal;
+            thread.IsBackground = true;
+            thread.Start();
+        }
+        catch { }
     }
 }
