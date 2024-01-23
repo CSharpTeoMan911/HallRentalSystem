@@ -196,27 +196,31 @@
 
     private async void OnLoginSuccessful(string? key)
     {
-        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
-        await module.InvokeAsync<string>("AuthCache", key, "Insert");
-        
-        DateTime registration_time = DateTime.Now;
-
-        System.Threading.Thread thread = new System.Threading.Thread(async () =>
+        try
         {
-            while (true)
+            IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+            await module.InvokeAsync<string>("AuthCache", key, "Insert");
+        
+            DateTime registration_time = DateTime.Now;
+
+            System.Threading.Thread thread = new System.Threading.Thread(async () =>
             {
-                if ((DateTime.Now - registration_time).TotalSeconds >= 3)
+                while (true)
                 {
-                    await Dispatcher.CreateDefault().InvokeAsync(() =>
+                    if ((DateTime.Now - registration_time).TotalSeconds >= 3)
                     {
-                        NavigationManager.NavigateTo("/book", true);
-                    });
-                    break;
+                        await Dispatcher.CreateDefault().InvokeAsync(() =>
+                        {
+                            NavigationManager.NavigateTo("/book", true);
+                        });
+                        break;
+                    }
                 }
-            }
-        });
-        thread.Priority = ThreadPriority.AboveNormal;
-        thread.IsBackground = true;
-        thread.Start();
+            });
+            thread.Priority = ThreadPriority.AboveNormal;
+            thread.IsBackground = true;
+            thread.Start();
+        }
+        catch { }
     }
 }

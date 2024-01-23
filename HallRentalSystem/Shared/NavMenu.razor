@@ -102,8 +102,6 @@
 
                 if (serialisedFirebaseKey != null)
                 {
-                    Console.WriteLine(serialisedFirebaseKey);
-
                     FirebaseKey? firebaseKey = Newtonsoft.Json.JsonConvert.DeserializeObject<FirebaseKey>(serialisedFirebaseKey);
                     if (firebaseKey != null)
                     {
