@@ -23,7 +23,6 @@
 </nav>
 
 @code{
-    IJSObjectReference? module = null;
 
     public enum AuthState
     {
@@ -67,7 +66,7 @@
 
         try
         {
-            module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+            IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
             string serialisedFirebaseKey = await module.InvokeAsync<string>("AuthCache", "key", "Get");
 
             if (serialisedFirebaseKey != null)
@@ -98,16 +97,16 @@
 
             try
             {
-                module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+                IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
                 string serialisedFirebaseKey = await module.InvokeAsync<string>("AuthCache", "key", "Get");
 
                 if (serialisedFirebaseKey != null)
                 {
                     Console.WriteLine(serialisedFirebaseKey);
+
                     FirebaseKey? firebaseKey = Newtonsoft.Json.JsonConvert.DeserializeObject<FirebaseKey>(serialisedFirebaseKey);
                     if (firebaseKey != null)
                     {
-                        /*
                         StringBuilder query_builder = new StringBuilder();
                         query_builder.Append("/log-out/user-log-out?");
                         string query = await Query_Formater.ObjectQueryFormatter<FirebaseKey>(firebaseKey);
@@ -116,10 +115,11 @@
                         HttpClient client = Shared_Data.GenerateHttpCLient();
                         client.BaseAddress = new Uri(Navigation_Manager.BaseUri);
                         await client.DeleteAsync(query_builder.ToString());
-                        */
-                        
+
                     }
+                    
                     await module.InvokeAsync<string>("AuthCache", "key", "Delete");
+                    
                 }
             }
             catch(Exception E)

@@ -196,11 +196,9 @@
 
     private async void OnLoginSuccessful(string? key)
     {
-        AuthStateManagerParameters parameters = new AuthStateManagerParameters();
-        parameters.localStorage = LocalStorage;
-        parameters.log_in_session_key = key;
-
-        await Shared_Data.auth_manager.Insert<bool>(parameters);
+        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+        await module.InvokeAsync<string>("AuthCache", key, "Insert");
+        
         DateTime registration_time = DateTime.Now;
 
         System.Threading.Thread thread = new System.Threading.Thread(async () =>
@@ -211,7 +209,7 @@
                 {
                     await Dispatcher.CreateDefault().InvokeAsync(() =>
                     {
-                        NavigationManager.NavigateTo("/book");
+                        NavigationManager.NavigateTo("/book", true);
                     });
                     break;
                 }
