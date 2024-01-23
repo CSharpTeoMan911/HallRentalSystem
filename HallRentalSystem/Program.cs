@@ -11,9 +11,19 @@ namespace HallRentalSystem
     internal class Program:Firebase_Database
     {
         public static bool Is_API_Testing_Mode;
+        public static bool EnableSSL;
 
         private static void Main(string[] args)
         {
+            // COMMAND LINE SWAGGER API TESTING MODE
+            //
+            //Enable_Or_Disable_Https_Certificate_Validation();
+
+
+            // PROGRAMATICALLY SET SWAGGER API TESTING MODE ( "y" for yes; "n" for no; )
+            //
+            Enable_Or_Disable_Https_Certificate_Validation_Programatically("n");
+
             InitiateFirebaseDatabase();
 
             var builder = WebApplication.CreateBuilder(args);
@@ -102,8 +112,41 @@ namespace HallRentalSystem
                 case "n":
                     return;
                 default:
-                    Enable_Or_Disable_Swagger(app);
+                    return;
+            }
+        }
+
+        private static void Enable_Or_Disable_Https_Certificate_Validation()
+        {
+            Console.Write("\n\nEnable SSL certificate security and validation ( [ y ] for yes; [ n ] for no; ): ");
+            string? input = Console.ReadLine()?.ToLower();
+            Console.Clear();
+
+            switch (input)
+            {
+                case "y":
+                    EnableSSL = true;
                     break;
+                case "n":
+                    return;
+                default:
+                    Enable_Or_Disable_Https_Certificate_Validation();
+                    break;
+            }
+        }
+
+
+        private static void Enable_Or_Disable_Https_Certificate_Validation_Programatically(string input)
+        {
+            switch (input)
+            {
+                case "y":
+                    EnableSSL = true;
+                    break;
+                case "n":
+                    return;
+                default:
+                    return;
             }
         }
     }

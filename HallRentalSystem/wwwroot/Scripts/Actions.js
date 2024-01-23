@@ -42,3 +42,17 @@ export function SetElementImage(element_id, image) {
         console.log(element_id);
     }
 }
+
+export function SetAuthCache(key, option){
+    switch(option)
+    {
+        case "Insert":
+            window.localStorage.setItem("HallRental_Auth_Cache", key);
+            break;
+        case "Delete":
+            window.localStorage.removeItem("HallRental_Auth_Cache");
+            break;
+        case "Get":
+            return window.localStorage.getItem("HallRental_Auth_Cache");
+    }
+}

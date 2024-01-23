@@ -50,7 +50,7 @@
 
         StringBuilder url_formatter = new StringBuilder();
 
-        HttpClient client = new HttpClient();
+        HttpClient client = Shared_Data.GenerateHttpCLient();
         client.BaseAddress = new Uri(NavigationManager.BaseUri);
 
         Customer_ID_Value customers = new Customer_ID_Value();

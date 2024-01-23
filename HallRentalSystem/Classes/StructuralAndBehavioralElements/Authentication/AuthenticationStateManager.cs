@@ -7,7 +7,13 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
         public async Task<ReturnType?> Delete<ReturnType>(ProtectedLocalStorage? data)
         {
             if (data != null)
-                await data.DeleteAsync("HallRental_Auth_Cache");
+            {
+                try
+                {
+                    await data.DeleteAsync("HallRental_Auth_Cache");
+                }
+                catch{}
+            }
             return (ReturnType)(object)true;
         }
 
@@ -15,12 +21,19 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
         {
             if (data != null)
             {
-                ProtectedBrowserStorageResult<string> cache = await data.GetAsync<string>("HallRental_Auth_Cache");
-                if(cache.Value != null)
+                try
                 {
-                    return (ReturnType)(object)cache.Value;
+                    ProtectedBrowserStorageResult<string> cache = await data.GetAsync<string>("HallRental_Auth_Cache");
+                    if(cache.Value != null)
+                    {
+                        return (ReturnType)(object)cache.Value;
+                    }
+                    else
+                    {
+                        return (ReturnType)(object)String.Empty;
+                    }
                 }
-                else
+                catch
                 {
                     return (ReturnType)(object)String.Empty;
                 }
@@ -39,7 +52,11 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
                 {
                     if (data.localStorage != null)
                     {
-                        await data.localStorage.SetAsync("HallRental_Auth_Cache", data.log_in_session_key);
+                        try
+                        {
+                            await data.localStorage.SetAsync("HallRental_Auth_Cache", data.log_in_session_key);
+                        }
+                        catch{}
                     }
                 }
             }
@@ -54,7 +71,11 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
                 {
                     if (data.localStorage != null)
                     {
-                        await data.localStorage.SetAsync("HallRental_Auth_Cache", data.log_in_session_key);
+                        try
+                        {
+                            await data.localStorage.SetAsync("HallRental_Auth_Cache", data.log_in_session_key);
+                        }
+                        catch{}
                     }
                 }
             }

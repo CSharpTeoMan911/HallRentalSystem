@@ -24,8 +24,11 @@
 @code{
     private async void InitiateAnimations()
     {
+        try
+        {
         IJSObjectReference animations_module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
 
+            if(animations_module != null){
         try
         {
             await animations_module.InvokeAsync<string>("SetBookingElementResize");
@@ -139,6 +142,9 @@
             await animations_module.InvokeAsync<string>("SetAuthGradientFluctuation");
         }
         catch { }
+            }
+        }
+        catch{}
     }
 
     protected override async void OnAfterRender(bool firstRender)
