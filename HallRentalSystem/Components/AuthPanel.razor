@@ -1,14 +1,22 @@
-﻿<div class="authpanel_div">
+﻿
+@* AUTH PANEL COMPONENT *@
+
+<div class="authpanel_div">
+
+    @* AUTH PANEL FUNCTION *@
     <h2 class="authpanel_header">
         @label
     </h2>
 
+    @* IF THE INPUT FIELD WILL PROCESS A PASSWORD *@
     @if (IsPassword == true)
     {
+        // SET AN HTML INPUT FIELD WITH THE INPUT TYPE AS PASSWORD
         <input id="@InputId" class="auth_input" type="password" placeholder="@placeholder" />
     }
     else
     {
+        // SET AN HTML INPUT FIELD WITH ITS DEFAULT TYPE
         <input id="@InputId" class="auth_input" placeholder="@placeholder" />
     }
 
