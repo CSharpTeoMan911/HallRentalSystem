@@ -11,18 +11,26 @@
 @inject ProtectedLocalStorage LocalStorage;
 @page "/sign-up"
 
+<PageTitle>Sign up</PageTitle>
+
 <div id="auth_jumbotron" class="jumbotron auth_jumbotron">
     <div class="main_auth_container">
+
+        @* SIGN UP PAGE TITLE *@
         <h1 class="auth_page_header">
             Sign Up
         </h1>
 
+        @* EMAIL INPUT FIELD *@
         <AuthPanel label="Email" placeholder="Enter your email address" IsPassword=false InputId="email_input" />
 
+        @* PASSORD INPUT FIELD *@
         <AuthPanel label="Password" placeholder="Enter your password" IsPassword=true InputId="password_input" />
 
+        @* PASSWORD REPEAT INPUT FIELD *@
         <AuthPanel label="Re-Password" placeholder="Enter your password" IsPassword=true InputId="re_password_input" />
 
+        @* SIGN UP AND LOG IN PAGE NAVIGATION FIELD *@
         <AuthAction TransistiveButton="Already have an account? Click here to log in." ActionButton="Register" TransitionTarget="/log-in" />
     </div>
 </div>
