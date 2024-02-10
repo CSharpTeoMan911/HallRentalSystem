@@ -34,3 +34,12 @@
         <AuthAction TransistiveButton="Already have an account? Click here to log in." ActionButton="Register" TransitionTarget="/log-in" />
     </div>
 </div>
+
+@code {
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+        await module.InvokeAsync<string>("ChangeNavState", "true");
+    }
+}

@@ -8,22 +8,21 @@
 @inject IJSRuntime JS;
 
 <nav id="main_nav" class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" style="margin-left:20px;font-size:28px;" href="/" @onclick=@(()=>OnPageNavigation(0))>Hall Rentals</a>
+    <a class="navbar-brand" style="margin-left:20px;font-size:28px;" href="/" @onclick=@(()=>OnPageNavigation(false))>Hall Rentals</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation" style="margin-left:20px;margin-right:20px;">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav" style="margin-left:20px;">
-            <a style="font-size:23px;" class=@class_names.ElementAt(0) @onclick=@(()=>OnPageNavigation(0)) href="/">Home</a>
-            <a style="font-size:23px;" class=@class_names.ElementAt(1) @onclick=@(()=>OnPageNavigation(1)) href="/book">Booking</a>
-            <a style="font-size:23px;" class=@class_names.ElementAt(2) @onclick=@(()=>OnPageNavigation(2)) href="/contacts">Contacts</a>
-            <a style="font-size:23px;" class=@class_names.ElementAt(3) href="/" @onclick=@(()=>OnPageNavigation(3))>@authentication_state</a>
+            <a id="/" style="font-size:23px;" class="nav-link active" @onclick=@(()=>OnPageNavigation(false)) href="/">Home</a>
+            <a id="/book" style="font-size:23px;" class="nav-link" @onclick=@(()=>OnPageNavigation(false)) href="/book">Booking</a>
+            <a id="/contacts" style="font-size:23px;" class="nav-link" @onclick=@(()=>OnPageNavigation(false)) href="/contacts">Contacts</a>
+            <a id="/auth" style="font-size:23px;" class="nav-link" href="/" @onclick=@(()=>OnPageNavigation(true))>@authentication_state</a>
         </div>
     </div>
 </nav>
 
 @code{
-
     public enum AuthState
     {
         Login,
@@ -31,33 +30,14 @@
     }
     public AuthState authentication_state = AuthState.Login;
 
-    private static List<string> class_names = new List<string>()
+
+    public async void OnPageNavigation(bool isAuth)
     {
-        "nav-link active",
-        "nav-link",
-        "nav-link",
-        "nav-link"
-    };
+        if (isAuth == true)
+            AuthStateManagement();
 
-    string active_class_name = "nav-link active";
-    string non_active_class_name = "nav-link";
-
-
-    private void OnPageNavigation(int index)
-    {
-        for(int i = 0; i < class_names.Count; i++)
-        {
-            if (i == index)
-            {
-                if (index == 3)
-                    AuthStateManagement();
-                class_names[i] = "nav-link active";
-            }
-            else
-            {
-                class_names[i] = "nav-link";
-            }
-        }
+        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+        await module.InvokeAsync<string>("ChangeNavState", isAuth.ToString());
     }
 
     protected override async void OnAfterRender(bool firstRender)
@@ -113,18 +93,12 @@
                         HttpClient client = Shared_Data.GenerateHttpCLient();
                         client.BaseAddress = new Uri(Navigation_Manager.BaseUri);
                         await client.DeleteAsync(query_builder.ToString());
-
                     }
                     
                     await module.InvokeAsync<string>("AuthCache", "key", "Delete");
-                    
                 }
             }
-            catch(Exception E)
-            {
-                Console.WriteLine("Here");
-                Console.WriteLine(E.Message);
-            }
+            catch { }
             StateHasChanged();
         }
         else
