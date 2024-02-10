@@ -24,20 +24,30 @@ namespace HallRentalSystem.Controllers
             return Task.FromResult<ActionResult<string?>>(Content("!!! NOT IMPLEMENTED !!!"));
         }
 
+
+        // GET THE HALLS OBJECTS WITHIN THE DATABASE
         [HttpGet("get-halls-page")]
         public async Task<ActionResult<string?>> Get(string? data)
         {
             string? serialised_result = null;
 
+            // CREATE A REFERENCE TO THE DATABASE NODE THAT STORES THE HALLS
             ChildQuery? reference = Firebase_Database.firebaseClient?.Child("Halls/Hall_ID");
+
+            // ORDER THE HALLS BY LOCATION
             OrderQuery ordered_values = reference.OrderBy("Location");
 
+            // IF THE LOCATION PARAMETER IS NOT NULL
             if (data != null)
             {
+                // GET THE HALLS THAT HAVE THEIR LOCATION PROPRIETY FIELD EQUAL WITH THE
+                // SELECTED LOCATION PARAMETER AND SERIALIZE THEM IN A JSON OBJECT
                 serialised_result = await ordered_values.EqualTo(data).OnceAsJsonAsync();
             }
+            // IF THE LOCATION PARAMETER IS NULL
             else
             {
+                // GET THE HALLS AND SERIALIZE THEM IN A JSON OBJECT
                 serialised_result = await ordered_values.OnceAsJsonAsync();
             }
 
