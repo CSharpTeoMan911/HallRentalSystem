@@ -10,18 +10,25 @@
 @inject ProtectedLocalStorage LocalStorage;
 @inject IJSRuntime JS;
 
+
+@* AUTH ACTION COMPONENT *@
+
 <div class="authaction_div">
+
+    @* NAVIGATE TO LOG IN PAGE BUTTON *@
     <button class="transistive_button" @onclick=ImplementTransition>
         @TransistiveButton
     </button>
 
+    @* AUTH ACTION BUTTON *@
     <button class="action_button" @onclick=ImplementAuthAction>
         @ActionButton
     </button>
 
-
+    @* IF "ShowNotification" IS TRUE *@
     @if (ShowNotification == true)
     {
+        @* "Notification_System" COMPONENT *@
         <Notification_System MessageContent="@MessageContent" NotificationClose="new Notification_System.OnClose(CloseNotification)" Type="@type"/>
     }
 </div>
@@ -43,61 +50,101 @@
 
     private async void ImplementAuthAction()
     {
+        // IMPORT THE "Actions.js" MODULE AND SAVE ITS REFERENCE IN AN "IJSObjectReference"
         IJSObjectReference? module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
         string[]? result = null;
         string? query = null;
         string? response = null;
 
+        // CREATE A "StringBuilder" OBJECT THAT WILL BE USED TO STORE API URI AND ITS QUERY PARAMETERS
         StringBuilder url_formatter = new StringBuilder();
 
+        // CRATE AN "HttpClient" OBJECT THAT IS USED TO INITIATE THE CONNECTION TO SERVER APIs
         HttpClient client = Shared_Data.GenerateHttpCLient();
+
+        // SET THE BASE URI AS THE CURRENT PAGE'S URI BECAUSE THE SERVER API AND THE WEBPAGE HAVE THE SAME ORIGIN
         client.BaseAddress = new Uri(NavigationManager.BaseUri);
 
+        // CREATE A "Customer_ID_Value" OBJECT TO BE SENT ON BOTH THE SERVER'S LOGIN AND REGISTER APIs AS A QUERY PARAMETER
         Customer_ID_Value customers = new Customer_ID_Value();
+
 
         switch (ActionButton)
         {
+            // IF THE AUTH ACTION IS LOG IN
             case "Log In":
+
+                // APPEND THE LOG IN SERVER API URI PATH
                 url_formatter.Append("/auth/get-account?");
+
+                // EXTRACT THE EMAIL AND PASSOWRD VALUES FROM THEIR RESPECTIVE HTML ELEMENTS
                 result = await module.InvokeAsync<string[]>("GetLoginEmailAndPassword", "email_input", "password_input");
 
+                // IF BOTH EMAIL AND PASSOWRD EXIST
                 if (result?.Length == 2)
                 {
+                    // SET THE EMAIL AND PASSWORD IN THE "Customer_ID_Value" OBJECT
                     customers.Email = result[0];
                     customers.Password = result[1];
 
+                    // FORMAT THE "Customer_ID_Value" OBJECT IN AN HTML QUERY FORMAT
                     query = await Query_Formater.ObjectQueryFormatter<Customer_ID_Value>(customers);
+
+                    // APPEND THE FORMATED QUERY OBJECT
                     url_formatter.Append(query);
 
+                    // MAKE A GET REQUEST TO THE SERVER'S AUTHENTICATION API BY PASSING THE URL FROM THE "url_formatter" OBJECT AS A STRING
                     HttpResponseMessage response_message = await client.GetAsync(url_formatter.ToString());
+
+                    // GET THE SERVER'S RESPONSE
                     response = await response_message.Content.ReadAsStringAsync();
 
                     switch (response)
                     {
+                        // IF THE SERVER'S RESPONSE IS AN INTERNAL ERROR
                         case "Internal server error":
+                            // SET THE NOTIFICATION TYPE AS AN ERROR
                             type = Notification_System.NotificationType.Error;
                             break;
+
+                        // IF THE SERVER'S RESPONSE IS THAT EITHER THE PASSWORD OR EMAIL AR INVALID
                         case "Invalid email or password":
+                            // SET THE NOTIFICATION TYPE AS AN ERROR
                             type = Notification_System.NotificationType.Error;
                             break;
+
+                        // ELSE
                         default:
+
+                            // DESEARIALIZE THE SERVER'S RESPONSE IN AN "Auth_Result" OBJECT
                             Auth_Result? auth_result = Newtonsoft.Json.JsonConvert.DeserializeObject<Auth_Result>(response);
+
+                            // IF THE "Auth_Result" OBJECT IS NOT NULL
                             if (auth_result != null)
                             {
+                                // SET THE "response" STRING AS THE VALUE OF THE "Response" FIELD WITHIN THE "Auth_Result" OBJECT
                                 response = auth_result.Response;
 
+                                // IF THE "Response" FIELD WITHIN THE "Auth_Result" OBJECT IS NOT "Internal server error"
                                 if (auth_result.Response == "Internal server error")
                                 {
+                                    // SET THE NOTIFICATION TYPE AS AN ERROR
                                     type = Notification_System.NotificationType.Error;
                                 }
+                                // ELSE
                                 else
                                 {
+                                    // SET THE NOTIFICATION TYPE AS AN NOTIFICATION
                                     type = Notification_System.NotificationType.Notification;
+
+                                    // INITIATE THE LOG IN SUCCESSFUL RESPONSE AND PASS THE LOG IN SESSION KEY TO THE METHOD
                                     OnLoginSuccessful(auth_result.Log_In_Key);
                                 }
                             }
+                            // ELSE
                             else
                             {
+                                // SET THE NOTIFICATION TYPE AS AN ERROR
                                 response = "Internal server error";
                                 type = Notification_System.NotificationType.Error;
                             }
@@ -107,46 +154,85 @@
 
                 break;
             case "Register":
+
+                // APPEND THE REGISER SERVER API URI PATH
                 url_formatter.Append("/auth/insert-account?");
+
+                // EXTRACT THE EMAIL AND PASSOWRD VALUES FROM THEIR RESPECTIVE HTML ELEMENTS
                 result = await module.InvokeAsync<string[]>("GetRegisterEmailAndPassword", "email_input", "password_input", "re_password_input");
 
+                // IF BOTH EMAIL AND PASSOWRD EXIST, AND IF BOTH PASSWORDS MATCH
                 if (result?.Length == 2)
                 {
+                    // SET THE EMAIL AND PASSWORD IN THE "Customer_ID_Value" OBJECT
                     customers.Email = result[0];
                     customers.Password = result[1];
 
+                    // FORMAT THE "Customer_ID_Value" OBJECT IN AN HTML QUERY FORMAT
                     query = await Query_Formater.ObjectQueryFormatter<Customer_ID_Value>(customers);
+
+                    // APPEND THE FORMATED QUERY OBJECT
                     url_formatter.Append(query);
 
+                    // MAKE A POST REQUEST TO THE SERVER'S AUTHENTICATION API BY PASSING THE URL FROM THE "url_formatter" OBJECT AS A STRING
                     HttpResponseMessage response_message = await client.PostAsync(url_formatter.ToString(), null);
+
+                    // GET THE SERVER'S RESPONSE
                     response = await response_message.Content.ReadAsStringAsync();
 
                     switch (response)
                     {
+                        // IF THE SERVER'S RESPONSE IS THAT THE REGISTRATION IS SUCCESSFUL
                         case "Registration successful":
+
+                            // INITIATE THE REGISTER SUCCESSFUL RESPONSE
                             OnRegistrationSuccessful();
+
+                            // SET THE NOTIFICATION TYPE AS AN NOTIFICATION
                             type = Notification_System.NotificationType.Notification;
                             break;
+
+                        // IF THE SERVER'S RESPONSE IS THAT THE CREDENTIALS ARE INVALID
                         case "Invalid credentials":
+
+                            // SET THE NOTIFICATION TYPE AS AN ERROR
                             type = Notification_System.NotificationType.Error;
                             break;
+
+                        // IF THE SERVER'S RESPONSE IS THAT THE PASSWORD IS LESS THAN 10 CHARACTERS LONG
                         case "Passowrd is less than 10 characters long":
+
+                            // SET THE NOTIFICATION TYPE AS AN ERROR
                             type = Notification_System.NotificationType.Error;
                             break;
+
+                        // IF THE SERVER'S RESPONSE IS THAT THE EMAIL ADDRESS IS INVALID
                         case "Invalid email address":
+
+                            // SET THE NOTIFICATION TYPE AS AN ERROR
                             type = Notification_System.NotificationType.Error;
                             break;
+
+                        // IF THE SERVER'S RESPONSE IS THAT THE EMAIL IS ALREADY IN USE
                         case "Email already in use":
+
+                            // SET THE NOTIFICATION TYPE AS AN ERROR
                             type = Notification_System.NotificationType.Error;
                             break;
+
+                        // IF THE SERVER'S RESPONSE IS THAT AN INTERNAL SERVER ERROR OCCURED
                         case "Internal server error":
+
+                            // SET THE NOTIFICATION TYPE AS AN ERROR
                             type = Notification_System.NotificationType.Error;
                             break;
                     }
 
                 }
+                // ELSE PASSWORDS DO NOT MATCH
                 else
                 {
+                    // SET THE NOTIFICATION TYPE AS AN ERROR
                     type = Notification_System.NotificationType.Error;
                     response = "Passwords do not match";
                 }
@@ -160,28 +246,40 @@
 
     public void CloseNotification()
     {
+        // SET THE "ShowNotification" TO FALSE
         ShowNotification = false;
+
+        // RELOAD THE COMPONENT
         StateHasChanged();
     }
 
     private void ImplementTransition()
     {
+        // IF "TransitionTarget" IS NOT NULL
         if (TransitionTarget != null)
+
+            // NAVIGATE TO THE SPECIFIED URL
             NavigationManager.NavigateTo(TransitionTarget);
     }
 
     private void OnRegistrationSuccessful()
     {
+        // GET THE CURRENT DATE AND TIME
         DateTime registration_time = DateTime.Now;
 
+        // INITIATE A THREAD TO RUN THE FUNCTION IN PARALLEL ON THE CPU
         System.Threading.Thread thread = new System.Threading.Thread(async() =>
         {
+            // WHILE TRUE
             while (true)
             {
+                // IF THE CURRENT DATE TIME IS 3 SECONDS PAST THE INITIAL DATE TIME WITHIN THE METHOD
                 if ((DateTime.Now - registration_time).TotalSeconds >= 3)
                 {
+                    // INVOKE THE OPERATION ON THE APPLICATION'S UI THREAD
                     await Dispatcher.CreateDefault().InvokeAsync(() =>
                     {
+                        // NAVIGATE TO THE LOG IN PAGE
                         NavigationManager.NavigateTo("/log-in");
                     });
                     break;
@@ -198,19 +296,28 @@
     {
         try
         {
+            // IMPORT THE "Actions.js" MODULE AND SAVE ITS REFERENCE IN AN "IJSObjectReference"
             IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+
+            // INVOKE THE "AuthCache" JS FUNCTION AND PASS THE LOG IN SESSION KEY AND THE OPERATION PERFORMED
             await module.InvokeAsync<string>("AuthCache", key, "Insert");
         
+            // GET THE CURRENT DATE AND TIME
             DateTime registration_time = DateTime.Now;
 
+            // INITIATE A THREAD TO RUN THE FUNCTION IN PARALLEL ON THE CPU
             System.Threading.Thread thread = new System.Threading.Thread(async () =>
             {
+                // WHILE TRUE
                 while (true)
                 {
+                    // IF THE CURRENT DATE TIME IS 3 SECONDS PAST THE INITIAL DATE TIME WITHIN THE METHOD
                     if ((DateTime.Now - registration_time).TotalSeconds >= 3)
                     {
+                        // INVOKE THE OPERATION ON THE APPLICATION'S UI THREAD
                         await Dispatcher.CreateDefault().InvokeAsync(() =>
                         {
+                            // NAVIGATE TO THE BOOKING PAGE
                             NavigationManager.NavigateTo("/", true);
                         });
                         break;

@@ -24,6 +24,7 @@ namespace HallRentalSystem
             //
             Enable_Or_Disable_Https_Certificate_Validation_Programatically("n");
 
+            // INITIATE THE FIREBASE DATABASE CONNECTION
             InitiateFirebaseDatabase();
 
             var builder = WebApplication.CreateBuilder(args);
