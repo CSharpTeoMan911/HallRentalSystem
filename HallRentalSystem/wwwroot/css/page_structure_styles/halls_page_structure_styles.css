@@ -106,7 +106,7 @@ div.amenities_div{
     display:flex;
     flex-direction:column;
     align-content:center;
-    background-color:green;
+    /*background-color:green;*/
     width:50%;
 }
 
