@@ -1,17 +1,27 @@
 ﻿@inject IJSRuntime JS;
 @page "/contacts"
 
+<PageTitle>Contacts</PageTitle>
+
 <div id="contacts_page_jumbotron" class="jumbotorn contacts_jumbotron">
     <div class="contacts_container">
+
+        @* PAGE TITLE *@
         <h1 class="contacts_page_heading">Contact us</h1>
+
         <div class="contacts_main_container">
             <div id="main_container_segment_1" class="main_container_segment">
+
+                @* GOOGLE MAPS DIV *@
                 <div class="main_container_segment_content">
                     <div id="location_map" class="location_map"></div>
                 </div>
+
             </div>
             <div id="main_container_segment_2" class="main_container_segment">
                 <div class="main_container_segment_content">
+
+                    @* CONTACT DETAILS DIV *@
                     <div class="contact_details">
                         <div class="contact_details_section">
                             <h2 class="contact_details_section_heading">
@@ -43,6 +53,7 @@
                             </p>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -53,7 +64,11 @@
     protected override async void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
+
+        // IMPORT THE "GoogleMaps.js" MODULE AND SAVE ITS REFERENCE IN AN "IJSObjectReference"
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/GoogleMaps.js");
+
+        // CALL THE FUNCTION THAT IS RENDERING GOOGLE MAPS WITHIN THE CONTACTS PAGE
         await module.InvokeAsync<string>("initLocationMap");
     }
 }

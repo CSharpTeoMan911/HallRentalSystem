@@ -322,24 +322,34 @@ export function SetAuthGradientFluctuation() {
 // [ START ]
 
 function BookingElementsContainerResize() {
+    // GET THE HALLS CONATINER ELEMENTS BAR HTML ELEMENT
     let halls_container = document.getElementById("halls_container");
+
+    // GET THE HALLS NAVIGATION BAR HTML ELEMENT
     let halls_nav = document.getElementById("halls_nav");
+
+    // GET THE MAIN NAVIGATION BAR HTML ELEMENT
     let main_nav = document.getElementById("main_nav");
+
+    // IF NONE OF THE HTML ELEMENTS ARE NULL
     if (halls_container != null) {
         if (halls_nav != null) {
             if (main_nav != null) {
+                // SET THE HEIGHT OF THE HALLS CONTAINER AS THE ( WINDOW HEIGHT - THE SUM OF THE HEIGHT OF THE MAIN NAVBAR AND THE LOCATION SELECTION NAVBAR )
                 halls_container.style.height = (window.innerHeight - (main_nav.offsetHeight + halls_nav.offsetHeight)) + "px";
             }
         }
     }
 }
 
+// CLEAR THE BookingElementsContainerResize INTERVAL
 export function ClearBookingElementsContainerResize() {
     if (booking_elements_container_resize != null) {
         clearInterval(booking_elements_container_resize);
     }
 }
 
+// SET THE METHOD BookingElementsContainerResize TO BE CALLED AT A CERTAIN INTERVAL
 export function SetBookingElementsContainerResize() {
     booking_elements_container_resize = setInterval(() => { BookingElementsContainerResize(); }, 20)
 }
@@ -352,30 +362,52 @@ export function SetBookingElementsContainerResize() {
 // [ START ]
 
 function BookingElementResize() {
+    // GET THE HALLS CONTAINER HTML ELEMENT
     let halls_container = document.getElementById("halls_container");
 
+    // IF THE HALLS CONTAINER HTML ELEMENT IS NOT NULL
     if (halls_container != null) {
+
+        // GET ALL HTML ELEMENTS WITH THE CSS CLASS "image_element_section" AND "details_element_section"
         let image_elements = document.getElementsByClassName("image_element_section");
         let details_elements = document.getElementsByClassName("details_element_section");
 
-
+        // LOOP EACH HTML ELEMENT IN THE "image_elements" LIST
         for (let i = 0; i < image_elements.length; i++) {
+
+            // IF THE WIDTH OF THE HALLS CONTAINER IS LESS THAN 1400px
             if (halls_container.offsetWidth < 1400) {
+
+                // SET EACH ELEMENT'S WIDTH EQUAL TO THE WIDTH OF THE HALLS CONTAINER
                 image_elements[i].style.width = "100%";
-               
             }
+            // IF THE WIDTH OF THE HALLS CONTAINER IS MORE THAN OR EQUAL TO 1400px
             else {
+
+                // SET EACH ELEMENT'S WIDTH EQUAL TO 49.8% OF THE WIDTH OF THE HALLS CONTAINER
                 image_elements[i].style.width = "49.8%";
             }
         }
 
+        // LOOP EACH HTML ELEMENT IN THE "details_elements" LIST
         for (let i = 0; i < details_elements.length; i++) {
+
+            // IF THE WIDTH OF THE HALLS CONTAINER IS LESS THAN 1400px
             if (halls_container.offsetWidth < 1400) {
+
+                // SET EACH ELEMENT'S WIDTH EQUAL TO THE WIDTH OF THE HALLS CONTAINER
                 details_elements[i].style.width = "100%";
+
+                // SET THE HEIGHT OF EACH ELEMENT TO FIT ITS CONTENT
                 details_elements[i].style.height = "fit-content";
             }
+            // IF THE WIDTH OF THE HALLS CONTAINER IS MORE THAN OR EQUAL TO 1400px
             else {
+
+                // SET EACH ELEMENT'S WIDTH EQUAL TO 49.8% OF THE WIDTH OF THE HALLS CONTAINER
                 details_elements[i].style.width = "49.8%";
+
+                // SET THE HEIGHT OF EACH ELEMENT TO THE SUM OF 200px AND 10vw
                 details_elements[i].style.height = "calc(200px + 10vw)";
             }
         }

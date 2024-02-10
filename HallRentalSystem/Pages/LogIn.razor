@@ -29,5 +29,10 @@
 </div>
 
 @code {
-
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+        await module.InvokeAsync<string>("ChangeNavState", "true");
+    }
 }
