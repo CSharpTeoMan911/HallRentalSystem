@@ -10,7 +10,6 @@
         }
     }
 
-    console.log(return_values);
     return return_values;
 }
 
@@ -37,9 +36,7 @@ export function GetRegisterEmailAndPassword(email_id, password_id, re_password_i
 export function SetElementImage(element_id, image) {
     let element = document.getElementById(element_id);
     if (element != null) {
-        console.log(image);
         element.style.backgroundImage = "url(\"" + image +"\")";
-        console.log(element_id);
     }
 }
 
@@ -54,5 +51,30 @@ export function AuthCache(key, option){
             break;
         case "Get":
             return window.localStorage.getItem("HallRental_Auth_Cache");
+    }
+}
+
+
+export function ChangeNavState(isAuth) {
+    let elements = document.getElementsByClassName("nav-link");
+
+    for (let i = 0; i < elements.length; i++) {
+
+        if (isAuth == "False") {
+            if (elements[i].id === window.location.pathname) {
+                elements[i].className = "nav-link active";
+            }
+            else {
+                elements[i].className = "nav-link";
+            }
+        }
+        else {
+            if (elements[i].id === "/auth") {
+                elements[i].className = "nav-link active";
+            }
+            else {
+                elements[i].className = "nav-link";
+            }
+        }
     }
 }

@@ -14,6 +14,8 @@
 
 
 <PageTitle>Booking</PageTitle>
+
+@* NAVBAR FOR FILTERING HALLS *@
 <nav id="halls_nav" class="navbar navbar-light bg-light">
     <div class="label-div">
         <a class="navbar-brand" style="font-size:25px;">Location</a>
@@ -27,6 +29,7 @@
     </div>
 </nav>
 
+@* CONTAINER THAT HOLDS THE CURENT HALL ELEMENTS *@
 <div id="halls_container" class="halls_container">
     <div class="halls_container_inner">
         @for (int i = 0; i < halls?.Count; i++)
@@ -46,34 +49,53 @@
     protected override void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
+
+        // IF THE PAGE DID NOT LOAD
         if (Loaded == false)
         {
+            // SET THAT THE PAGE HAS LOADED
             Loaded = true;
+
+            // RENDER HALLS AT ALL LOCATIONS
             LocationOnChange("All");
         }
     }
 
     public async void LocationOnChange(string location)
     {
+        // "StringBuilder" OBJECT THAT HOLDS THE HALLS API PATH URI
         StringBuilder url_formatter = new StringBuilder();
 
+        // CRATE AN HTML CLIENT
         HttpClient client = Shared_Data.GenerateHttpCLient();
+
+        // SET THE BASE ADDRESS OF THE PATH THE SAME AS THE CURRENT PAGE BECAUSE THE API IS ON THE SAME ORIGIN
         client.BaseAddress = new Uri(NavigationManager.BaseUri);
 
+        // IF ALL LOCATIONS ARE NOT SELECTED
         if (location != "All")
         {
+            // APPEND THE URI OF THE HALLS API AND ADD AS ITS QUERY PARAMETER THE CURRENT SELECTED LOCATION
             url_formatter.Append("/halls/get-halls-page?");
             url_formatter.Append(System.Web.HttpUtility.UrlEncode("data"));
             url_formatter.Append("=");
             url_formatter.Append(System.Web.HttpUtility.UrlEncode(location));
         }
+        // IF ALL LOCATIONS ARE SELECTED
         else
         {
+            // APPEND THE URI OF THE HALLS API
             url_formatter.Append("/halls/get-halls-page");
         }
 
+
+        // INITIATE A GET REQUEST TO THE HALLS API
         HttpResponseMessage response = await client.GetAsync(url_formatter.ToString());
+
+        // DESEARIALIZE THE RESPONSE FROM A JSON OBJECT INTO A C# OBJECT
         halls = Newtonsoft.Json.JsonConvert.DeserializeObject<Halls>(await response.Content.ReadAsStringAsync());
+
+        // RELOAD THE CURRENT COMPONENT
         StateHasChanged();
     }
 
