@@ -33,20 +33,23 @@
 
     public async void OnPageNavigation(bool isAuth)
     {
-        if (isAuth == true)
+        if(isAuth == true)
             AuthStateManagement();
 
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
-        await module.InvokeAsync<string>("ChangeNavState", isAuth.ToString());
+        await module.InvokeAsync<string>("ChangeNavState");
     }
 
     protected override async void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
 
+
         try
         {
             IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+            await module.InvokeAsync<string>("ChangeNavState");
+
             string serialisedFirebaseKey = await module.InvokeAsync<string>("AuthCache", "key", "Get");
 
             if (serialisedFirebaseKey != null)

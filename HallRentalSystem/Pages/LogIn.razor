@@ -38,6 +38,6 @@
     {
         base.OnAfterRender(firstRender);
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
-        await module.InvokeAsync<string>("ChangeNavState", "true");
+        await module.InvokeAsync<string>("ChangeNavState");
     }
 }
