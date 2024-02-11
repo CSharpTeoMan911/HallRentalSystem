@@ -35,7 +35,7 @@
         @for (int i = 0; i < halls?.Count; i++)
         {
             string element = "hall_element_" + i;
-            <Hall_Element value="halls.ElementAt(i).Value" element="@element" />
+            <Hall_Element value="halls.ElementAt(i).Value" element="@element" amenities="@halls.ElementAt(i).Value.Amenities" />
         }
     </div>
 </div>

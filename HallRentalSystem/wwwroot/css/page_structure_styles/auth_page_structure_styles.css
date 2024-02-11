@@ -75,8 +75,9 @@ input.auth_input {
     opacity: 1; /* Firefox */
 }
 
-.auth_input::-ms-input-placeholder { /* Edge 12 -18 */
+.auth_input::-ms-input-placeholder {
     color: #d5d4d4;
+    opacity: 1; /* Edge 12 -18 */
 }
 
 button.transistive_button {
