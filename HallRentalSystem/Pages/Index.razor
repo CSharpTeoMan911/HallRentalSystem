@@ -61,7 +61,7 @@
     {
         NavigationManager.NavigateTo(page);
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
-        await module.InvokeAsync<string>("ChangeNavState", "false");
+        await module.InvokeAsync<string>("ChangeNavState");
     }
 
     private async void MouseEnter(string element_id)
