@@ -55,12 +55,13 @@ export function AuthCache(key, option){
 }
 
 
-export function ChangeNavState(isAuth) {
+export function ChangeNavState() {
     let elements = document.getElementsByClassName("nav-link");
 
     for (let i = 0; i < elements.length; i++) {
+        console.log(window.location.pathname);
 
-        if (isAuth == "False") {
+        if (window.location.pathname !== "/sign-up" && window.location.pathname !== "/log-in") {
             if (elements[i].id === window.location.pathname) {
                 elements[i].className = "nav-link active";
             }
