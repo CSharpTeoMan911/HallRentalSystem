@@ -61,7 +61,7 @@
         }
     }
 
-    public async void LocationOnChange(string location)
+    public async void LocationOnChange(string? location)
     {
         // "StringBuilder" OBJECT THAT HOLDS THE HALLS API PATH URI
         StringBuilder url_formatter = new StringBuilder();
@@ -97,10 +97,5 @@
 
         // RELOAD THE CURRENT COMPONENT
         StateHasChanged();
-    }
-
-    public void Render_Halls()
-    {
-
     }
 }
