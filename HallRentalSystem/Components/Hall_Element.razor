@@ -1,4 +1,7 @@
-﻿@using HallRentalSystem.Classes.Models;
+﻿@using HallRentalSystem.Classes.API_Parameters
+@using HallRentalSystem.Classes.Models;
+@inject IJSRuntime JS;
+@inject NavigationManager NavigationManager;
 
 <div class="jumbotorn hall_element">
     <div class="hall_element_inner">
@@ -46,16 +49,28 @@
                     </div>
 
                 </div>
-                <button class="booking_button">
+
+                <button class="booking_button" @onclick=BookHall>
                     Book hall
                 </button>
             </div>
         </div>
 
+        @* IF "ShowNotification" IS TRUE *@
+        @if (ShowNotification == true)
+        {
+            @* "Notification_System" COMPONENT *@
+            <Notification_System MessageContent="@MessageContent" NotificationClose="new Notification_System.OnClose(CloseNotification)" Type="@type" />
+        }
+
     </div>
 </div>
 
 @code {
+    private bool ShowNotification;
+    private string? MessageContent;
+    private Notification_System.NotificationType type;
+
     [Parameter]
     public Hall_ID_Value? value { get; set; }
 
@@ -76,4 +91,75 @@
     {
         base.OnAfterRender(firstRender);
     }
+
+    public void CloseNotification()
+    {
+        // SET THE "ShowNotification" TO FALSE
+        ShowNotification = false;
+
+        // RELOAD THE COMPONENT
+        StateHasChanged();
+    }
+
+    private async void BookHall()
+    {
+        try
+        {
+            IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+
+            if (module != null)
+            {
+                string serialisedFirebaseKey = await module.InvokeAsync<string>("AuthCache", "key", "Get");
+
+                if (serialisedFirebaseKey != null)
+                {
+                    FirebaseKey? key = Newtonsoft.Json.JsonConvert.DeserializeObject<FirebaseKey>(serialisedFirebaseKey);
+
+                    if (key != null)
+                    {
+                        Console.WriteLine(key.log_in_session_key);
+                        Console.WriteLine(key.database_key);
+                        Console.WriteLine("Key");
+                    }
+                    else
+                    {
+                        OnPermissionError();
+                    }
+                }
+                else
+                {
+                    OnPermissionError();
+                }
+            }
+        }
+        catch { }
+    }
+
+    private void OnPermissionError()
+    {
+        MessageContent = "An authenticated user is required to book a hall";
+        type = Notification_System.NotificationType.Error;
+        ShowNotification = true;
+
+        StateHasChanged();
+
+        DateTime initial_time = DateTime.Now;
+
+        System.Threading.Thread parallel_processing = new System.Threading.Thread(() =>
+        {
+            while (true)
+            {
+                if ((DateTime.Now - initial_time).TotalSeconds >= 5)
+                {
+                    NavigationManager.NavigateTo("/log-in", true);
+                    break;
+                }
+            }
+        });
+        parallel_processing.Priority = ThreadPriority.AboveNormal;
+        parallel_processing.IsBackground = false;
+        parallel_processing.Start();
+
+    }
 }
+
