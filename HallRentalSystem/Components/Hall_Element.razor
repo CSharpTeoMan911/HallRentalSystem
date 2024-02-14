@@ -20,7 +20,7 @@
                                 <div class="details_div_inner_section">
                                     <p class="propriety_label">Price: </p>
                                     <p class="value_label">@value?.Price</p>
-                                    <p class="value_label">£/hour</p>
+                                    <p class="price_unit">£/hour</p>
                                 </div>
                                 <br />
                                 <div class="details_div_inner_section">
@@ -54,17 +54,6 @@
 
     </div>
 </div>
-
-@*                     <div class="amenities_main_div">
-                        <div class="amenities_div">
-                            @for (int i = 0; i < amenities?.Count; i++)
-                            {
-                                <div class="amenities_item">
-                                    @amenities.ElementAt(i)
-                                </div>
-                            }
-                        </div>
-                    </div> *@
 
 @code {
     [Parameter]
