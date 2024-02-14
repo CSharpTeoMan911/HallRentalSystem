@@ -4,8 +4,8 @@
     {
         public string? Name { get; set; }
         public string? Location { get; set; }
-        public int Capacity { get; set; }
-        public int Price { get; set; }
+        public long Capacity { get; set; }
+        public long Price { get; set; }
         public List<string>? Hall_Pictures { get; set; }
         public List<string>? Amenities { get; set; }
     }
