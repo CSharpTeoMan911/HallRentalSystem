@@ -100,8 +100,8 @@ div.details_div_inner {
 div.details_div_inner_section {
     display:flex;
     flex-direction:row;
-    word-break:break-all;
     margin-left:10px;
+    margin-right:10px;
 }
 
 div.details_div_inner_sections {
@@ -135,7 +135,6 @@ div.amenities_div {
     border-radius: 5px;
     margin-right: 10px;
     width: 100%;
-    height:200px;
     overflow-y:auto;
     background-color:#e0e0e0
 }
@@ -152,7 +151,7 @@ div.amenities_item {
     align-self: center;
     justify-self: center;
     text-align: center;
-    font-size: 22px;
+    font-size: calc(10px + 1vw);
     border-radius: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -175,7 +174,10 @@ h2.element_name {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 700;
     align-self: center;
-    font-size: 40px;
+    width:90%;
+    word-wrap:break-word;
+    font-size: calc(20px + 1vw);
+    text-align:center;
 }
 
 select.select-location {
@@ -201,7 +203,7 @@ button.booking_button {
     padding-bottom: 5px;
     padding-left: 40px;
     padding-right: 40px;
-    font-size: 25px;
+    font-size: calc(10px + 1vw);
     color: white;
     background-color: black;
     border-radius: 6px;
@@ -211,17 +213,24 @@ p.propriety_label {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 700;
     margin-right: 10px;
-    font-size: 25px;
+    font-size: calc(10px + 1vw);
     align-self: center;
     justify-self: center;
-    word-wrap: break-word;
 }
 
 p.value_label {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
-    font-size: 25px;
+    font-size: calc(10px + 1vw);
     align-self: center;
     justify-self: center;
-    word-wrap: break-word;
+    word-break:break-word;
+}
+
+p.price_unit {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    font-size: calc(10px + 1vw);
+    align-self: center;
+    justify-self: center;
 }
