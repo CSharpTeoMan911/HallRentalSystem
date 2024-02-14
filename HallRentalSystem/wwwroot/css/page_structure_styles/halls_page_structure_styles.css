@@ -151,7 +151,7 @@ div.amenities_item {
     align-self: center;
     justify-self: center;
     text-align: center;
-    font-size: calc(10px + 1vw);
+    font-size: calc(6px + 1vw);
     border-radius: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -207,6 +207,7 @@ button.booking_button {
     color: white;
     background-color: black;
     border-radius: 6px;
+    border-width: 0px;
 }
 
 p.propriety_label {
