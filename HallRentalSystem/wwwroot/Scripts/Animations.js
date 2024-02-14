@@ -537,11 +537,13 @@ function BookingElementResize() {
         let details_divs_inner = document.getElementsByClassName("details_div_inner");
         let amenities_main_divs = document.getElementsByClassName("amenities_main_div");
         let amenities_divs = document.getElementsByClassName("amenities_div");
+        let main_details_divs = document.getElementsByClassName("main_details_div");
        
 
         for (let i = 0; i < hall_element_inner.length; i++) {
             let img_section = hall_element_inner[i].children[0];
             let det_elements = hall_element_inner[i].children[1];
+
 
             // IF THE WIDTH OF THE HALLS CONTAINER IS LESS THAN 1400px
             if (halls_container.offsetWidth < 1400) {
@@ -573,6 +575,17 @@ function BookingElementResize() {
         }
 
 
+        for (let i = 0; i < main_details_divs.length; i++) {
+
+            let details_div = main_details_divs[i].children[0].children[0].children[0];
+            let amenities_div = main_details_divs[i].children[1].children[0].children[0];
+
+            amenities_div.style.height = details_div.offsetHeight + "px";
+            console.log(main_details_divs[i].children[0].children[0].children[0]);
+            console.log(details_div.style.height + "\n\n");
+        }
+
+
         // LOOP EACH HTML ELEMENT IN THE "details_elements" LIST
         for (let i = 0; i < details_elements.length; i++) {
 
@@ -601,11 +614,10 @@ function BookingElementResize() {
         for (let i = 0; i < details_divs_inner.length; i++) {
 
             // IF THE WIDTH OF THE HALLS CONTAINER IS LESS THAN 800px
-            if (halls_container.offsetWidth < 800) {
+            if (halls_container.offsetWidth < 600) {
                 details_divs_inner[i].style.marginTop = "30px";
-                details_divs_inner[i].style.width = "100%";
             }
-            // IF THE WIDTH OF THE HALLS CONTAINER IS MORE THAN OR EQUAL TO 800px
+            // IF THE WIDTH OF THE HALLS CONTAINER IS MORE THAN OR EQUAL TO 600px
             else {
                 details_divs_inner[i].style.width = "49%";
             }
@@ -616,12 +628,11 @@ function BookingElementResize() {
         // LOOP EACH HTML ELEMENT IN THE "details_elements" LIST
         for (let i = 0; i < amenities_main_divs.length; i++) {
 
-            // IF THE WIDTH OF THE HALLS CONTAINER IS LESS THAN 800px
-            if (halls_container.offsetWidth < 800) {
+            // IF THE WIDTH OF THE HALLS CONTAINER IS LESS THAN 600px
+            if (halls_container.offsetWidth < 600) {
                 amenities_main_divs[i].style.marginTop = "30px";
-                amenities_main_divs[i].style.width = "100%";
             }
-            // IF THE WIDTH OF THE HALLS CONTAINER IS MORE THAN OR EQUAL TO 800px
+            // IF THE WIDTH OF THE HALLS CONTAINER IS MORE THAN OR EQUAL TO 600px
             else {
                 amenities_main_divs[i].style.width = "48.8%";
             }
@@ -631,11 +642,11 @@ function BookingElementResize() {
         // LOOP EACH HTML ELEMENT IN THE "details_elements" LIST
         for (let i = 0; i < amenities_divs.length; i++) {
 
-            // IF THE WIDTH OF THE HALLS CONTAINER IS LESS THAN 800px
-            if (halls_container.offsetWidth < 800) {
+            // IF THE WIDTH OF THE HALLS CONTAINER IS LESS THAN 600px
+            if (halls_container.offsetWidth < 600) {
                 amenities_divs[i].style.width = "80%";
             }
-            // IF THE WIDTH OF THE HALLS CONTAINER IS MORE THAN OR EQUAL TO 800px
+            // IF THE WIDTH OF THE HALLS CONTAINER IS MORE THAN OR EQUAL TO 600px
             else {
                 amenities_divs[i].style.width = "100%";
             }
