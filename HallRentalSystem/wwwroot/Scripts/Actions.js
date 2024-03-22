@@ -59,8 +59,6 @@ export function ChangeNavState() {
     let elements = document.getElementsByClassName("nav-link");
 
     for (let i = 0; i < elements.length; i++) {
-        console.log(window.location.pathname);
-
         if (window.location.pathname !== "/sign-up" && window.location.pathname !== "/log-in") {
             if (elements[i].id === window.location.pathname) {
                 elements[i].className = "nav-link active";
@@ -77,5 +75,11 @@ export function ChangeNavState() {
                 elements[i].className = "nav-link";
             }
         }
+    }
+}
+
+export function SetCurrentHallName(hall_name) {
+    if (hall_name != null) {
+        window.localStorage.setItem("Selected_Hall", hall_name);
     }
 }
