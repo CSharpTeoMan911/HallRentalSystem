@@ -22,6 +22,7 @@
     </main>
 </div>
 @code{
+
     private async void InitiateAnimations()
     {
         try
@@ -35,6 +36,13 @@
                 // INVOKE THE NECESARY ANIMATIONS METHODS
                 //
                 // [ BEGIN ]
+
+                try
+                {
+                    IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+                    await module.InvokeAsync<string>("ChangeNavState");
+                }
+                catch{ }
 
                 try
                 {
