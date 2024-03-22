@@ -581,8 +581,6 @@ function BookingElementResize() {
             let amenities_div = main_details_divs[i].children[1].children[0].children[0];
 
             amenities_div.style.height = details_div.offsetHeight + "px";
-            console.log(main_details_divs[i].children[0].children[0].children[0]);
-            console.log(details_div.style.height + "\n\n");
         }
 
 
