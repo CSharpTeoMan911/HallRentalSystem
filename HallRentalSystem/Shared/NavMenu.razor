@@ -31,13 +31,10 @@
     public AuthState authentication_state = AuthState.Login;
 
 
-    public async void OnPageNavigation(bool isAuth)
+    public void OnPageNavigation(bool isAuth)
     {
         if(isAuth == true)
             AuthStateManagement();
-
-        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
-        await module.InvokeAsync<string>("ChangeNavState");
     }
 
     protected override async void OnAfterRender(bool firstRender)
