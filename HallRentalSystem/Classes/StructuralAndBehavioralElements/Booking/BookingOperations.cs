@@ -11,6 +11,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
 
         public Task<ReturnType?> Get<ReturnType>(string? data)
         {
+            //Firebase.Firebase_Database.firebaseClient.
             throw new NotImplementedException();
         }
 
