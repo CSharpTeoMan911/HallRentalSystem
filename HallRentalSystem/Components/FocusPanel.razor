@@ -1,0 +1,27 @@
+﻿<div class="focus-div">
+    <div class="element-cancel">
+        <button class="element-cancel-button" @onclick="CloseFocusPanel">
+            &#x2716;
+        </button>
+    </div>
+    @Component
+</div>
+
+@code {
+    public string date = DateTime.Now.Date.ToString();
+    public delegate void OnClose();
+    [Parameter] public OnClose? ClosePanel { get; set; }
+    [Parameter] public RenderFragment? Component { get; set; }
+
+
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+    }
+
+    private void CloseFocusPanel()
+    {
+        ClosePanel?.Invoke();
+    }
+}
