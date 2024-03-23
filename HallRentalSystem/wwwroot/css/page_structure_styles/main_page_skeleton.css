@@ -133,7 +133,7 @@ button.element-cancel-button {
     border-width: 0;
     margin: 10px;
     font-size: 30px;
-    color: #ff0000;
+    color: red;
     -webkit-text-stroke: 0.1px #6f6f6f;
     text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
 }
