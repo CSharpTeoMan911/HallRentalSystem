@@ -172,6 +172,25 @@ div.book_section {
     vertical-align:top;
 }
 
+div.reservation-div {
+    border-radius: 10px;
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    background: linear-gradient(to right, #5a5959, #828181);
+}
+
+div.reservation-content {
+    display:flex;
+    flex-direction:column;
+    padding:50px;
+    display: flex;
+    align-self: center;
+    width: fit-content;
+}
+
+
 h2.element_name {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 700;
@@ -250,4 +269,9 @@ p.price_unit {
     color: #2c2c2c;
     -webkit-text-stroke: 1px #0c0c0c;
     text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
+}
+
+input.datetime 
+{
+    align-self:center;
 }
