@@ -1,5 +1,6 @@
 ﻿@using HallRentalSystem.Classes.API_Parameters
 @using HallRentalSystem.Classes.Models;
+@using HallRentalSystem.Components;
 @inject IJSRuntime JS;
 @inject NavigationManager NavigationManager;
 
@@ -63,11 +64,21 @@
             <Notification_System MessageContent="@MessageContent" NotificationClose="new Notification_System.OnClose(CloseNotification)" Type="@type" />
         }
 
+        @if (ReserveHall == true)
+        {
+            <FocusPanel ClosePanel="new FocusPanel.OnClose(CloseReservation)">
+                <Component>
+                    <HallRezervation/>
+                </Component>
+            </FocusPanel>
+        }
+
     </div>
 </div>
 
 @code {
     private bool ShowNotification;
+    private bool ReserveHall;
     private string? MessageContent;
     private Notification_System.NotificationType type;
 
@@ -101,6 +112,13 @@
         StateHasChanged();
     }
 
+    public void CloseReservation()
+    {
+        ReserveHall = false;
+
+        StateHasChanged();
+    }
+
     private async void BookHall()
     {
         try
@@ -119,7 +137,9 @@
                     {
                         IJSObjectReference module_reference = await JS.InvokeAsync<IJSObjectReference>("import", "../Scripts/Actions.js");
                         await module_reference.InvokeAsync<string>("SetCurrentHallName", value?.Name);
-                        NavigationManager.NavigateTo("/hall_rezervation", true);
+                        // NavigationManager.NavigateTo("/hall_rezervation", true);
+                        ReserveHall = true;
+                        StateHasChanged();
                     }
                     else
                     {
