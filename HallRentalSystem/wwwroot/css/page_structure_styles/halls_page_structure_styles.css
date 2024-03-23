@@ -184,7 +184,7 @@ div.reservation-div {
 div.reservation-content {
     display:flex;
     flex-direction:column;
-    padding:50px;
+    padding:30px;
     display: flex;
     align-self: center;
     width: fit-content;

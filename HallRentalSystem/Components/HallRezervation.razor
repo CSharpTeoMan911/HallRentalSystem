@@ -1,17 +1,38 @@
-﻿<div class="reservation-div">
+﻿@using Radzen;
+@using Radzen.Blazor.Rendering;
+@using System.Text;
+@using HallRentalSystem.Classes;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
+@inject NavigationManager NavigationManager;
+
+<div class="reservation-div">
     <div class="reservation-content">
         <h2 class="title">Book Hall</h2>
 
         <div>
-            <input class="datetime" type="date" min=@DateTime.Now.Date.ToString("yyyy-MM-dd") @onchange=TextChanged value=@DateTime.Now.Date.ToString("yyyy-MM-dd") />
+            <RadzenStack>
+                <RadzenLabel Text="Select Date, bound to DateOnly" Component="DatePickerDateOnlyType" Style="margin-right: 8px; vertical-align: middle;" />
+                <RadzenDatePicker @bind-Value=@value AllowInput=false YearRange=@year_range DateRender=@DateRender DateFormat="dd/MM/yyyy" Name="DatePickerSpecialDates" />
+            </RadzenStack>
         </div>
 
         <div>
             <p>
                 Hours
             </p>
-            <input type="time" />
-            <input type="time" />
+            <HourPicker/>
+@*             <RadzenStack Orientation="Orientation.Horizontal">
+                <RadzenStack>
+                    <RadzenLabel Text="Select Time, bound to TimeOnly" Component="DatePickerTimeOnlyType" Style="margin-right: 8px; vertical-align: middle;" />
+                    <RadzenDatePicker Name="StartTimePicker" @bind-Value="@startTimeValue" AllowInput=false TimeOnly=true ShowTimeOkButton=false Change="TimeRender" ShowSeconds="false" DateFormat="HH" />
+                </RadzenStack>
+
+                <RadzenStack>
+                    <RadzenLabel Text="Select Time, bound to TimeOnly" Component="DatePickerTimeOnlyType" Style="margin-right: 8px; vertical-align: middle;" />
+                    <RadzenDatePicker Name="EndTimePicker" @bind-Value="@endTimeValue" AllowInput=false TimeOnly=true ShowTimeOkButton=false Change="TimeRender" ShowSeconds="false" DateFormat="HH" />
+                </RadzenStack>
+            </RadzenStack> *@
         </div>
 
         <div>
@@ -20,22 +41,139 @@
             </p>
         </div>
 
-        <button>
+        <button @onclick=ReserveHall>
         </button>
     </div>
 </div>
 
 @code {
+    IEnumerable<DateTime> dates = new DateTime[] { DateTime.Today.AddDays(-1), DateTime.Today.AddDays(1) };
+    IEnumerable<DateTime> disabled_dates = new DateTime[] { DateTime.Today.AddDays(1), DateTime.Today.AddDays(3), DateTime.Today.AddDays(5) };
+    IEnumerable<TimeOnly> disabled_times = new TimeOnly[] { TimeOnly.FromDateTime(DateTime.Now.AddHours(1)), TimeOnly.FromDateTime(DateTime.Now.AddHours(2)), TimeOnly.FromDateTime(DateTime.Now.AddHours(4)) };
+
+
+    string year_range = @DateTime.Now.Year.ToString() + @":3000";
     public string date = DateTime.Now.Date.ToString();
+    DateTime? value = DateTime.Now;
+
+
+    TimeOnly startTimeValue = TimeOnly.FromDateTime(DateTime.Now);
+    TimeOnly endTimeValue = TimeOnly.FromDateTime(DateTime.Now.AddHours(1));
+
+
     public delegate void OnClose();
+    [Parameter] public string? HallName { get; set; }
+
 
     protected override void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
     }
 
-    private void TextChanged()
+    void DateRender(DateRenderEventArgs args)
     {
-        
+        DateTime current_time = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+
+        if (disabled_dates.Contains(args.Date))
+        {
+            args.Attributes.Add("style", "background-color: rgba(255,0,0,0.6)");
+            args.Disabled = true;
+        }
+
+        if (args.Date.Date < current_time)
+        {
+            args.Attributes.Add("style", "background-color: rgba(255,0,0,0.6)"); 
+            args.Disabled = true;
+        }
+    }
+
+    void TimeRender(DateTime? dateTime)
+    {
+        if (dateTime is null) return;
+        TimeOnly.FromDateTime(dateTime.Value);
+    }
+
+    private async void GetHallData()
+    {
+        HttpClient client = Shared_Data.GenerateHttpCLient();
+
+        try
+        {
+            client.BaseAddress = new Uri(NavigationManager.BaseUri);
+
+            Bookings booking = new Bookings();
+
+            ///////////////////////////////////////////////
+            // !!! IMPLEMENT BOOKING DATA EXTRACTION !!! //
+            ///////////////////////////////////////////////
+
+
+            string api_controller_path = "/booking?";
+            string formated_query = await Query_Formater.ObjectQueryFormatter<Bookings>(booking);
+            int total_length = api_controller_path.Length + formated_query.Length;
+
+
+            StringBuilder url_builder = new StringBuilder(total_length);
+            url_builder.Append(api_controller_path);
+            url_builder.Append(formated_query);
+
+
+            HttpResponseMessage response_message = await client.GetAsync(url_builder.ToString());
+            string response = await response_message.Content.ReadAsStringAsync();
+
+            ///////////////////////////////////////////////////////
+            // !!! IMPLEMENT API RESPONSE MESSAGE PROCESSING !!! //
+            ///////////////////////////////////////////////////////
+        }
+        catch
+        {
+
+        }
+        finally
+        {
+            client?.Dispose();
+        }
+    }
+
+    private async void ReserveHall()
+    {
+        HttpClient client = Shared_Data.GenerateHttpCLient();
+
+        try
+        {
+            client.BaseAddress = new Uri(NavigationManager.BaseUri);
+
+            Bookings booking = new Bookings();
+
+            ///////////////////////////////////////////////
+            // !!! IMPLEMENT BOOKING DATA EXTRACTION !!! //
+            ///////////////////////////////////////////////
+
+
+            string api_controller_path = "/booking?";
+            string formated_query = await Query_Formater.ObjectQueryFormatter<Bookings>(booking);
+            int total_length = api_controller_path.Length + formated_query.Length;
+
+
+            StringBuilder url_builder = new StringBuilder(total_length);
+            url_builder.Append(api_controller_path);
+            url_builder.Append(formated_query);
+
+
+            HttpResponseMessage response_message = await client.GetAsync(url_builder.ToString());
+            string response = await response_message.Content.ReadAsStringAsync();
+
+            ///////////////////////////////////////////////////////
+            // !!! IMPLEMENT API RESPONSE MESSAGE PROCESSING !!! //
+            ///////////////////////////////////////////////////////
+        }
+        catch
+        {
+
+        }
+        finally
+        {
+            client?.Dispose();
+        }
     }
 }
