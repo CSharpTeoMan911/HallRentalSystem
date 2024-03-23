@@ -60,43 +60,43 @@ div.contact_details_section {
 
 .contacts_jumbotron {
     margin-top: 80px;
-    background-color: #212121;
+    background: linear-gradient(to right, #e5e3e3, #b7b7b7);
     align-self: center;
     width: 75%;
     height: 100%;
-    opacity: 65%;
+    opacity: 85%;
     border-radius: 10px;
 }
 
 h1.contacts_page_heading {
-    color: white;
     width: fit-content;
     align-self: center;
     justify-self: center;
     font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
     font-size: calc(45px + 1vw);
-    -webkit-text-stroke: 1px #F8F8F8;
-    text-shadow: 13px 13px 9px black;
+    color: #4b4b4b;
+    -webkit-text-stroke: 1px #373737;
+    text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
     margin-top: 20px;
     margin-bottom: 70px;
 }
 
 h2.contact_details_section_heading {
-    color: #e8e8e8;
     font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
     font-size: calc(23px + 1vw);
-    -webkit-text-stroke: 1px #F8F8F8;
-    text-shadow: 7px 4px 1px black;
+    color: #4b4b4b;
+    -webkit-text-stroke: 1px #212121;
+    text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
 }
 
 p.contact_details_section_detail {
-    color: #e2e2e2;
     width: calc(100% - 120px);
     font-family: 'JetBrains Mono', monospace;
     font-weight: 300;
     font-size: calc(14px + 1vw);
-    -webkit-text-stroke: 1px #e2e2e2;
-    text-shadow: 5px 4px 1px black;
+    color: #2c2c2c;
+    -webkit-text-stroke: 1px #0c0c0c;
+    text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
 }

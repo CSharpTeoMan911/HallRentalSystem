@@ -17,12 +17,12 @@ namespace HallRentalSystem
         {
             // COMMAND LINE SWAGGER API TESTING MODE
             //
-            //Enable_Or_Disable_Https_Certificate_Validation();
+            Enable_Or_Disable_Https_Certificate_Validation();
 
 
             // PROGRAMATICALLY SET SWAGGER API TESTING MODE ( "y" for yes; "n" for no; )
             //
-            Enable_Or_Disable_Https_Certificate_Validation_Programatically("n");
+            //Enable_Or_Disable_Https_Certificate_Validation_Programatically("n");
 
             // INITIATE THE FIREBASE DATABASE CONNECTION
             InitiateFirebaseDatabase();
@@ -52,12 +52,12 @@ namespace HallRentalSystem
             {
                 // COMMAND LINE SWAGGER API TESTING MODE
                 //
-                //Enable_Or_Disable_Swagger(app);
+                Enable_Or_Disable_Swagger(app);
 
 
                 // PROGRAMATICALLY SET SWAGGER API TESTING MODE ( "y" for yes; "n" for no; )
                 //
-                Enable_Or_Disable_Swagger_Programatically(app, "n"); 
+                //Enable_Or_Disable_Swagger_Programatically(app, "n"); 
             }
 
             app.UseHttpsRedirection();
