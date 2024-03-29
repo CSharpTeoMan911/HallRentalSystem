@@ -1,9 +1,49 @@
-﻿<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="width:500px;height:200px;">
-    <a class="dropdown-item" href="#">Action</a>
-    <a class="dropdown-item" href="#">Another action</a>
-    <a class="dropdown-item" href="#">Something else here</a>
+﻿@using System.Text;
+
+<div class="dropdown">
+    <button class="btn btn-secondary fa" @onclick=Expand_Hour_Picker type="button" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
+        &#xf017;
+    </button>
+    <div class="@current_dropdown_menu_class" aria-labelledby="dropdownMenuButton">
+        <article>
+            <div class="hour_picker_div">
+                @for (int i = 0; i < 4; i++)
+                {
+                    int ii = i * 6;
+                    int limit = ii + 6;
+                    
+                    <div class="btn-group hour_picker_row" role="group" aria-label="...">
+                        @for (; ii < limit; ii++)
+                        {
+                            name_builder.Append("hour");
+                            name_builder.Append("_");
+                            name_builder.Append(ii);
+                            <button name="@name_builder.ToString()" class="hour_item">@(ii + 1)</button>
+                            name_builder.Clear();
+                        }
+                    </div>
+                    
+                }
+            </div>
+        </article>
+    </div>
 </div>
 
 @code {
+    StringBuilder name_builder = new StringBuilder();
+    private string current_dropdown_menu_class = "dropdown-menu";
+    private int Count;
 
+    private void Expand_Hour_Picker()
+    {
+        Count++;
+        if (Count == 1)
+            current_dropdown_menu_class = "dropdown-menu show";
+        if (Count == 2)
+        {
+            current_dropdown_menu_class = "dropdown-menu";
+            Count = 0;
+        }
+        StateHasChanged();
+    }
 }

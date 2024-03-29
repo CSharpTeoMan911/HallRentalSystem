@@ -56,7 +56,7 @@ namespace HallRentalSystem
 
                 // PROGRAMATICALLY SET SWAGGER API TESTING MODE ( "y" for yes; "n" for no; )
                 //
-                Enable_Or_Disable_Swagger_Programatically(app, "y"); 
+                Enable_Or_Disable_Swagger_Programatically(app, "n"); 
             }
 
             app.UseHttpsRedirection();
