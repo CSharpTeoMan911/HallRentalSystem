@@ -13,7 +13,7 @@
         <div>
             <RadzenStack>
                 <RadzenLabel Text="Select Date, bound to DateOnly" Component="DatePickerDateOnlyType" Style="margin-right: 8px; vertical-align: middle;" />
-                <RadzenDatePicker @bind-Value=@value AllowInput=false YearRange=@year_range DateRender=@DateRender DateFormat="dd/MM/yyyy" Name="DatePickerSpecialDates" />
+                <RadzenDatePicker @bind-Value=@value AllowInput=false YearRange=@year_range DateRender=@DateRender DateFormat="dd/MM/yyyy" Name="DatePickerSpecialDates"/>
             </RadzenStack>
         </div>
 
@@ -50,7 +50,7 @@
     IEnumerable<DateTime> dates = new DateTime[] { DateTime.Today.AddDays(-1), DateTime.Today.AddDays(1) };
     IEnumerable<DateTime> disabled_dates = new DateTime[] { DateTime.Today.AddDays(1), DateTime.Today.AddDays(3), DateTime.Today.AddDays(5) };
     IEnumerable<TimeOnly> disabled_times = new TimeOnly[] { TimeOnly.FromDateTime(DateTime.Now.AddHours(1)), TimeOnly.FromDateTime(DateTime.Now.AddHours(2)), TimeOnly.FromDateTime(DateTime.Now.AddHours(4)) };
-
+    
 
     string year_range = @DateTime.Now.Year.ToString() + @":3000";
     public string date = DateTime.Now.Date.ToString();
