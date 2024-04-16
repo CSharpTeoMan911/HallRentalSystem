@@ -16,23 +16,11 @@
                 <RadzenDatePicker @bind-Value=@value AllowInput=false YearRange=@year_range DateRender=@DateRender DateFormat="dd/MM/yyyy" Name="DatePickerSpecialDates"/>
             </RadzenStack>
         </div>
-
         <div>
-            <p>
-                Hours
-            </p>
-            <HourPicker/>
-@*             <RadzenStack Orientation="Orientation.Horizontal">
-                <RadzenStack>
-                    <RadzenLabel Text="Select Time, bound to TimeOnly" Component="DatePickerTimeOnlyType" Style="margin-right: 8px; vertical-align: middle;" />
-                    <RadzenDatePicker Name="StartTimePicker" @bind-Value="@startTimeValue" AllowInput=false TimeOnly=true ShowTimeOkButton=false Change="TimeRender" ShowSeconds="false" DateFormat="HH" />
-                </RadzenStack>
-
-                <RadzenStack>
-                    <RadzenLabel Text="Select Time, bound to TimeOnly" Component="DatePickerTimeOnlyType" Style="margin-right: 8px; vertical-align: middle;" />
-                    <RadzenDatePicker Name="EndTimePicker" @bind-Value="@endTimeValue" AllowInput=false TimeOnly=true ShowTimeOkButton=false Change="TimeRender" ShowSeconds="false" DateFormat="HH" />
-                </RadzenStack>
-            </RadzenStack> *@
+            <RadzenStack>
+                <RadzenLabel Text="Select Date, bound to DateOnly" Component="DatePickerDateOnlyType" Style="margin-right: 8px; vertical-align: middle;" />
+                <RadzenDatePicker @bind-Value=@value AllowInput=false YearRange=@year_range DateRender=@DateRender DateFormat="dd/MM/yyyy" Name="DatePickerSpecialDates" />
+            </RadzenStack>
         </div>
 
         <div>
