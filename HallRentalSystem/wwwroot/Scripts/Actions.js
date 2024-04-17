@@ -83,3 +83,8 @@ export function SetCurrentHallName(hall_name) {
         window.localStorage.setItem("Selected_Hall", hall_name);
     }
 }
+
+
+export function DebugWriteLine(value) {
+    console.log(value);
+}

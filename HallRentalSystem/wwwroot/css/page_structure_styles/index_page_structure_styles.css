@@ -22,7 +22,7 @@ div.main_index_page_panel_content {
     width: 100%;
     margin-bottom: 20px;
     background-color: rgb(36, 35, 35);
-    opacity: 53%;
+    opacity: 63%;
 }
 
 div.main_index_page_panel_content_display_block {
@@ -66,31 +66,8 @@ div.button_cover {
 
 /* width */
 .main_article_style::-webkit-scrollbar {
-    width: 10px;
+    width: 0px;
 }
-
-/* Track */
-.main_article_style::-webkit-scrollbar-track {
-    background: black;
-    border-radius: 10px;
-}
-
-/* Handle */
-.main_article_style::-webkit-scrollbar-thumb {
-    background: #888;
-    background-color: black; /* color of the scroll thumb */
-    border-radius: 20px; /* roundness of the scroll thumb */
-    border: 3px solid grey;
-}
-
-/* Handle on hover */
-.main_article_style::-webkit-scrollbar-thumb:hover {
-    background: #555;
-    background-color: white; /* color of the scroll thumb */
-    border-radius: 20px; /* roundness of the scroll thumb */
-    border: 3px solid grey;
-}
-
 
 .custom_jumbotron {
     border-radius: 20px;

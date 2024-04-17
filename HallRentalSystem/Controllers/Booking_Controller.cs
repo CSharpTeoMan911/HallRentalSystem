@@ -22,7 +22,7 @@ namespace HallRentalSystem.Controllers
         [HttpPost("insert-booking")]
         public Task<ActionResult<string?>> Insert(string? data)
         {
-            throw new NotImplementedException();
+            return Task.FromResult<ActionResult<string>>(data);
         }
 
         [HttpPut("update-booking")]
