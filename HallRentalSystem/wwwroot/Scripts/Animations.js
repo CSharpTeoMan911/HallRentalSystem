@@ -534,11 +534,6 @@ function BookingElementResize() {
         // GET ALL HTML ELEMENTS WITH THE CSS CLASS "image_element_section" AND "details_element_section"
         let hall_element_inner = document.getElementsByClassName("hall_element_inner");
         let details_elements = document.getElementsByClassName("details_element_section");
-        let details_divs_inner = document.getElementsByClassName("details_div_inner");
-        let amenities_main_divs = document.getElementsByClassName("amenities_main_div");
-        let amenities_divs = document.getElementsByClassName("amenities_div");
-        let main_details_divs = document.getElementsByClassName("main_details_div");
-       
 
         for (let i = 0; i < hall_element_inner.length; i++) {
             let img_section = hall_element_inner[i].children[0];
@@ -562,14 +557,6 @@ function BookingElementResize() {
             }
         }
 
-
-        for (let i = 0; i < main_details_divs.length; i++) {
-
-            let details_div = main_details_divs[i].children[0].children[0].children[0];
-            let amenities_div = main_details_divs[i].children[1].children[0].children[1];
-
-            amenities_div.style.height = details_div.offsetHeight -50 + "px";
-        }
 
 
         // LOOP EACH HTML ELEMENT IN THE "details_elements" LIST

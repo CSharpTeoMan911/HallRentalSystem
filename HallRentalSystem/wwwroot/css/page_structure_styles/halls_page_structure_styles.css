@@ -24,6 +24,7 @@ div.halls_container {
     width: 100%;
     height: 100%;
     overflow-y: auto;
+    background: linear-gradient(to right, white, #dcdcdc);
 }
 
 div.hall_element {
@@ -120,30 +121,17 @@ div.main_details_div {
     vertical-align: top;
 }
 
-div.amenities_main_div {
-    display: inline-block;
-    width: 49%;
-    vertical-align: top;
-}
-
-div.amenities_div {
-    display: flex;
-    flex-direction: column;
-    align-self: center;
-    align-content: center;
-    margin-right: 10px;
-    width: 100%;
-    overflow-y: auto;
-    background: linear-gradient(to right, #8e8e8e, #727272)
+div.date_picker {
+    width:50%;
 }
 
 div.amenities_item {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
-    margin-left:10px;
+    margin-left: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
-    padding:5px;
+    padding: 5px;
     background: white;
     color: black;
     word-wrap: break-word;
@@ -157,37 +145,6 @@ div.amenities_item {
     padding-bottom: 5px;
 }
 
-div.amenities_div {
-    display: flex;
-    flex-direction: column;
-    align-content: center;
-    justify-content:center;
-}
-
-/* width */
-.amenities_div::-webkit-scrollbar {
-    width: 10px;
-}
-
-/* Track */
-.amenities_div::-webkit-scrollbar-track {
-    background: linear-gradient(to right,#bdbdbd, #a7a7a7);
-}
-
-/* Handle */
-.amenities_div::-webkit-scrollbar-thumb {
-    background: #888;
-    background: linear-gradient(to right,#bdbdbd, #a7a7a7); /* color of the scroll thumb */
-    border: 3px solid grey;
-}
-
-/* Handle on hover */
-.amenities_div::-webkit-scrollbar-thumb:hover {
-    background: #555;
-    background-color: white; /* color of the scroll thumb */
-    border: 3px solid grey;
-}
-
 div.amenities_identifier_div {
     position: sticky;
     border-radius: 4px;
@@ -195,12 +152,6 @@ div.amenities_identifier_div {
     height: 50px;
     background: linear-gradient(to right,#bdbdbd, #a7a7a7);
     text-align: center;
-}
-
-div.amenities_main_sub_div {
-    border: 2px solid black;
-    border-radius: 3px;
-    background: linear-gradient(to right,#bdbdbd, #a7a7a7);
 }
 
 div.book_section {
@@ -255,7 +206,7 @@ h2.element_name {
     align-self: center;
     word-wrap: break-word;
     margin-top: 2px;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     font-size: calc(35px + 1vw);
     text-align: center;
     color: black;
