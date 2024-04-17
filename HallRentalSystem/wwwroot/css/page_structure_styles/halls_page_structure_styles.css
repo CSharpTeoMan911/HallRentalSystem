@@ -24,17 +24,17 @@ div.halls_container {
     width: 100%;
     height: 100%;
     overflow-y: auto;
+    background: linear-gradient(to right, white, #dcdcdc);
 }
 
 div.hall_element {
+    padding:10px;
     display: inline-block;
-    border-radius:5px;
     align-self:center;
-    margin-top: 40px;
-    margin-bottom: 40px;
-    width: 80%;
+    width: 100%;
     height: fit-content;
-    background: linear-gradient(to right, white, #cecece);
+    background: linear-gradient(to right, white, #dcdcdc);
+    border: 3px solid black;
 }
 
 div.hall_element_inner{
@@ -58,11 +58,11 @@ div.halls_container_inner {
 }
 
 div.image_element_section {
+    align-self:center;
     display: inline-block;
     width: 49.8%;
-    margin-top: 5px;
-    margin-left: 5px;
     height: calc(200px + 10vw);
+    min-height: calc(200px + 10vw);
     vertical-align: top;
 }
 
@@ -75,13 +75,13 @@ div.details_element_section {
 
 div.custom_carousel {
     display: flex;
-    border-radius:5px;
     flex-direction: row;
     width: 100%;
     height: 100%;
     justify-content: center;
     align-items: center;
     text-align: center;
+    border-radius: 10px;
 }
 
 div.details_div{
@@ -121,55 +121,44 @@ div.main_details_div {
     vertical-align: top;
 }
 
-div.amenities_main_div {
-    display: inline-block;
-    width: 49%;
-    vertical-align: top;
-}
-
-div.amenities_div {
-    display: flex;
-    flex-direction: column;
-    align-self: center;
-    align-content: center;
-    border-radius: 5px;
-    margin-right: 10px;
-    width: 100%;
-    overflow-y: auto;
-    background: linear-gradient(to right, #a4a4a4, #b1b0b0)
+div.date_picker {
+    width:50%;
 }
 
 div.amenities_item {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
+    margin-left: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
-    background: linear-gradient(to right, #5a5959, #828181);
-    color: #ffffff;
-    -webkit-text-stroke: 0.1px #6f6f6f;
-    text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
+    padding: 5px;
+    background: white;
+    color: black;
     word-wrap: break-word;
-    width: 70%;
     align-self: center;
     justify-self: center;
     text-align: center;
     font-size: calc(6px + 1vw);
+    border: 1px solid black;
     border-radius: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
-div.amenities_main_sub_div {
-    display:flex;
-    flex-direction:column;
-    align-content:center;
+div.amenities_identifier_div {
+    position: sticky;
+    border-radius: 4px;
+    top: 0px;
+    height: 50px;
+    background: linear-gradient(to right,#bdbdbd, #a7a7a7);
+    text-align: center;
 }
 
 div.book_section {
-    display:inline-block;
-    width:100%;
-    background-color:black;
-    vertical-align:top;
+    display: inline-block;
+    width: 100%;
+    background-color: black;
+    vertical-align: top;
 }
 
 div.reservation-div {
@@ -201,18 +190,26 @@ div.hour_picker_row
     align-self:center;
 }
 
+div.main_sub_section {
+    display: inline-block;
+    margin-bottom: 10px;
+    margin-left: 20px;
+}
+
+div.sub_section {
+    display: inline-block;
+}
 
 h2.element_name {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 700;
     align-self: center;
-    width: 90%;
     word-wrap: break-word;
-    font-size: calc(20px + 1vw);
+    margin-top: 2px;
+    margin-bottom: 40px;
+    font-size: calc(35px + 1vw);
     text-align: center;
-    color: #4b4b4b;
-    -webkit-text-stroke: 1px #373737;
-    text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
+    color: black;
 }
 
 select.select-location {
@@ -230,61 +227,64 @@ select.select-location {
 
 button.booking_button {
     font-family: 'JetBrains Mono', monospace;
-    font-weight: 500;
     margin-top: 30px;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
+    font-weight: 700;
     align-self: center;
+    border-radius: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
-    padding-left: 40px;
-    padding-right: 40px;
-    font-size: calc(10px + 1vw);
-    color: #ffffff;
-    -webkit-text-stroke: 0.1px #6f6f6f;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-size: calc(16px + 1vw);
+    color: white;
+    -webkit-text-stroke: 1px #212121;
     text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
-    background: linear-gradient(to right, #5a5959, #828181);
-    border-radius: 6px;
+    background: linear-gradient(to right, green, #34ca01);
     border-width: 0px;
+    border: 2px solid black;
 }
 
 p.propriety_label {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 700;
     margin-right: 10px;
-    font-size: calc(10px + 1vw);
+    font-size: calc(15px + 1vw);
     align-self: center;
     justify-self: center;
-    color: #4b4b4b;
-    -webkit-text-stroke: 1px #212121;
-    text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
+    color: black;
 }
 
 p.value_label {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
-    font-size: calc(10px + 1vw);
+    font-size: calc(15px + 1vw);
     align-self: center;
     justify-self: center;
     word-break: break-word;
-    color: #2c2c2c;
-    -webkit-text-stroke: 1px #0c0c0c;
-    text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
+    color: #212121;
 }
 
 p.price_unit {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
-    font-size: calc(10px + 1vw);
+    font-size: calc(15px + 1vw);
     align-self: center;
     justify-self: center;
-    color: #2c2c2c;
-    -webkit-text-stroke: 1px #0c0c0c;
+    color: #212121;
+}
+
+h3.amenities_identifier {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: calc(15px + 1vw);
+    font-weight: 500;
+    color: #4b4b4b;
+    -webkit-text-stroke: 1px #212121;
     text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
 }
 
-input.datetime 
-{
-    align-self:center;
+input.datetime {
+    align-self: center;
 }
 
 button.hour_item {
