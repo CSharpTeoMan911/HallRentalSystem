@@ -69,6 +69,14 @@ namespace HallRentalSystem
             app.MapBlazorHub();
             app.MapFallbackToPage("/_Host");
 
+            Thread server_admin_thread = new Thread(() =>
+            {
+                ServerOperationController();
+            });
+            server_admin_thread.IsBackground = true;
+            server_admin_thread.Priority = ThreadPriority.Highest;
+            server_admin_thread.Start();
+
             app.Run();
         }
 
@@ -148,6 +156,21 @@ namespace HallRentalSystem
                 default:
                     return;
             }
+        }
+
+        private static void ServerOperationController()
+        {   
+            ////////////////////////////////
+            // !!!!!!!!!! TO DO !!!!!!!!! //
+            ////////////////////////////////
+            // CREATE A CONSOLE INTERFACE //
+            // FOR ADMINISTERING THE      //
+            // SERVER'S OPERATION         //
+            ////////////////////////////////
+            
+            string input = Console.ReadLine();
+            System.Diagnostics.Debug.WriteLine(input);
+            ServerOperationController();
         }
     }
 }
