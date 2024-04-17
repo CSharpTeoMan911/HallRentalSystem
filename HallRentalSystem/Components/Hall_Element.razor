@@ -6,13 +6,83 @@
 
 <div class="jumbotorn hall_element">
     <div class="hall_element_inner">
+
+@*         <div style="display:flex; flex-direction:column;width:100%;">
+            <div>
+
+            </div>
+        </div> *@
         <Dynamic_Image_Craousel image_sources="dummy_image_sources" element="@element" />
 
-
         <div class="details_element_section">
-            <div class="details_div">
+            <h2 class="element_name">@value?.Name</h2>
+
+            <div style="display:flex;flex-direction:column;">
+
+                <div style="display:flex;flex-direction:column;align-self:center;">
+
+                    <div class="sub_section">
+                        <div class="sub_section" style="margin-right:30px;">
+
+                            <div style="display:flex;flex-direction:column;">
+                                <div class="sub_section">
+                                    <div class="main_sub_section">
+                                        <p class="propriety_label">Location: </p>
+                                    </div>
+                                    <div class="sub_section">
+                                        <p class="value_label">@value?.Location</p>
+                                    </div>
+                                </div>
+
+                                <div class="sub_section">
+                                    <div class="main_sub_section">
+                                        <div>
+                                            <p class="propriety_label">Price: </p>
+                                        </div>
+                                    </div>
+                                    <div class="sub_section">
+                                        <div style="display:flex;flex-direction:row;">
+                                            <p class="value_label">@value?.Price</p>
+                                            <p class="price_unit">£/day</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sub_section" >
+                                    <div class="main_sub_section">
+                                        <p class="propriety_label">Amenities: </p>
+                                    </div>
+                                    <div class="sub_section">
+                                        <div class="sub_section">
+                                            @for (int i = 0; i < amenities?.Count; i++)
+                                            {
+                                                <div class="sub_section">
+                                                    <div class="amenities_item">
+                                                        @amenities.ElementAt(i)
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+  
+                        </div>
+                    </div>
+
+                    <button class="booking_button" @onclick=BookHall>
+                        Book hall
+                    </button>
+                </div>
+            </div>
+          @*   <div class="details_div">
                 <h2 class="element_name">@value?.Name</h2>
+
+
                 <div class="main_details_div">
+
+
+
                     <div class="details_div_inner">
                         <div class="details_div_inner_sections">
                             <div class="details_div_inner_sections_main">
@@ -24,7 +94,7 @@
                                 <div class="details_div_inner_section">
                                     <p class="propriety_label">Price: </p>
                                     <p class="value_label">@value?.Price</p>
-                                    <p class="price_unit">£/hour</p>
+                                    <p class="price_unit">£/day</p>
                                 </div>
                                 <br />
                                 <div class="details_div_inner_section">
@@ -38,6 +108,11 @@
 
                     <div class="amenities_main_div">
                         <div class="amenities_main_sub_div">
+                            <div class="amenities_identifier_div">
+                                <h3 class="amenities_identifier">
+                                    Amenities
+                                </h3>
+                            </div>
                             <div class="amenities_div">
                                 @for (int i = 0; i < amenities?.Count; i++)
                                 {
@@ -54,7 +129,7 @@
                 <button class="booking_button" @onclick=BookHall>
                     Book hall
                 </button>
-            </div>
+            </div> *@
         </div>
 
         @* IF "ShowNotification" IS TRUE *@

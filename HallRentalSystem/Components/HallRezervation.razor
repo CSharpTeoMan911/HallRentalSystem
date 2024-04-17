@@ -5,34 +5,17 @@
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
 @inject NavigationManager NavigationManager;
+@inject IJSRuntime JS;
 
 <div class="reservation-div">
     <div class="reservation-content">
         <h2 class="title">Book Hall</h2>
 
-        <div>
+        <div class="date_picker">
             <RadzenStack>
                 <RadzenLabel Text="Select Date, bound to DateOnly" Component="DatePickerDateOnlyType" Style="margin-right: 8px; vertical-align: middle;" />
-                <RadzenDatePicker @bind-Value=@value AllowInput=false YearRange=@year_range DateRender=@DateRender DateFormat="dd/MM/yyyy" Name="DatePickerSpecialDates"/>
+                <RadzenDatePicker id="picker" Inline="true" @bind-Value=@value AllowInput=false YearRange=@year_range DateRender=@DateRender DateFormat="dd/MM/yyyy" @onmousedown="Clicked" Name="DatePickerSpecialDates" />
             </RadzenStack>
-        </div>
-
-        <div>
-            <p>
-                Hours
-            </p>
-            <HourPicker/>
-@*             <RadzenStack Orientation="Orientation.Horizontal">
-                <RadzenStack>
-                    <RadzenLabel Text="Select Time, bound to TimeOnly" Component="DatePickerTimeOnlyType" Style="margin-right: 8px; vertical-align: middle;" />
-                    <RadzenDatePicker Name="StartTimePicker" @bind-Value="@startTimeValue" AllowInput=false TimeOnly=true ShowTimeOkButton=false Change="TimeRender" ShowSeconds="false" DateFormat="HH" />
-                </RadzenStack>
-
-                <RadzenStack>
-                    <RadzenLabel Text="Select Time, bound to TimeOnly" Component="DatePickerTimeOnlyType" Style="margin-right: 8px; vertical-align: middle;" />
-                    <RadzenDatePicker Name="EndTimePicker" @bind-Value="@endTimeValue" AllowInput=false TimeOnly=true ShowTimeOkButton=false Change="TimeRender" ShowSeconds="false" DateFormat="HH" />
-                </RadzenStack>
-            </RadzenStack> *@
         </div>
 
         <div>
@@ -47,10 +30,12 @@
 </div>
 
 @code {
-    IEnumerable<DateTime> dates = new DateTime[] { DateTime.Today.AddDays(-1), DateTime.Today.AddDays(1) };
-    IEnumerable<DateTime> disabled_dates = new DateTime[] { DateTime.Today.AddDays(1), DateTime.Today.AddDays(3), DateTime.Today.AddDays(5) };
-    IEnumerable<TimeOnly> disabled_times = new TimeOnly[] { TimeOnly.FromDateTime(DateTime.Now.AddHours(1)), TimeOnly.FromDateTime(DateTime.Now.AddHours(2)), TimeOnly.FromDateTime(DateTime.Now.AddHours(4)) };
-    
+    bool Init;
+
+    IEnumerable<DateTime> dates = new List<DateTime>() { DateTime.Today.AddDays(-1), DateTime.Today.AddDays(1) };
+    IEnumerable<DateTime> disabled_dates = new List<DateTime>() { DateTime.Today.AddDays(1), DateTime.Today.AddDays(3), DateTime.Today.AddDays(5) };
+    List<DateTime> selected_dates = new List<DateTime>();
+
 
     string year_range = @DateTime.Now.Year.ToString() + @":3000";
     public string date = DateTime.Now.Date.ToString();
@@ -70,8 +55,16 @@
         base.OnAfterRender(firstRender);
     }
 
-    void DateRender(DateRenderEventArgs args)
+    void Clicked(MouseEventArgs args)
     {
+        System.Diagnostics.Debug.WriteLine("OK");
+    }
+
+    async void DateRender(DateRenderEventArgs args)
+    {
+        //await (await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js")).InvokeAsync<string>("DebugWriteLine", selected_dates.Count);
+
+
         DateTime current_time = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
 
         if (disabled_dates.Contains(args.Date))
@@ -85,13 +78,41 @@
             args.Attributes.Add("style", "background-color: rgba(255,0,0,0.6)"); 
             args.Disabled = true;
         }
+        else
+        {
+            if (selected_dates?.Contains(current_time) == true)
+            {
+                await (await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js")).InvokeAsync<string>("DebugWriteLine", "YES");
+                args.Attributes.Remove("style");
+                args.Attributes.Add("style", "background-color: rgba(61,255,62,0.6)");
+            }
+            else
+            {
+                args.Attributes.Remove("style");
+                selected_dates?.Remove((DateTime)value);
+                args.Attributes.Add("style", "background-color: rgba(255,255,255,0)");
+            }
+        }
+
+        if (Init == true)
+        {
+            if (args.Date.Date >= current_time)
+            {
+                if (value != null)
+                    if (current_time.Date.Date == args.Date.Date)
+                    {
+                        //await debug.InvokeVoidAsync("DebugWriteLine", value.ToString());
+                        if (selected_dates.Contains((DateTime)value) == false)
+                        {
+                            selected_dates?.Add((DateTime)value);
+                        }
+                    }
+            }
+        }
+
+        Init = true;
     }
 
-    void TimeRender(DateTime? dateTime)
-    {
-        if (dateTime is null) return;
-        TimeOnly.FromDateTime(dateTime.Value);
-    }
 
     private async void GetHallData()
     {
