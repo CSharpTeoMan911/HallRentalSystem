@@ -13,7 +13,7 @@
             <h1 class="h1" style="align-self:center;font-size:40px;font-weight:600;">Book Hall</h1>
 
             <div class="date_picker">
-                <RadzenDatePicker id="picker" Inline="true" @bind-Value=@value AllowInput=false YearRange=@year_range DateRender=@DateRender DateFormat="dd/MM/yyyy" @onclick=Clicked Name="DatePickerSpecialDates" />
+                <RadzenDatePicker id="picker" Inline="true" @bind-Value=@value Change=Changed AllowInput=false YearRange=@year_range DateRender=@DateRender DateFormat="dd/MM/yyyy" Name="DatePickerSpecialDates" />
                 <button class="clear_dates" @onclick=ClearDates>
                     Clear selected dates
                 </button>
@@ -34,7 +34,6 @@
 </div>
 
 @code {
-    bool Init;
     long price;
 
     public enum BookingError
@@ -70,31 +69,6 @@
     [Parameter] public CloseNotificationSystem? closeNotificationSystem { get; set; }
 
 
-    void ClearDates()
-    {
-        selected_dates.Clear();
-        price = 0;
-        StateHasChanged();
-    }
-
-    void Clicked(MouseEventArgs args)
-    {
-        if (value != null)
-            if ((DateTime)value.Value.Date >= DateTime.Now.Date)
-            {
-                if (disabled_dates?.Contains((DateTime)value.Value.Date) == false)
-                {
-                    if (selected_dates?.Contains((DateTime)value.Value.Date) == false)
-                    {
-                        selected_dates?.Add((DateTime)value.Value.Date);
-                        if (Price != null)
-                            price += (long)Price;
-                    }
-                }
-            }
-
-    }
-
     void DateRender(DateRenderEventArgs args)
     {
         DateTime current_time = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
@@ -103,25 +77,43 @@
         {
             args.Attributes.Add("style", "background-color: rgba(255,0,0,0.6);");
         }
-
-        if (args.Date.Date < current_time)
+        else if (args.Date.Date < current_time)
         {
             args.Attributes.Add("style", "background-color: rgba(255,0,0,0.6);");
         }
-
-
-
-        if(Init == true)
+        else if (selected_dates.Contains(args.Date) == true)
         {
-            if (selected_dates.Contains(args.Date) == true)
-            {
-                args.Attributes.Add("style", "background-color: rgba(61,255,62,0.6);");
-            }
+            args.Attributes.Add("style", "background-color: rgba(61,255,62,0.6);");
         }
-
-        Init = true;
     }
 
+    void Changed()
+    {
+        if (value != null)
+            if ((DateTime)value.Value.Date >= DateTime.Now.Date)
+                if (disabled_dates?.Contains((DateTime)value.Value.Date) == false)
+                {
+                    if (selected_dates?.Contains((DateTime)value.Value.Date) == false)
+                    {
+                        selected_dates?.Add((DateTime)value.Value.Date);
+                        if (Price != null)
+                            price += (long)Price;
+                    }
+                    else
+                    {
+                        selected_dates?.Remove((DateTime)value.Value.Date);
+                        if (Price != null)
+                            price -= (long)Price;
+                    }
+                }
+    }
+
+    void ClearDates()
+    {
+        selected_dates.Clear();
+        price = 0;
+        StateHasChanged();
+    }
 
     private async void GetHallData()
     {
