@@ -1,17 +1,13 @@
 ﻿@using HallRentalSystem.Classes.API_Parameters
 @using HallRentalSystem.Classes.Models;
 @using HallRentalSystem.Components;
+
 @inject IJSRuntime JS;
 @inject NavigationManager NavigationManager;
 
 <div class="jumbotorn hall_element">
     <div class="hall_element_inner">
 
-@*         <div style="display:flex; flex-direction:column;width:100%;">
-            <div>
-
-            </div>
-        </div> *@
         <Dynamic_Image_Craousel image_sources="dummy_image_sources" element="@element" />
 
         <div class="details_element_section">
@@ -75,75 +71,27 @@
                     </button>
                 </div>
             </div>
-          @*   <div class="details_div">
-                <h2 class="element_name">@value?.Name</h2>
-
-
-                <div class="main_details_div">
-
-
-
-                    <div class="details_div_inner">
-                        <div class="details_div_inner_sections">
-                            <div class="details_div_inner_sections_main">
-                                <div class="details_div_inner_section">
-                                    <p class="propriety_label">Location: </p>
-                                    <p class="value_label">@value?.Location</p>
-                                </div>
-                                <br />
-                                <div class="details_div_inner_section">
-                                    <p class="propriety_label">Price: </p>
-                                    <p class="value_label">@value?.Price</p>
-                                    <p class="price_unit">£/day</p>
-                                </div>
-                                <br />
-                                <div class="details_div_inner_section">
-                                    <p class="propriety_label">Capacity: </p>
-                                    <p class="value_label">@value?.Capacity</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="amenities_main_div">
-                        <div class="amenities_main_sub_div">
-                            <div class="amenities_identifier_div">
-                                <h3 class="amenities_identifier">
-                                    Amenities
-                                </h3>
-                            </div>
-                            <div class="amenities_div">
-                                @for (int i = 0; i < amenities?.Count; i++)
-                                {
-                                    <div class="amenities_item">
-                                        @amenities.ElementAt(i)
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <button class="booking_button" @onclick=BookHall>
-                    Book hall
-                </button>
-            </div> *@
         </div>
 
         @* IF "ShowNotification" IS TRUE *@
         @if (ShowNotification == true)
         {
             @* "Notification_System" COMPONENT *@
-            <Notification_System MessageContent="@MessageContent" NotificationClose="new Notification_System.OnClose(CloseNotification)" Type="@type" />
+            <Notification_System MessageContent="@MessageContent" NotificationClose="new Notification_System.OnClose(CloseNotification)" Type="@type"/>
         }
 
         @if (ReserveHall == true)
         {
             <FocusPanel ClosePanel="new FocusPanel.OnClose(CloseReservation)">
                 <Component>
-                    <HallRezervation/>
+                    @if (PaymentInitiated == true)
+                    {
+                        <Payments HallName="@value?.Name" SelectedDates="@_selected_dates" Price="@value?.Price" />
+                    }
+                    @if (PaymentInitiated == false)
+                    {
+                        <HallRezervation Price="@value?.Price" hallName="@value?.Name" initiatePayment="new HallRezervation.InitiatePayment(PaymentProcedureInitiated)" notificationSystem="new HallRezervation.NotificationSystem(BookingError)" closeNotificationSystem="new HallRezervation.CloseNotificationSystem(CloseNotification)"/>
+                    }
                 </Component>
             </FocusPanel>
         }
@@ -156,6 +104,10 @@
     private bool ReserveHall;
     private string? MessageContent;
     private Notification_System.NotificationType type;
+    private bool PaymentInitiated;
+    private List<DateTime>? _selected_dates { get; set; }
+    private DateTime? permission_error_initial_time;
+    private DateTime? booking_error_initial_time;
 
     [Parameter]
     public Hall_ID_Value? value { get; set; }
@@ -176,6 +128,38 @@
     protected override void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
+        System.Timers.Timer timer = new System.Timers.Timer();
+        timer.Elapsed += (sender, args)=> ThreadPoolTimerLoop(args);
+        timer.Interval = 500;
+        timer.Start();
+    }
+
+    private async void ThreadPoolTimerLoop(System.Timers.ElapsedEventArgs args)
+    {
+        if (permission_error_initial_time != null)
+            if ((DateTime.Now - permission_error_initial_time).Value.TotalSeconds >= 5)
+            {
+                NavigationManager.NavigateTo("/log-in", true);
+                permission_error_initial_time = null;
+            }
+
+        if (booking_error_initial_time != null)
+            if ((DateTime.Now - booking_error_initial_time).Value.TotalSeconds >= 5)
+            {
+                await InvokeAsync(() =>
+                {
+                    CloseNotification();
+                });
+                booking_error_initial_time = null;
+            }
+    }
+
+
+    public void PaymentProcedureInitiated(List<DateTime> selected_dates)
+    {
+        _selected_dates = selected_dates;
+        PaymentInitiated = true;
+        StateHasChanged();
     }
 
     public void CloseNotification()
@@ -190,6 +174,8 @@
     public void CloseReservation()
     {
         ReserveHall = false;
+
+        PaymentInitiated = false;
 
         StateHasChanged();
     }
@@ -230,6 +216,22 @@
         catch { }
     }
 
+    public void BookingError(HallRezervation.BookingError error)
+    {
+        switch (error)
+        {
+            case HallRezervation.BookingError.InsufficientDates:
+                MessageContent = "The amount of booked dates must be greater than 0";
+                type = Notification_System.NotificationType.Error;
+                ShowNotification = true;
+                break;
+        }
+
+        StateHasChanged();
+
+        booking_error_initial_time = DateTime.Now;
+    }
+
     private void OnPermissionError()
     {
         MessageContent = "An authenticated user is required to book a hall";
@@ -238,23 +240,7 @@
 
         StateHasChanged();
 
-        DateTime initial_time = DateTime.Now;
-
-        System.Threading.Thread parallel_processing = new System.Threading.Thread(() =>
-        {
-            while (true)
-            {
-                if ((DateTime.Now - initial_time).TotalSeconds >= 5)
-                {
-                    NavigationManager.NavigateTo("/log-in", true);
-                    break;
-                }
-            }
-        });
-        parallel_processing.Priority = ThreadPriority.AboveNormal;
-        parallel_processing.IsBackground = false;
-        parallel_processing.Start();
-
+        permission_error_initial_time = DateTime.Now;
     }
 }
 
