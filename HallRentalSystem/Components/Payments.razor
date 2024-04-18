@@ -1,0 +1,31 @@
+﻿@inject IJSRuntime JS;
+
+<div class="payments_div_style">
+    <div id="payment_div" class="payments_div">
+    </div>
+    <button @onclick=Payment>
+        Pay
+    </button>
+</div>
+
+@code {
+    [Parameter] public string? HallName { get; set; }
+
+    [Parameter] public List<DateTime>? SelectedDates { get; set; }
+
+    [Parameter] public long? Price { get; set; }
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Stripe.js");
+        await module.InvokeAsync<string>("InitiatePaymentObject", 100);
+        Console.WriteLine("!!! Payments !!!");
+    }
+
+    private async void Payment()
+    {
+        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Stripe.js");
+        await module.InvokeAsync<string>("CreatePaymentMethod");
+    }
+}
