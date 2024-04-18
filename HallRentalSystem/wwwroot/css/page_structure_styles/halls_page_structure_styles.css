@@ -122,7 +122,9 @@ div.main_details_div {
 }
 
 div.date_picker {
-    width:50%;
+    overflow-x: auto;
+    overflow-y: auto;
+    min-width: 250px;
 }
 
 div.amenities_item {
@@ -162,27 +164,30 @@ div.book_section {
 }
 
 div.reservation-div {
+    background-color:white;
+    width:fit-content;
+    height:fit-content;
     border-radius: 10px;
     align-self: center;
     display: flex;
     flex-direction: column;
     align-content: center;
-    background: linear-gradient(to right, #5a5959, #828181);
 }
 
 div.reservation-content {
-    display:flex;
-    flex-direction:column;
-    padding:30px;
+    display: flex;
+    min-width: 250px;
+    max-width: 400px;
+    flex-direction: column;
+    padding: calc(5px + 0.5vw);
     display: flex;
     align-self: center;
     width: fit-content;
 }
 
-div.hour_picker_div
-{
-    display:flex;
-    flex-direction:column;
+div.hour_picker_div {
+    display: flex;
+    flex-direction: column;
 }
 
 div.hour_picker_row 
@@ -198,6 +203,23 @@ div.main_sub_section {
 
 div.sub_section {
     display: inline-block;
+}
+
+div.datepicker_scroller {
+    display:flex;
+    flex-direction:column;
+    align-self: center;
+    height: 100vh;
+    border-radius: 10px;
+    min-width: 250px;
+    max-width: 400px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+/* width */
+.datepicker_scroller::-webkit-scrollbar {
+    width: 0px;
 }
 
 h2.element_name {
@@ -283,6 +305,19 @@ h3.amenities_identifier {
     text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
 }
 
+p.note_op {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: calc(12.2px);
+    font-weight: bold;
+    color: black;
+}
+
+p.total_price {
+    align-self:center;
+    margin-top: 30px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
 input.datetime {
     align-self: center;
 }
@@ -294,4 +329,36 @@ button.hour_item {
     color: #2c2c2c;
     -webkit-text-stroke: 2px #2a2929;
     text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
+}
+
+button.calendar_booking_button {
+    font-size: 25px;
+    margin-top: 30px;
+    align-self: center;
+    width: fit-content;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left:50px;
+    padding-right:50px;
+    border-radius:5px;
+    color: white;
+    border: 1px solid black;
+    background: linear-gradient(to right, #2c2c2c, #050505);
+}
+
+
+button.clear_dates {
+    align-self:center;
+    width:100%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    border-radius: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom:5px;
+    color:white;
+    background-color:black;
+    margin-bottom:20px;
+    border:solid 1px black;
 }
