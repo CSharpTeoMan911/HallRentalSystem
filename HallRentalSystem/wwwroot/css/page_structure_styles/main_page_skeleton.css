@@ -48,6 +48,16 @@ div.notification_system {
     top:10%;
     left:50%;
     transform:translateX(-50%);
+    z-index:100;
+}
+
+div.notification_system_error {
+    position: fixed;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    border: solid 1px #ff4f4f;
 }
 
 div.toast-body-custom {

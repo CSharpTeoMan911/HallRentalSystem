@@ -7,30 +7,40 @@
 @inject NavigationManager NavigationManager;
 @inject IJSRuntime JS;
 
-<div class="reservation-div">
-    <div class="reservation-content">
-        <h2 class="title">Book Hall</h2>
+<div class="datepicker_scroller">
+    <div class="reservation-div">
+        <div class="reservation-content">
+            <h1 class="h1" style="align-self:center;font-size:40px;font-weight:600;">Book Hall</h1>
 
-        <div class="date_picker">
-            <RadzenStack>
-                <RadzenLabel Text="Select Date, bound to DateOnly" Component="DatePickerDateOnlyType" Style="margin-right: 8px; vertical-align: middle;" />
-                <RadzenDatePicker id="picker" Inline="true" @bind-Value=@value AllowInput=false YearRange=@year_range DateRender=@DateRender DateFormat="dd/MM/yyyy" @onmousedown="Clicked" Name="DatePickerSpecialDates" />
-            </RadzenStack>
+            <div class="date_picker">
+                <RadzenDatePicker id="picker" Inline="true" @bind-Value=@value AllowInput=false YearRange=@year_range DateRender=@DateRender DateFormat="dd/MM/yyyy" @onclick=Clicked Name="DatePickerSpecialDates" />
+                <button class="clear_dates" @onclick=ClearDates>
+                    Clear selected dates
+                </button>
+            </div>
+
+
+            <div style="align-self:center;width:fit-content;">
+                <p class="h4 total_price">
+                    Total price: £@price
+                </p>
+            </div>
+
+            <button class="h2 calendar_booking_button" @onclick=ReserveHall>
+                Book
+            </button>
         </div>
-
-        <div>
-            <p>
-                Price
-            </p>
-        </div>
-
-        <button @onclick=ReserveHall>
-        </button>
     </div>
 </div>
 
 @code {
     bool Init;
+    long price;
+
+    public enum BookingError
+    {
+        InsufficientDates
+    }
 
     IEnumerable<DateTime> dates = new List<DateTime>() { DateTime.Today.AddDays(-1), DateTime.Today.AddDays(1) };
     IEnumerable<DateTime> disabled_dates = new List<DateTime>() { DateTime.Today.AddDays(1), DateTime.Today.AddDays(3), DateTime.Today.AddDays(5) };
@@ -47,66 +57,65 @@
 
 
     public delegate void OnClose();
-    [Parameter] public string? HallName { get; set; }
+    [Parameter] public long? Price { get; set; }
+    [Parameter] public string? hallName { get; set; }
+
+    public delegate void InitiatePayment(List<DateTime> selectedDates);
+    [Parameter] public InitiatePayment? initiatePayment { get; set; }
+
+    public delegate void NotificationSystem(BookingError error);
+    [Parameter] public NotificationSystem? notificationSystem { get; set; }
+
+    public delegate void CloseNotificationSystem();
+    [Parameter] public CloseNotificationSystem? closeNotificationSystem { get; set; }
 
 
-    protected override void OnAfterRender(bool firstRender)
+    void ClearDates()
     {
-        base.OnAfterRender(firstRender);
+        selected_dates.Clear();
+        price = 0;
+        StateHasChanged();
     }
 
     void Clicked(MouseEventArgs args)
     {
-        System.Diagnostics.Debug.WriteLine("OK");
+        if (value != null)
+            if ((DateTime)value.Value.Date >= DateTime.Now.Date)
+            {
+                if (disabled_dates?.Contains((DateTime)value.Value.Date) == false)
+                {
+                    if (selected_dates?.Contains((DateTime)value.Value.Date) == false)
+                    {
+                        selected_dates?.Add((DateTime)value.Value.Date);
+                        if (Price != null)
+                            price += (long)Price;
+                    }
+                }
+            }
+
     }
 
-    async void DateRender(DateRenderEventArgs args)
+    void DateRender(DateRenderEventArgs args)
     {
-        //await (await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js")).InvokeAsync<string>("DebugWriteLine", selected_dates.Count);
-
-
         DateTime current_time = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
 
         if (disabled_dates.Contains(args.Date))
         {
-            args.Attributes.Add("style", "background-color: rgba(255,0,0,0.6)");
-            args.Disabled = true;
+            args.Attributes.Add("style", "background-color: rgba(255,0,0,0.6);");
         }
 
         if (args.Date.Date < current_time)
         {
-            args.Attributes.Add("style", "background-color: rgba(255,0,0,0.6)"); 
-            args.Disabled = true;
-        }
-        else
-        {
-            if (selected_dates?.Contains(current_time) == true)
-            {
-                await (await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js")).InvokeAsync<string>("DebugWriteLine", "YES");
-                args.Attributes.Remove("style");
-                args.Attributes.Add("style", "background-color: rgba(61,255,62,0.6)");
-            }
-            else
-            {
-                args.Attributes.Remove("style");
-                selected_dates?.Remove((DateTime)value);
-                args.Attributes.Add("style", "background-color: rgba(255,255,255,0)");
-            }
+            args.Attributes.Add("style", "background-color: rgba(255,0,0,0.6);");
         }
 
-        if (Init == true)
+
+
+        if(Init == true)
         {
-            if (args.Date.Date >= current_time)
+            if (selected_dates.Contains(args.Date) == true)
             {
-                if (value != null)
-                    if (current_time.Date.Date == args.Date.Date)
-                    {
-                        //await debug.InvokeVoidAsync("DebugWriteLine", value.ToString());
-                        if (selected_dates.Contains((DateTime)value) == false)
-                        {
-                            selected_dates?.Add((DateTime)value);
-                        }
-                    }
+                args.Attributes.Add("style", "background-color: rgba(61,255,62,0.6);");
             }
         }
 
@@ -156,45 +165,16 @@
         }
     }
 
-    private async void ReserveHall()
+    private void ReserveHall()
     {
-        HttpClient client = Shared_Data.GenerateHttpCLient();
-
-        try
+        if (selected_dates.Count > 0)
         {
-            client.BaseAddress = new Uri(NavigationManager.BaseUri);
-
-            Bookings booking = new Bookings();
-
-            ///////////////////////////////////////////////
-            // !!! IMPLEMENT BOOKING DATA EXTRACTION !!! //
-            ///////////////////////////////////////////////
-
-
-            string api_controller_path = "/booking?";
-            string formated_query = await Query_Formater.ObjectQueryFormatter<Bookings>(booking);
-            int total_length = api_controller_path.Length + formated_query.Length;
-
-
-            StringBuilder url_builder = new StringBuilder(total_length);
-            url_builder.Append(api_controller_path);
-            url_builder.Append(formated_query);
-
-
-            HttpResponseMessage response_message = await client.GetAsync(url_builder.ToString());
-            string response = await response_message.Content.ReadAsStringAsync();
-
-            ///////////////////////////////////////////////////////
-            // !!! IMPLEMENT API RESPONSE MESSAGE PROCESSING !!! //
-            ///////////////////////////////////////////////////////
+            initiatePayment?.Invoke(selected_dates);
+            closeNotificationSystem?.Invoke();
         }
-        catch
+        else
         {
-
-        }
-        finally
-        {
-            client?.Dispose();
+            notificationSystem?.Invoke(BookingError.InsufficientDates);
         }
     }
 }
