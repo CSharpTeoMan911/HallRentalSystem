@@ -1,5 +1,6 @@
 ﻿@using HallRentalSystem.Components;
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+@inject NavigationManager NavigationManager;
 @inject IJSRuntime JS;
 
 <div class="payments_container">
@@ -97,7 +98,12 @@
             }
             else
             {
-                
+                //////////////////////////
+                // !!!!!! TO DO !!!!!!! //
+                //////////////////////////
+
+                HttpClient client = Shared_Data.GenerateHttpCLient();
+                client.BaseAddress = NavigationManager.BaseUri;
             }
         }
         catch { }
