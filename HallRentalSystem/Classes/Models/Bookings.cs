@@ -5,9 +5,8 @@
         public string? Booking_ID { get; set; }
         public string? Customer_ID { get; set; }
         public string? Hall_ID { get; set; }
-        public DateTime Booking_Date { get; set; }
-        public DateTime Rental_Date { get; set; }
-        public int Booking_Duration { get; set; }
-        public int Cost { get; set; }
+        public string? Stripe_Payment_ID { get; set; }
+        public long Amount { get; set; }
+        public List<DateTime>? Rental_Dates { get; set; }
     }
 }

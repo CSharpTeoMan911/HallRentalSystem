@@ -2,6 +2,7 @@
 @using Radzen.Blazor.Rendering;
 @using System.Text;
 @using HallRentalSystem.Classes;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
 @inject NavigationManager NavigationManager;
@@ -13,7 +14,7 @@
             <h1 class="h1" style="align-self:center;font-size:40px;font-weight:600;">Book Hall</h1>
 
             <div class="date_picker">
-                <RadzenDatePicker id="picker" Inline="true" @bind-Value=@value AllowInput=false YearRange=@year_range DateRender=@DateRender DateFormat="dd/MM/yyyy" @onclick=Clicked Name="DatePickerSpecialDates" />
+                <RadzenDatePicker id="picker" Inline="true" @bind-Value=@value Change=Changed AllowInput=false YearRange=@year_range DateRender=@DateRender DateFormat="dd/MM/yyyy" Name="DatePickerSpecialDates" />
                 <button class="clear_dates" @onclick=ClearDates>
                     Clear selected dates
                 </button>
@@ -34,14 +35,7 @@
 </div>
 
 @code {
-    bool Init;
     long price;
-
-    public enum BookingError
-    {
-        InsufficientDates
-    }
-
     IEnumerable<DateTime> dates = new List<DateTime>() { DateTime.Today.AddDays(-1), DateTime.Today.AddDays(1) };
     IEnumerable<DateTime> disabled_dates = new List<DateTime>() { DateTime.Today.AddDays(1), DateTime.Today.AddDays(3), DateTime.Today.AddDays(5) };
     List<DateTime> selected_dates = new List<DateTime>();
@@ -63,37 +57,12 @@
     public delegate void InitiatePayment(List<DateTime> selectedDates);
     [Parameter] public InitiatePayment? initiatePayment { get; set; }
 
-    public delegate void NotificationSystem(BookingError error);
+    public delegate void NotificationSystem(Shared_Data.BookingError error);
     [Parameter] public NotificationSystem? notificationSystem { get; set; }
 
     public delegate void CloseNotificationSystem();
     [Parameter] public CloseNotificationSystem? closeNotificationSystem { get; set; }
 
-
-    void ClearDates()
-    {
-        selected_dates.Clear();
-        price = 0;
-        StateHasChanged();
-    }
-
-    void Clicked(MouseEventArgs args)
-    {
-        if (value != null)
-            if ((DateTime)value.Value.Date >= DateTime.Now.Date)
-            {
-                if (disabled_dates?.Contains((DateTime)value.Value.Date) == false)
-                {
-                    if (selected_dates?.Contains((DateTime)value.Value.Date) == false)
-                    {
-                        selected_dates?.Add((DateTime)value.Value.Date);
-                        if (Price != null)
-                            price += (long)Price;
-                    }
-                }
-            }
-
-    }
 
     void DateRender(DateRenderEventArgs args)
     {
@@ -103,66 +72,43 @@
         {
             args.Attributes.Add("style", "background-color: rgba(255,0,0,0.6);");
         }
-
-        if (args.Date.Date < current_time)
+        else if (args.Date.Date < current_time)
         {
             args.Attributes.Add("style", "background-color: rgba(255,0,0,0.6);");
         }
-
-
-
-        if(Init == true)
+        else if (selected_dates.Contains(args.Date) == true)
         {
-            if (selected_dates.Contains(args.Date) == true)
-            {
-                args.Attributes.Add("style", "background-color: rgba(61,255,62,0.6);");
-            }
+            args.Attributes.Add("style", "background-color: rgba(61,255,62,0.6);");
         }
-
-        Init = true;
     }
 
-
-    private async void GetHallData()
+    void Changed()
     {
-        HttpClient client = Shared_Data.GenerateHttpCLient();
+        closeNotificationSystem?.Invoke();
+        if (value != null)
+            if ((DateTime)value.Value.Date >= DateTime.Now.Date)
+                if (disabled_dates?.Contains((DateTime)value.Value.Date) == false)
+                {
+                    if (selected_dates?.Contains((DateTime)value.Value.Date) == false)
+                    {
+                        selected_dates?.Add((DateTime)value.Value.Date);
+                        if (Price != null)
+                            price += (long)Price;
+                    }
+                    else
+                    {
+                        selected_dates?.Remove((DateTime)value.Value.Date);
+                        if (Price != null)
+                            price -= (long)Price;
+                    }
+                }
+    }
 
-        try
-        {
-            client.BaseAddress = new Uri(NavigationManager.BaseUri);
-
-            Bookings booking = new Bookings();
-
-            ///////////////////////////////////////////////
-            // !!! IMPLEMENT BOOKING DATA EXTRACTION !!! //
-            ///////////////////////////////////////////////
-
-
-            string api_controller_path = "/booking?";
-            string formated_query = await Query_Formater.ObjectQueryFormatter<Bookings>(booking);
-            int total_length = api_controller_path.Length + formated_query.Length;
-
-
-            StringBuilder url_builder = new StringBuilder(total_length);
-            url_builder.Append(api_controller_path);
-            url_builder.Append(formated_query);
-
-
-            HttpResponseMessage response_message = await client.GetAsync(url_builder.ToString());
-            string response = await response_message.Content.ReadAsStringAsync();
-
-            ///////////////////////////////////////////////////////
-            // !!! IMPLEMENT API RESPONSE MESSAGE PROCESSING !!! //
-            ///////////////////////////////////////////////////////
-        }
-        catch
-        {
-
-        }
-        finally
-        {
-            client?.Dispose();
-        }
+    void ClearDates()
+    {
+        selected_dates.Clear();
+        price = 0;
+        StateHasChanged();
     }
 
     private void ReserveHall()
@@ -174,7 +120,7 @@
         }
         else
         {
-            notificationSystem?.Invoke(BookingError.InsufficientDates);
+            notificationSystem?.Invoke(Shared_Data.BookingError.InsufficientDates);
         }
     }
 }

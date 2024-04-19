@@ -13,6 +13,14 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
             Login,
             Logout
         }
+
+        public enum BookingError
+        {
+            InsufficientDates,
+            PaymentError
+        }
+
+
         public static AuthState authentication_state = AuthState.Login;
 
         public static CRUD_Context<Customer_ID_Value, Customer_ID_Value, Customers, string> authentication = new CRUD_Context<Customer_ID_Value, Customer_ID_Value, Customers, string>(new CredentialsOperations());
