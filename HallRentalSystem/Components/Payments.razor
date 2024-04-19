@@ -103,7 +103,7 @@
                 //////////////////////////
 
                 HttpClient client = Shared_Data.GenerateHttpCLient();
-                client.BaseAddress = NavigationManager.BaseUri;
+                client.BaseAddress = new Uri(NavigationManager.BaseUri);
             }
         }
         catch { }
