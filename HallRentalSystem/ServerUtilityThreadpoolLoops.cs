@@ -6,6 +6,12 @@
         {
 
         }
+
+        private void CalculateNecessaryThreadPools()
+        {
+            
+        }
+
         private void RemoveExpiredLogInSessionKeys()
         {
 
