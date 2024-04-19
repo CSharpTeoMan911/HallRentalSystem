@@ -2,6 +2,7 @@
 @using Radzen.Blazor.Rendering;
 @using System.Text;
 @using HallRentalSystem.Classes;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
 @inject NavigationManager NavigationManager;
@@ -35,12 +36,6 @@
 
 @code {
     long price;
-
-    public enum BookingError
-    {
-        InsufficientDates
-    }
-
     IEnumerable<DateTime> dates = new List<DateTime>() { DateTime.Today.AddDays(-1), DateTime.Today.AddDays(1) };
     IEnumerable<DateTime> disabled_dates = new List<DateTime>() { DateTime.Today.AddDays(1), DateTime.Today.AddDays(3), DateTime.Today.AddDays(5) };
     List<DateTime> selected_dates = new List<DateTime>();
@@ -62,7 +57,7 @@
     public delegate void InitiatePayment(List<DateTime> selectedDates);
     [Parameter] public InitiatePayment? initiatePayment { get; set; }
 
-    public delegate void NotificationSystem(BookingError error);
+    public delegate void NotificationSystem(Shared_Data.BookingError error);
     [Parameter] public NotificationSystem? notificationSystem { get; set; }
 
     public delegate void CloseNotificationSystem();
@@ -89,6 +84,7 @@
 
     void Changed()
     {
+        closeNotificationSystem?.Invoke();
         if (value != null)
             if ((DateTime)value.Value.Date >= DateTime.Now.Date)
                 if (disabled_dates?.Contains((DateTime)value.Value.Date) == false)
@@ -115,48 +111,6 @@
         StateHasChanged();
     }
 
-    private async void GetHallData()
-    {
-        HttpClient client = Shared_Data.GenerateHttpCLient();
-
-        try
-        {
-            client.BaseAddress = new Uri(NavigationManager.BaseUri);
-
-            Bookings booking = new Bookings();
-
-            ///////////////////////////////////////////////
-            // !!! IMPLEMENT BOOKING DATA EXTRACTION !!! //
-            ///////////////////////////////////////////////
-
-
-            string api_controller_path = "/booking?";
-            string formated_query = await Query_Formater.ObjectQueryFormatter<Bookings>(booking);
-            int total_length = api_controller_path.Length + formated_query.Length;
-
-
-            StringBuilder url_builder = new StringBuilder(total_length);
-            url_builder.Append(api_controller_path);
-            url_builder.Append(formated_query);
-
-
-            HttpResponseMessage response_message = await client.GetAsync(url_builder.ToString());
-            string response = await response_message.Content.ReadAsStringAsync();
-
-            ///////////////////////////////////////////////////////
-            // !!! IMPLEMENT API RESPONSE MESSAGE PROCESSING !!! //
-            ///////////////////////////////////////////////////////
-        }
-        catch
-        {
-
-        }
-        finally
-        {
-            client?.Dispose();
-        }
-    }
-
     private void ReserveHall()
     {
         if (selected_dates.Count > 0)
@@ -166,7 +120,7 @@
         }
         else
         {
-            notificationSystem?.Invoke(BookingError.InsufficientDates);
+            notificationSystem?.Invoke(Shared_Data.BookingError.InsufficientDates);
         }
     }
 }
