@@ -1,4 +1,5 @@
-﻿@using HallRentalSystem.Classes.API_Parameters
+﻿@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+@using HallRentalSystem.Classes.API_Parameters;
 @using HallRentalSystem.Classes.Models;
 @using HallRentalSystem.Components;
 
@@ -86,7 +87,7 @@
                 <Component>
                     @if (PaymentInitiated == true)
                     {
-                        <Payments HallName="@value?.Name" SelectedDates="@_selected_dates" Price="@value?.Price" />
+                        <Payments HallName="@value?.Name" SelectedDates="@_selected_dates" Price="@value?.Price" notificationSystem="new Payments.NotificationSystem(BookingError)" closeNotificationSystem="new Payments.CloseNotificationSystem(CloseNotification)"/>
                     }
                     @if (PaymentInitiated == false)
                     {
@@ -100,6 +101,7 @@
 </div>
 
 @code {
+    private System.Timers.Timer timer = new System.Timers.Timer();
     private bool ShowNotification;
     private bool ReserveHall;
     private string? MessageContent;
@@ -128,7 +130,7 @@
     protected override void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
-        System.Timers.Timer timer = new System.Timers.Timer();
+
         timer.Elapsed += (sender, args)=> ThreadPoolTimerLoop(args);
         timer.Interval = 500;
         timer.Start();
@@ -196,9 +198,6 @@
 
                     if (key != null)
                     {
-                        IJSObjectReference module_reference = await JS.InvokeAsync<IJSObjectReference>("import", "../Scripts/Actions.js");
-                        await module_reference.InvokeAsync<string>("SetCurrentHallName", value?.Name);
-                        // NavigationManager.NavigateTo("/hall_rezervation", true);
                         ReserveHall = true;
                         StateHasChanged();
                     }
@@ -216,31 +215,42 @@
         catch { }
     }
 
-    public void BookingError(HallRezervation.BookingError error)
+    public void BookingError(Shared_Data.BookingError error)
     {
-        switch (error)
+        if (booking_error_initial_time == null)
         {
-            case HallRezervation.BookingError.InsufficientDates:
-                MessageContent = "The amount of booked dates must be greater than 0";
-                type = Notification_System.NotificationType.Error;
-                ShowNotification = true;
-                break;
+            switch (error)
+            {
+                case Shared_Data.BookingError.InsufficientDates:
+                    MessageContent = "The amount of booked dates must be greater than 0";
+                    type = Notification_System.NotificationType.Error;
+                    ShowNotification = true;
+                    break;
+                case Shared_Data.BookingError.PaymentError:
+                    MessageContent = "Please fill all the fields";
+                    type = Notification_System.NotificationType.Error;
+                    ShowNotification = true;
+                    break;
+            }
+
+            StateHasChanged();
+
+            booking_error_initial_time = DateTime.Now;
         }
-
-        StateHasChanged();
-
-        booking_error_initial_time = DateTime.Now;
     }
 
     private void OnPermissionError()
     {
-        MessageContent = "An authenticated user is required to book a hall";
-        type = Notification_System.NotificationType.Error;
-        ShowNotification = true;
+        if (permission_error_initial_time == null)
+        {
+            MessageContent = "An authenticated user is required to book a hall";
+            type = Notification_System.NotificationType.Error;
+            ShowNotification = true;
 
-        StateHasChanged();
+            StateHasChanged();
 
-        permission_error_initial_time = DateTime.Now;
+            permission_error_initial_time = DateTime.Now;
+        }
     }
 }
 

@@ -1,11 +1,55 @@
-﻿@inject IJSRuntime JS;
+﻿@using HallRentalSystem.Components;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JS;
 
-<div class="payments_div_style">
-    <div id="payment_div" class="payments_div">
+<div class="payments_container">
+    <div class="payments_div_style">
+        <img class="graphical_effect" />
+
+        <div class="main_payment_section">
+            <p class="sub_section">
+                Product
+            </p>
+            <div class="payment_section">
+                <p class="payment_detail">
+                    Hall name: @HallName
+                </p>
+                <p class="payment_detail">
+                    Total number of days: @SelectedDates.Count
+                </p>
+                <p class="payment_detail">
+                    Price: £@Price
+                </p>
+            </div>
+
+        </div>
+
+        <div class="main_payment_section">
+            <p class="sub_section">
+                Payment details
+            </p>
+
+            <div class="payment_section">
+                <div id="payment_div" class="payments_div"></div>
+                <div class="payment_detail_input_div">
+                    <input class="payment_details_input" @bind=@Name placeholder="Name" />
+                    <input class="payment_details_input" @bind=@City placeholder="City" />
+                </div>
+                <div class="payment_detail_input_div">
+                    <input class="payment_details_input" @bind=@Country placeholder="Country" />
+                    <input class="payment_details_input" @bind=@Address placeholder="Address" />
+                </div>
+                <div class="payment_detail_input_div" style="margin-bottom:10px;">
+                    <input class="payment_details_input" @bind=@Email placeholder="Email" />
+                </div>
+            </div>
+        </div>
+
+        <button class="payment_button" @onclick=Payment>
+            Pay
+        </button>
     </div>
-    <button @onclick=Payment>
-        Pay
-    </button>
 </div>
 
 @code {
@@ -15,17 +59,54 @@
 
     [Parameter] public long? Price { get; set; }
 
+    public delegate void NotificationSystem(Shared_Data.BookingError error);
+    [Parameter] public NotificationSystem? notificationSystem { get; set; }
+
+    public delegate void CloseNotificationSystem();
+    [Parameter] public CloseNotificationSystem? closeNotificationSystem { get; set; }
+
+    private string Name { get; set; }
+    private string City { get; set; }
+    private string Country { get; set; }
+    private string Address { get; set; }
+    private string Email { get; set; }
+
     protected override async void OnAfterRender(bool firstRender)
     {
-        base.OnAfterRender(firstRender);
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Stripe.js");
-        await module.InvokeAsync<string>("InitiatePaymentObject", 100);
-        Console.WriteLine("!!! Payments !!!");
+
+        try
+        {
+            string result = await module.InvokeAsync<string>("InitiatePaymentObject", 100);
+        }
+        catch { }
+
+        base.OnAfterRender(firstRender);
     }
 
     private async void Payment()
     {
         IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Stripe.js");
-        await module.InvokeAsync<string>("CreatePaymentMethod");
+
+        try
+        {
+            string paymentIntentResult = await module.InvokeAsync<string>("CreatePaymentMethod", Name, City, Country, Address, Email);
+
+            if (paymentIntentResult.IndexOf("Error: ") == 0)
+            {
+                notificationSystem.Invoke(Shared_Data.BookingError.PaymentError);
+            }
+            else
+            {
+                //////////////////////////
+                // !!!!!! TO DO !!!!!!! //
+                //////////////////////////
+
+                HttpClient client = Shared_Data.GenerateHttpCLient();
+                client.BaseAddress = new Uri(NavigationManager.BaseUri);
+            }
+        }
+        catch { }
+
     }
 }
