@@ -2,12 +2,13 @@
 using HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking;
 using Microsoft.AspNetCore.Mvc;
 using HallRentalSystem.Classes;
+using HallRentalSystem.Classes.API_Parameters;
 
 namespace HallRentalSystem.Controllers
 {
     [ApiController]
     [Route("/booking")]
-    public class Booking_Controller : Controller, CRUD_API_Strategy<Bookings, string, string, string>
+    public class Booking_Controller : Controller, CRUD_API_Strategy<Booking_Parameters, string, string, string>
     {
         [HttpDelete("delete-booking")]
         public Task<ActionResult<string?>> Delete(string? data)
@@ -22,12 +23,9 @@ namespace HallRentalSystem.Controllers
         }
 
         [HttpPost("insert-booking")]
-        public async Task<ActionResult<string?>> Insert(Bookings? data)
+        public async Task<ActionResult<string?>> Insert([FromQuery]Booking_Parameters? data)
         {
             string? result = await Shared_Data.bookings.Insert<string>(data);
-
-
-
             return result;
         }
 
