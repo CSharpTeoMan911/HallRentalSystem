@@ -224,7 +224,7 @@ div.datepicker_scroller {
 }
 
 h2.element_name {
-    font-family: "Open Sans", sans-serif;
+    font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
     align-self: center;
     word-wrap: break-word;
