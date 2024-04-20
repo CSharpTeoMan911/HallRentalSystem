@@ -8,4 +8,4 @@
 <br/>
 
 # Database schema
-![HallRentalDatabase drawio](https://github.com/CSharpTeoMan911/HallRentalSystem/assets/87245086/baa46f94-9be6-4497-ad3e-fe1c53a7c140)
+![297928996-baa46f94-9be6-4497-ad3e-fe1c53a7c140 (1)](https://github.com/CSharpTeoMan911/HallRentalSystem/assets/87245086/783fc5b1-636e-4a68-ab59-0fdf779549e7)

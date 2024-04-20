@@ -15,11 +15,12 @@ export function InitiatePaymentObject(_amount) {
         return "[ Successful ]";
     }
     catch (error) {
+        console.log(error);
         return "[ Error ]";
     }
 }
 
-export async function CreatePaymentMethod(_name, _city, _country, _address, _email) {
+export async function CreatePaymentMethod(_name, _city, _address, _email) {
     try {
         let result = await stripe.createPaymentMethod({
             type: 'card',
@@ -28,12 +29,12 @@ export async function CreatePaymentMethod(_name, _city, _country, _address, _ema
                 name: _name,
                 address: {
                     city: _city,
-                    country: _country,
                     line1: _address,
-                    email: _email
-                }
+                },
+                email: _email
             },
         });
+        console.log(result);
         if (result.error !== undefined) {
             return "Error: " + result.error.message
         }
@@ -43,6 +44,7 @@ export async function CreatePaymentMethod(_name, _city, _country, _address, _ema
         }
     }
     catch (error) {
+        console.log(error);
         return "Error: " + error.message;
     }
 }
