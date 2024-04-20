@@ -51,11 +51,11 @@
                                     </div>
                                     <div class="sub_section">
                                         <div class="sub_section">
-                                            @for (int i = 0; i < amenities?.Count; i++)
+                                            @for (int i = 0; i < value?.Amenities?.Count; i++)
                                             {
                                                 <div class="sub_section">
                                                     <div class="amenities_item">
-                                                        @amenities.ElementAt(i)
+                                                        @value?.Amenities.ElementAt(i)
                                                     </div>
                                                 </div>
                                             }
@@ -87,7 +87,7 @@
                 <Component>
                     @if (PaymentInitiated == true)
                     {
-                        <Payments HallName="@value?.Name" SelectedDates="@_selected_dates" Price="@value?.Price" notificationSystem="new Payments.NotificationSystem(BookingError)" closeNotificationSystem="new Payments.CloseNotificationSystem(CloseNotification)"/>
+                        <Payments HallName="@value?.Name" SelectedDates="@_selected_dates" Price="@value?.Price" notificationSystem="new Payments.NotificationSystem(BookingError)" closeNotificationSystem="new Payments.CloseNotificationSystem(CloseNotification)" hall_id="@hall_id" key="@key"/>
                     }
                     @if (PaymentInitiated == false)
                     {
@@ -107,9 +107,10 @@
     private string? MessageContent;
     private Notification_System.NotificationType type;
     private bool PaymentInitiated;
-    private List<DateTime>? _selected_dates { get; set; }
+    private List<DateOnly>? _selected_dates { get; set; }
     private DateTime? permission_error_initial_time;
     private DateTime? booking_error_initial_time;
+    private FirebaseKey? key { get; set; }
 
     [Parameter]
     public Hall_ID_Value? value { get; set; }
@@ -118,7 +119,7 @@
     public string? element { get; set; }
 
     [Parameter]
-    public List<string>? amenities { get; set; }
+    public string? hall_id { get; set; }
 
     public List<string> dummy_image_sources = new List<string>()
     {
@@ -157,7 +158,7 @@
     }
 
 
-    public void PaymentProcedureInitiated(List<DateTime> selected_dates)
+    public void PaymentProcedureInitiated(List<DateOnly> selected_dates)
     {
         _selected_dates = selected_dates;
         PaymentInitiated = true;
@@ -194,7 +195,7 @@
 
                 if (serialisedFirebaseKey != null)
                 {
-                    FirebaseKey? key = Newtonsoft.Json.JsonConvert.DeserializeObject<FirebaseKey>(serialisedFirebaseKey);
+                    key = Newtonsoft.Json.JsonConvert.DeserializeObject<FirebaseKey>(serialisedFirebaseKey);
 
                     if (key != null)
                     {

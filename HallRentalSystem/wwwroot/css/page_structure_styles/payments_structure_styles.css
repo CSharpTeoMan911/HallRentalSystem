@@ -26,10 +26,11 @@ div.payments_div_style {
 }
 
 div.payments_div {
-    min-width:245px;
-    align-self:center;
-    margin-top:10px;
-    margin-left:5px;
+    min-width: 245px;
+    align-self: center;
+    margin-top: 20px;
+    margin-bottom: 4px;
+    margin-left: 5px;
 }
 
 div.payment_details {
