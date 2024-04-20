@@ -8,7 +8,7 @@ using System.Security.Cryptography.Xml;
 
 namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authentication
 {
-    public class LoginSessionKeyOperations : CRUD_Strategy<Log_In_Session_ID_Value, string, string, FirebaseKey>
+    public class LoginSessionKeyOperations : CRUD_Strategy<Log_In_Session_ID_Value, FirebaseKey, string, FirebaseKey>
     {
         // DELETE THE LOG IN KEY FROM THE DATABASE
         public async Task<ReturnType?> Delete<ReturnType>(FirebaseKey? data)
@@ -45,9 +45,49 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
             }
         }
 
-        public Task<ReturnType?> Get<ReturnType>(string? data)
+        public async Task<ReturnType?> Get<ReturnType>(FirebaseKey? key)
         {
-            throw new NotImplementedException();
+            if (key?.database_key != null)
+            {
+                if (key?.log_in_session_key != null)
+                {
+                    
+                    ChildQuery? reference = Firebase_Database.firebaseClient?.Child("Log_In_Sessions/Log_In_Session_ID");
+                    
+                    if (reference != null)
+                    {
+                        string log_in_session_key = await reference.Child(key.database_key).OnceSingleAsync<string>();
+
+                        if (log_in_session_key != null)
+                        {
+                            if (log_in_session_key == key.log_in_session_key)
+                            {
+                                return (ReturnType)(object)"Valid login session key";
+                            }
+                            else
+                            {
+                                return (ReturnType)(object)"Invalid login session key";
+                            }
+                        }
+                        else
+                        {
+                            return (ReturnType)(object)"Internal server error";
+                        }
+                    }
+                    else 
+                    {
+                        return (ReturnType)(object)"Internal server error";
+                    }
+                }
+                else
+                {
+                    return (ReturnType)(object)"Internal server error";
+                }
+            }
+            else
+            {
+                return (ReturnType)(object)"Internal server error";
+            }
         }
 
         
