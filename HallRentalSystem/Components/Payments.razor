@@ -1,5 +1,9 @@
 ﻿@using HallRentalSystem.Components;
+@using System.Text;
+@using HallRentalSystem.Classes.Models;
+@using HallRentalSystem.Classes.API_Parameters;
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
 @inject NavigationManager NavigationManager;
 @inject IJSRuntime JS;
 
@@ -16,7 +20,7 @@
                     Hall name: @HallName
                 </p>
                 <p class="payment_detail">
-                    Total number of days: @SelectedDates.Count
+                    Total number of days: @SelectedDates?.Count
                 </p>
                 <p class="payment_detail">
                     Price: £@Price
@@ -36,11 +40,8 @@
                     <input class="payment_details_input" @bind=@Name placeholder="Name" />
                     <input class="payment_details_input" @bind=@City placeholder="City" />
                 </div>
-                <div class="payment_detail_input_div">
-                    <input class="payment_details_input" @bind=@Country placeholder="Country" />
+                <div class="payment_detail_input_div" style="margin-bottom:20px;">
                     <input class="payment_details_input" @bind=@Address placeholder="Address" />
-                </div>
-                <div class="payment_detail_input_div" style="margin-bottom:10px;">
                     <input class="payment_details_input" @bind=@Email placeholder="Email" />
                 </div>
             </div>
@@ -55,7 +56,7 @@
 @code {
     [Parameter] public string? HallName { get; set; }
 
-    [Parameter] public List<DateTime>? SelectedDates { get; set; }
+    [Parameter] public List<DateOnly>? SelectedDates { get; set; }
 
     [Parameter] public long? Price { get; set; }
 
@@ -65,23 +66,29 @@
     public delegate void CloseNotificationSystem();
     [Parameter] public CloseNotificationSystem? closeNotificationSystem { get; set; }
 
-    private string Name { get; set; }
-    private string City { get; set; }
-    private string Country { get; set; }
-    private string Address { get; set; }
-    private string Email { get; set; }
+    [Parameter] public string? hall_id { get; set; }
+
+    [Parameter] public FirebaseKey? key { get; set; }
+
+    private string? Name { get; set; }
+    private string? City { get; set; }
+    private string? Address { get; set; }
+    private string? Email { get; set; }
 
     protected override async void OnAfterRender(bool firstRender)
     {
-        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Stripe.js");
-
-        try
-        {
-            string result = await module.InvokeAsync<string>("InitiatePaymentObject", 100);
-        }
-        catch { }
-
         base.OnAfterRender(firstRender);
+
+        if (firstRender == true)
+        {
+            IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Stripe.js");
+
+            try
+            {
+                string result = await module.InvokeAsync<string>("InitiatePaymentObject", 100);
+            }
+            catch { }
+        }
     }
 
     private async void Payment()
@@ -90,20 +97,39 @@
 
         try
         {
-            string paymentIntentResult = await module.InvokeAsync<string>("CreatePaymentMethod", Name, City, Country, Address, Email);
+            string paymentMethodResult = await module.InvokeAsync<string>("CreatePaymentMethod", Name, City, Address, Email);
 
-            if (paymentIntentResult.IndexOf("Error: ") == 0)
+            if (paymentMethodResult.IndexOf("Error: ") == 0)
             {
-                notificationSystem.Invoke(Shared_Data.BookingError.PaymentError);
+                notificationSystem?.Invoke(Shared_Data.BookingError.PaymentError);
             }
             else
             {
-                //////////////////////////
-                // !!!!!! TO DO !!!!!!! //
-                //////////////////////////
+                if (Name == null && City == null && Address == null && Email == null)
+                {
+                    notificationSystem?.Invoke(Shared_Data.BookingError.PaymentError);
+                }
+                else
+                {
 
-                HttpClient client = Shared_Data.GenerateHttpCLient();
-                client.BaseAddress = new Uri(NavigationManager.BaseUri);
+                    StringBuilder url_builder = new StringBuilder("/booking/insert-booking?");
+
+                    Booking_Parameters parameters = new Booking_Parameters();
+                    parameters.Hall_ID = hall_id;
+                    parameters.stripe_payment_method = paymentMethodResult;
+                    parameters.rental_dates = SelectedDates;
+                    parameters.key = key;
+
+                    string formatted_url_parameters = await Query_Formater.ObjectQueryFormatter(parameters);
+                    url_builder.Append(formatted_url_parameters);
+
+                    //Console.WriteLine(formatted_url_parameters);
+                    HttpClient client = Shared_Data.GenerateHttpCLient();
+                    client.BaseAddress = new Uri(NavigationManager.BaseUri);
+                    HttpResponseMessage result = await client.PostAsync(url_builder.ToString(), null);
+
+                    Console.WriteLine(await result.Content.ReadAsStringAsync());
+                }
             }
         }
         catch { }
