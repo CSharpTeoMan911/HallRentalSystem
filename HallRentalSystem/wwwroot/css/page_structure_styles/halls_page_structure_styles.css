@@ -29,13 +29,13 @@ div.halls_container {
 }
 
 div.hall_element {
-    padding:10px;
+    padding:15px;
     display: inline-block;
     align-self:center;
     width: 100%;
     height: fit-content;
     background: linear-gradient(to right, white, #f5f5f5);
-    border: 3px solid black;
+    border: 1px solid black;
 }
 
 div.hall_element_inner{
@@ -135,14 +135,15 @@ div.amenities_item {
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 5px;
-    background: white;
     color: black;
+    background: linear-gradient(to right, #fafafa, #e5e5e3);
     word-wrap: break-word;
     align-self: center;
     justify-self: center;
     text-align: center;
     font-size: calc(6px + 1vw);
-    border: 1px solid black;
+    font-weight:600;
+    border: 2px solid black;
     border-radius: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -225,11 +226,11 @@ div.datepicker_scroller {
 
 h2.element_name {
     font-family: 'JetBrains Mono', monospace;
-    font-weight: 500;
+    font-weight: 700;
     align-self: center;
     word-wrap: break-word;
     margin-top: 2px;
-    margin-bottom: 40px;
+    margin-bottom: 55px;
     font-size: calc(35px + 1vw);
     text-align: center;
     color: black;
@@ -250,7 +251,7 @@ select.select-location {
 
 button.booking_button {
     font-family: 'JetBrains Mono', monospace;
-    margin-top: 30px;
+    margin-top: 45px;
     margin-bottom: 20px;
     font-weight: 700;
     align-self: center;
@@ -261,7 +262,7 @@ button.booking_button {
     padding-right: 25px;
     font-size: calc(16px + 1vw);
     color: white;
-    -webkit-text-stroke: 1px #212121;
+    -webkit-text-stroke: 0.8px #212121;
     text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
     background: linear-gradient(to right, green, #34ca01);
     border-width: 0px;
@@ -272,7 +273,7 @@ p.propriety_label {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 700;
     margin-right: 10px;
-    font-size: calc(15px + 1vw);
+    font-size: calc(12px + 1vw);
     align-self: center;
     justify-self: center;
     color: black;
@@ -281,17 +282,19 @@ p.propriety_label {
 p.value_label {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
-    font-size: calc(15px + 1vw);
+    font-size: calc(12px + 1vw);
     align-self: center;
     justify-self: center;
     word-break: break-word;
-    color: #212121;
+    color: #343434;
+    margin-left: 10px;
 }
 
 p.price_unit {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
-    font-size: calc(15px + 1vw);
+    font-size: calc(12px + 1vw);
+    margin-left:10px;
     align-self: center;
     justify-self: center;
     color: #212121;
