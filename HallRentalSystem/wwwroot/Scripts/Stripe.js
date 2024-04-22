@@ -6,7 +6,7 @@ export function InitiatePaymentObject(_amount) {
         const elements = stripe.elements({
             mode: "payment",
             currency: "gbp",
-            amount: _amount
+            amount: (_amount * 100)
         });
 
         card = elements.create('card');
@@ -40,7 +40,7 @@ export async function CreatePaymentMethod(_name, _city, _address, _email) {
         }
         else
         {
-            return await JSON.stringify(result);
+            return result.paymentMethod.id;
         }
     }
     catch (error) {
