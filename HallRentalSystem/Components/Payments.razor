@@ -85,7 +85,7 @@
 
             try
             {
-                string result = await module.InvokeAsync<string>("InitiatePaymentObject", 100);
+                string result = await module.InvokeAsync<string>("InitiatePaymentObject", Price);
             }
             catch { }
         }
@@ -113,6 +113,7 @@
                 {
 
                     StringBuilder url_builder = new StringBuilder("/booking/insert-booking?");
+
 
                     Booking_Parameters parameters = new Booking_Parameters();
                     parameters.Hall_ID = hall_id;
