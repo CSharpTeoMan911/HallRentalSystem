@@ -1,6 +1,13 @@
 ﻿using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 using HallRentalSystem.Classes.API_Parameters;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles.Infrastructure;
+using HallRentalSystem.Classes.StructuralAndBehavioralElements.Stripe_Payment;
+using HallRentalSystem.Classes.StructuralAndBehavioralElements.Firebase;
+using Firebase.Database.Query;
+using HallRentalSystem.Classes.Models;
+using Firebase.Database;
+using System.Security.Cryptography.Xml;
 
 namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
 {
@@ -19,37 +26,151 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
 
         public async Task<ReturnType?> Insert<ReturnType>(Booking_Parameters? data)
         {
-            if (data?.Hall_ID != null)
+            try
             {
-                if (data?.stripe_payment_method != null)
+                if (data?.Hall_ID != null)
                 {
-                    if (data?.key != null)
+                    if (data?.stripe_payment_method != null)
                     {
-                        if (data?.rental_dates?.Count > 0)
+                        if (data?.key != null)
                         {
-                            string? log_in_session_key_verification_result = await Shared_Data.log_in_session.Get<string>(data.key);
-                            
-                            if (log_in_session_key_verification_result == "Valid login session key")
+                            if (data?.rental_dates?.Count > 0)
                             {
-                                ///////////////////
-                                // !!! TO DO !!! //
-                                ///////////////////
-                                
 
-                                Bookings booking = new Bookings();
+                                string? log_in_session_key_verification_result = await Shared_Data.log_in_session.Get<string>(data.key);
 
-                                return (ReturnType)(object)"Internal server error";
-                            }
-                            else
-                            {
-                                if (log_in_session_key_verification_result != null)
+
+                                if (log_in_session_key_verification_result != "Internal server error" && log_in_session_key_verification_result != "Invalid login session key" && log_in_session_key_verification_result != "Log in session key expired")
                                 {
-                                    return (ReturnType)(object)log_in_session_key_verification_result;
+
+                                    PaymentResult? stripe_payment_result = await Shared_Data.stripe_payments.Insert<PaymentResult>(data);
+
+
+                                    if (stripe_payment_result != null)
+                                    {
+                                        if (stripe_payment_result?.payment_operation_result == "Payment procedure initiated")
+                                        {
+                                            PaymentSessionResult paymentSessionResult = new PaymentSessionResult();
+                                            paymentSessionResult.status = stripe_payment_result?.payment_intent?.Status;
+
+
+
+                                            ChildQuery? halls_database_reference = Firebase_Database.firebaseClient?.Child("Halls/Hall_ID");
+                                            string serialised_values = await halls_database_reference.Child(data.Hall_ID).OnceAsJsonAsync();
+                                            Hall_ID_Value? deserialised_values = Newtonsoft.Json.JsonConvert.DeserializeObject<Hall_ID_Value>(serialised_values);
+
+
+
+                                            if (deserialised_values != null)
+                                            {
+                                                if (stripe_payment_result?.payment_intent?.Status == "succeeded")
+                                                {
+                                                    string? serialisedPaymentSessionResult = Newtonsoft.Json.JsonConvert.SerializeObject(paymentSessionResult);
+
+
+                                                    Booking_ID_Value booking = new Booking_ID_Value();
+                                                    booking.Customer_ID = log_in_session_key_verification_result;
+                                                    booking.Rental_Dates = data.rental_dates;
+                                                    booking.Hall_ID = data.Hall_ID;
+                                                    booking.Amount = deserialised_values.Price * data.rental_dates.Count;
+                                                    booking.Payment_Intent_ID = stripe_payment_result?.payment_intent?.Id;
+
+
+
+                                                    ChildQuery? bookings_database_reference = Firebase_Database.firebaseClient?.Child("Bookings/Booking_ID");
+                                                    await bookings_database_reference.PostAsync(booking);
+
+
+
+                                                    return (ReturnType)(object)serialisedPaymentSessionResult;
+
+                                                }
+                                                else if (stripe_payment_result?.payment_intent?.Status == "requires_action")
+                                                {
+
+                                                    Pending_Transactions_Values pending_Transactions_Values = new Pending_Transactions_Values();
+                                                    pending_Transactions_Values.Payment_Intent_ID = stripe_payment_result?.payment_intent?.Id;
+                                                    pending_Transactions_Values.Expiration_Date = DateTime.Now.AddMinutes(5);
+                                                    pending_Transactions_Values.Customer_ID = log_in_session_key_verification_result;
+                                                    pending_Transactions_Values.Rental_Dates = data.rental_dates;
+                                                    pending_Transactions_Values.Hall_ID = data.Hall_ID;
+                                                    pending_Transactions_Values.Amount = deserialised_values.Price * data.rental_dates.Count;
+
+
+
+                                                    string? serialised_Pending_Transactions_Values = Newtonsoft.Json.JsonConvert.SerializeObject(pending_Transactions_Values);
+
+
+                                                    if (serialised_Pending_Transactions_Values != null)
+                                                    {
+                                                        ChildQuery? database_reference = Firebase_Database.firebaseClient?.Child("Pending_Transactions/Pending_Transaction_ID");
+                                                        FirebaseObject<Pending_Transactions_Values> result = await database_reference.PostAsync(pending_Transactions_Values);
+
+
+                                                        paymentSessionResult.redirection_url = stripe_payment_result?.payment_intent?.NextAction?.RedirectToUrl.Url;
+                                                        paymentSessionResult.payment_intent_id_database_key = result.Key;
+
+
+                                                        string? serialisedPaymentSessionResult = Newtonsoft.Json.JsonConvert.SerializeObject(paymentSessionResult);
+
+
+                                                        if (serialisedPaymentSessionResult != null)
+                                                        {
+                                                            return (ReturnType)(object)serialisedPaymentSessionResult;
+                                                        }
+                                                        else
+                                                        {
+                                                            return (ReturnType)(object)"Internal server error";
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        return (ReturnType)(object)"Internal server error";
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    return (ReturnType)(object)"Payment unsuccessful";
+                                                }
+                                            }
+                                            else
+                                            {
+                                                return (ReturnType)(object)"Internal server error";
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            if (stripe_payment_result?.payment_operation_result != null)
+                                            {
+                                                return (ReturnType)(object)stripe_payment_result.payment_operation_result;
+                                            }
+                                            else
+                                            {
+                                                return (ReturnType)(object)"Internal server error";
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        return (ReturnType)(object)"Internal server error";
+                                    }
                                 }
                                 else
                                 {
-                                    return (ReturnType)(object)"Internal server error";
+                                    if (log_in_session_key_verification_result != null)
+                                    {
+                                        return (ReturnType)(object)log_in_session_key_verification_result;
+                                    }
+                                    else
+                                    {
+                                        return (ReturnType)(object)"Internal server error";
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                return (ReturnType)(object)"Missing required data";
                             }
                         }
                         else
@@ -67,9 +188,9 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
                     return (ReturnType)(object)"Missing required data";
                 }
             }
-            else
+            catch
             {
-                return (ReturnType)(object)"Missing required data";
+                return (ReturnType)(object)"Internal server error";
             }
         }
 
