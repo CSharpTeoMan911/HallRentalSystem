@@ -124,12 +124,17 @@
                     string formatted_url_parameters = await Query_Formater.ObjectQueryFormatter(parameters);
                     url_builder.Append(formatted_url_parameters);
 
-                    //Console.WriteLine(formatted_url_parameters);
                     HttpClient client = Shared_Data.GenerateHttpCLient();
                     client.BaseAddress = new Uri(NavigationManager.BaseUri);
                     HttpResponseMessage result = await client.PostAsync(url_builder.ToString(), null);
+                    string payment_result = await result.Content.ReadAsStringAsync();
 
-                    Console.WriteLine(await result.Content.ReadAsStringAsync());
+                    Console.WriteLine(payment_result);
+
+                    switch (payment_result)
+                    {
+                        
+                    }
                 }
             }
         }
