@@ -22,22 +22,20 @@
                         <div class="sub_section" style="margin-right:30px;">
 
                             <div style="display:flex;flex-direction:column;">
-                                <div class="sub_section">
+                                <div class="super_sub_section">
                                     <div class="main_sub_section">
                                         <p class="propriety_label">Location: </p>
                                     </div>
-                                    <div class="sub_section">
+                                    <div class="sub_section" style="margin-bottom:0px;">
                                         <p class="value_label">@value?.Location</p>
                                     </div>
                                 </div>
 
-                                <div class="sub_section">
+                                <div class="super_sub_section">
                                     <div class="main_sub_section">
-                                        <div>
-                                            <p class="propriety_label">Price: </p>
-                                        </div>
+                                        <p class="propriety_label">Price: </p>
                                     </div>
-                                    <div class="sub_section">
+                                    <div class="sub_section" style="margin-bottom:0px;">
                                         <div style="display:flex;flex-direction:row;">
                                             <p class="value_label">@value?.Price</p>
                                             <p class="value_label">£/day</p>
@@ -45,7 +43,7 @@
                                     </div>
                                 </div>
 
-                                <div class="sub_section">
+                                <div class="super_sub_section">
                                     <div class="main_sub_section">
                                         <div>
                                             <p class="propriety_label">Capacity: </p>
@@ -58,12 +56,12 @@
                                     </div>
                                 </div>
 
-                                <div class="sub_section" >
-                                    <div class="main_sub_section">
-                                        <p class="propriety_label">Amenities: </p>
-                                    </div>
-                                    <div class="sub_section">
-                                        <div class="sub_section">
+                                <div class="super_sub_section">
+                                    <div class="@toggle_state">
+                                        <button class="dropdown-toggle dropdown_amenities_button" type="button" id="dropdownMenuButton" data-toggle="collapse" data-target="@("#" + element + "_collapse")" aria-expanded="false">
+                                            Amenities
+                                        </button>
+                                        <div class="collapse dropdown-menu dropdown-menu-custom" id="@(element + "_collapse")">
                                             @for (int i = 0; i < value?.Amenities?.Count; i++)
                                             {
                                                 <div class="sub_section">
@@ -74,6 +72,7 @@
                                             }
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
   
@@ -124,6 +123,7 @@
     private DateTime? permission_error_initial_time;
     private DateTime? booking_error_initial_time;
     private FirebaseKey? key { get; set; }
+    private string toggle_state { get; set; }  = "dropdown";
 
     [Parameter]
     public Hall_ID_Value? value { get; set; }
@@ -231,40 +231,49 @@
 
     public void BookingError(Shared_Data.BookingError error)
     {
-        if (booking_error_initial_time == null)
+        switch (error)
         {
-            switch (error)
-            {
-                case Shared_Data.BookingError.InsufficientDates:
-                    MessageContent = "The amount of booked dates must be greater than 0";
-                    type = Notification_System.NotificationType.Error;
-                    ShowNotification = true;
-                    break;
-                case Shared_Data.BookingError.PaymentError:
-                    MessageContent = "Please fill all the fields";
-                    type = Notification_System.NotificationType.Error;
-                    ShowNotification = true;
-                    break;
-            }
-
-            StateHasChanged();
-
-            booking_error_initial_time = DateTime.Now;
+            case Shared_Data.BookingError.InsufficientDates:
+                MessageContent = "The amount of booked dates must be greater than 0";
+                type = Notification_System.NotificationType.Error;
+                ShowNotification = true;
+                break;
+            case Shared_Data.BookingError.PaymentError:
+                MessageContent = "Please fill all the fields";
+                type = Notification_System.NotificationType.Error;
+                ShowNotification = true;
+                break;
         }
+
+        StateHasChanged();
+
+        booking_error_initial_time = DateTime.Now;
     }
 
     private void OnPermissionError()
     {
-        if (permission_error_initial_time == null)
+        MessageContent = "An authenticated user is required to book a hall";
+        type = Notification_System.NotificationType.Error;
+        ShowNotification = true;
+
+        StateHasChanged();
+
+        permission_error_initial_time = DateTime.Now;
+    }
+
+    private void SwitchToggleState()
+    {
+        switch (toggle_state)
         {
-            MessageContent = "An authenticated user is required to book a hall";
-            type = Notification_System.NotificationType.Error;
-            ShowNotification = true;
-
-            StateHasChanged();
-
-            permission_error_initial_time = DateTime.Now;
+            case "dropdown":
+                toggle_state = "dropup";
+                break;
+            case "dropup":
+                toggle_state = "dropdown";
+                break;
         }
+
+        StateHasChanged();
     }
 }
 
