@@ -3,7 +3,7 @@
     public class Pending_Transactions_Values
     {
         public string? Payment_Intent_ID { get; set; }
-        public DateTime? Expiration_Date { get; set; }
+        public long? Expiration_Date { get; set; }
         public string? Customer_ID { get; set; }
         public string? Hall_ID { get; set; }
         public long Amount { get; set; }
