@@ -127,6 +127,10 @@ function ExpansionAnimationImplementation(element_id, max_width, size_unit) {
             // ASSIGN THE NEW WITH TO THE HTML ELEMENT
             element.style.width = current_width + size_unit;
         }
+        else
+        {
+            clearInterval(expansion_animation_interval);
+        }
         current_width++;
     }
 }
@@ -534,6 +538,25 @@ function BookingElementResize() {
         // GET ALL HTML ELEMENTS WITH THE CSS CLASS "image_element_section" AND "details_element_section"
         let hall_element_inner = document.getElementsByClassName("hall_element_inner");
         let details_elements = document.getElementsByClassName("details_element_section");
+        let hall_elements = document.getElementsByClassName("hall_element");
+
+        for (let i = 0; i < hall_elements.length; i++) {
+            let hall_element = hall_elements[i];
+
+            // IF THE WIDTH OF THE HALLS CONTAINER IS LESS THAN 1400px
+            if (window.screen.width < 400) {
+
+                if (hall_element.style.width != "99.9%") {
+                    hall_element.style.width = "99.9%";
+                }
+            }
+            else {
+                if (hall_element.style.width = "90%") {
+                    hall_element.style.width = "90%";
+                }
+            }
+        }
+
 
         for (let i = 0; i < hall_element_inner.length; i++) {
             let img_section = hall_element_inner[i].children[0];
@@ -542,10 +565,14 @@ function BookingElementResize() {
 
             // IF THE WIDTH OF THE HALLS CONTAINER IS LESS THAN 1400px
             if (halls_container.offsetWidth < 1300) {
-                img_section.style.height = "calc(200px + 10vw)";
+                if (img_section.style.height != "calc(200px + 10vw)") {
+                    img_section.style.height = "calc(200px + 10vw)";
+                }
 
-                // SET EACH ELEMENT'S WIDTH EQUAL TO THE WIDTH OF THE HALLS CONTAINER
-                img_section.style.width = "100%";
+                if (img_section.style.width != "100%") {
+                    // SET EACH ELEMENT'S WIDTH EQUAL TO THE WIDTH OF THE HALLS CONTAINER
+                    img_section.style.width = "100%";
+                }
             }
             else {
                 if (det_elements != null) {
@@ -553,7 +580,9 @@ function BookingElementResize() {
                 }
 
                 // SET EACH ELEMENT'S WIDTH EQUAL TO 49.8% OF THE WIDTH OF THE HALLS CONTAINER
-                img_section.style.width = "60%";
+                if (img_section.style.width != "60%") {
+                    img_section.style.width = "60%";
+                }
             }
         }
 
@@ -565,20 +594,28 @@ function BookingElementResize() {
             // IF THE WIDTH OF THE HALLS CONTAINER IS LESS THAN 1400px
             if (halls_container.offsetWidth < 1300) {
 
-                // SET EACH ELEMENT'S WIDTH EQUAL TO THE WIDTH OF THE HALLS CONTAINER
-                details_elements[i].style.width = "100%";
+                if (details_elements[i].style.width != "100%") {
+                    // SET EACH ELEMENT'S WIDTH EQUAL TO THE WIDTH OF THE HALLS CONTAINER
+                    details_elements[i].style.width = "100%";
+                }
 
-                // SET THE HEIGHT OF EACH ELEMENT TO FIT ITS CONTENT
-                details_elements[i].style.height = "fit-content";
+                if (details_elements[i].style.height != "fit-content") {
+                    // SET THE HEIGHT OF EACH ELEMENT TO FIT ITS CONTENT
+                    details_elements[i].style.height = "fit-content";
+                }
             }
             // IF THE WIDTH OF THE HALLS CONTAINER IS MORE THAN OR EQUAL TO 1400px
             else {
 
-                // SET EACH ELEMENT'S WIDTH EQUAL TO 49.8% OF THE WIDTH OF THE HALLS CONTAINER
-                details_elements[i].style.width = "38%";
+                if (details_elements[i].style.width != "38%") {
+                    // SET EACH ELEMENT'S WIDTH EQUAL TO 49.8% OF THE WIDTH OF THE HALLS CONTAINER
+                    details_elements[i].style.width = "38%";
+                }
 
-                // SET THE HEIGHT OF EACH ELEMENT TO THE SUM OF 200px AND 10vw
-                details_elements[i].style.height = "fit-content";
+                if (details_elements[i].style.height != "fit-content") {
+                    // SET THE HEIGHT OF EACH ELEMENT TO THE SUM OF 200px AND 10vw
+                    details_elements[i].style.height = "fit-content";
+                }
             }
         }
 
@@ -591,7 +628,7 @@ export function ClearSetBookingElementResize() {
 }
 
 export function SetBookingElementResize() {
-    booking_elements_resize = setInterval(() => { BookingElementResize(); }, 20)
+    booking_elements_resize = setInterval(() => { BookingElementResize(); }, 1)
 }
 
 // [ END ]

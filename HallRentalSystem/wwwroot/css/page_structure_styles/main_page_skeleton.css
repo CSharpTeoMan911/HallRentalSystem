@@ -82,7 +82,7 @@ div.focus-div {
     position: fixed;
     height: 100%;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 0.6);
     display: flex;
     flex-direction: column;
 }
@@ -143,9 +143,9 @@ button.element-cancel-button {
     border-width: 0;
     margin: 10px;
     font-size: 30px;
-    color: red;
+    color: white;
     -webkit-text-stroke: 0.1px #6f6f6f;
-    text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
+    text-shadow: calc(3px + 0.03vw) calc(3px + 0.05vw) 5px black;
 }
 
 .custom_carousel {

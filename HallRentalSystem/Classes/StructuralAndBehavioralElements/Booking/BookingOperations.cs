@@ -8,6 +8,7 @@ using Firebase.Database.Query;
 using HallRentalSystem.Classes.Models;
 using Firebase.Database;
 using System.Security.Cryptography.Xml;
+using System.Text;
 
 namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
 {
@@ -81,16 +82,34 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
                                                     await bookings_database_reference.PostAsync(booking);
 
 
+                                                    List<long> booking_dates = new List<long>();
+
+
+                                                    foreach (DateOnly date in data.rental_dates)
+                                                    {
+                                                        booking_dates.Add(Convert.ToInt64(date.ToString("yyyyMMdd")));
+                                                    }
+
+
+                                                    StringBuilder query_builder = new StringBuilder();
+                                                    query_builder.Append("Total_Booking_Dates/");
+                                                    query_builder.Append(data.Hall_ID);
+
+
+                                                    ChildQuery? total_dates_database_reference = Firebase_Database.firebaseClient?.Child(query_builder.ToString());
+                                                    await total_dates_database_reference.PostAsync(booking_dates);
+
 
                                                     return (ReturnType)(object)serialisedPaymentSessionResult;
 
                                                 }
                                                 else if (stripe_payment_result?.payment_intent?.Status == "requires_action")
                                                 {
+                                                    DateTime current_date_time = DateTime.Now.AddMinutes(5);
 
                                                     Pending_Transactions_Values pending_Transactions_Values = new Pending_Transactions_Values();
                                                     pending_Transactions_Values.Payment_Intent_ID = stripe_payment_result?.payment_intent?.Id;
-                                                    pending_Transactions_Values.Expiration_Date = DateTime.Now.AddMinutes(5);
+                                                    pending_Transactions_Values.Expiration_Date = Convert.ToInt64(current_date_time.ToString("yyyyMMddHHmm"));
                                                     pending_Transactions_Values.Customer_ID = log_in_session_key_verification_result;
                                                     pending_Transactions_Values.Rental_Dates = data.rental_dates;
                                                     pending_Transactions_Values.Hall_ID = data.Hall_ID;
