@@ -3,6 +3,7 @@ using HallRentalSystem.Classes.API_Parameters;
 using HallRentalSystem.Classes.Models;
 using HallRentalSystem.Classes.StructuralAndBehavioralElements.Firebase;
 using Stripe;
+using System.Text;
 
 namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Stripe_Payment
 {
@@ -50,6 +51,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Stripe_Paymen
                                 },
                             })).Id;
 
+
                             PaymentIntent paymentIntent = await service.ConfirmAsync(payment_intent_id, new PaymentIntentConfirmOptions
                             {
                                 PaymentMethod = data.stripe_payment_method,
@@ -69,8 +71,9 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Stripe_Paymen
                         result.payment_operation_result = "Invalid hall object";
                     }
                 }
-                catch
+                catch(Exception E)
                 {
+                    System.Diagnostics.Debug.WriteLine(E.Message);
                     result.payment_operation_result = "Internal server error";
                 }
             }

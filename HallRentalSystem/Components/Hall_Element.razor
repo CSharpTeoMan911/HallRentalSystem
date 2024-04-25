@@ -126,6 +126,7 @@
     private bool ShowNotification;
     private bool ReserveHall;
     private bool ConfirmPayment;
+    private bool LogInSessionKeyExpired;
     private string? MessageContent;
     private Notification_System.NotificationType type;
     private bool PaymentInitiated;
@@ -182,6 +183,11 @@
                     CloseNotification();
                 });
                 booking_error_initial_time = null;
+
+                if (LogInSessionKeyExpired == true)
+                {
+                    NavigationManager.NavigateTo("log-in", true);
+                }
             }
 
         if (payment_initial_time != null)
@@ -278,7 +284,7 @@
         StateHasChanged();
     }
 
-    public void BookingError(Shared_Data.BookingError error)
+    public async void BookingError(Shared_Data.BookingError error)
     {
         switch (error)
         {
@@ -299,6 +305,24 @@
                 break;
             case Shared_Data.BookingError.InvalidHallObject:
                 MessageContent = "The hall selected is invalid";
+                type = Notification_System.NotificationType.Error;
+                ShowNotification = true;
+                break;
+            case Shared_Data.BookingError.InvalidEmailAddress:
+                MessageContent = "The email address inserted is invalid";
+                type = Notification_System.NotificationType.Error;
+                ShowNotification = true;
+                break;
+            case Shared_Data.BookingError.LogInSessionKeyExpired:
+                try
+                {
+                    IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+                    await module.InvokeAsync<string>("AuthCache", "key", "Delete");
+                }
+                catch { }
+
+                LogInSessionKeyExpired = true;
+                MessageContent = "The log in session expired. Please log in.";
                 type = Notification_System.NotificationType.Error;
                 ShowNotification = true;
                 break;

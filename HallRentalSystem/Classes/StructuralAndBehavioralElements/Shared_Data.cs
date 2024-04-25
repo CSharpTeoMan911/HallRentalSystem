@@ -21,6 +21,8 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
             PaymentError,
             InvalidHallObject,
             MissingRequiredData,
+            LogInSessionKeyExpired,
+            InvalidEmailAddress
         }
 
         public enum PaymentStatus

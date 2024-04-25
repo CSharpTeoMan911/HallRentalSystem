@@ -39,6 +39,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
                 StringBuilder query_builder = new StringBuilder();
                 query_builder.Append("Total_Booking_Dates/");
                 query_builder.Append(data);
+                query_builder.Append("/Booking_Dates/");
 
                 ChildQuery? total_dates_database_reference = Firebase_Database.firebaseClient?.Child(query_builder.ToString());
 
@@ -73,7 +74,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
                                 StringBuilder query_builder = new StringBuilder();
                                 query_builder.Append("Total_Booking_Dates/");
                                 query_builder.Append(data.Hall_ID);
-                                query_builder.Append("/");
+                                query_builder.Append("/Booking_Dates/");
                                 query_builder.Append(date.ToString("yyyyMMdd"));
 
                                 ChildQuery? total_dates_database_reference = Firebase_Database.firebaseClient?.Child(query_builder.ToString());
@@ -121,7 +122,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
                                 StringBuilder query_builder = new StringBuilder();
                                 query_builder.Append("Total_Booking_Dates/");
                                 query_builder.Append(data.Hall_ID);
-                                query_builder.Append("/");
+                                query_builder.Append("/Booking_Dates/");
                                 query_builder.Append(date.ToString("yyyyMMdd"));
 
                                 ChildQuery? total_dates_database_reference = Firebase_Database.firebaseClient?.Child(query_builder.ToString());

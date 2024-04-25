@@ -105,7 +105,14 @@
 
             if (paymentMethodResult.IndexOf("Error: ") == 0)
             {
-                notificationSystem?.Invoke(Shared_Data.BookingError.PaymentError);
+                if (paymentMethodResult == "Error: Your email address is invalid.")
+                {
+                    notificationSystem?.Invoke(Shared_Data.BookingError.InvalidEmailAddress);
+                }
+                else
+                {
+                    notificationSystem?.Invoke(Shared_Data.BookingError.PaymentError);
+                }
             }
             else
             {
@@ -135,39 +142,53 @@
 
                     Console.WriteLine(payment_result);
 
-                    if (payment_result != "Internal server error")
+                    if (payment_result != "Log in session key expired")
                     {
-                        if (payment_result != "Missing required data")
+                        if (payment_result != "Invalid login session key")
                         {
-                            if (payment_result != "Payment unsuccessful")
+                            if (payment_result != "Internal server error")
                             {
-                                if (payment_result != "Invalid hall object")
+                                if (payment_result != "Missing required data")
                                 {
-                                    try
+                                    if (payment_result != "Payment unsuccessful")
                                     {
-                                        PaymentSessionResult? paymentResult = Newtonsoft.Json.JsonConvert.DeserializeObject<PaymentSessionResult>(payment_result);
-
-                                        switch (paymentResult?.status)
+                                        if (payment_result != "Invalid hall object")
                                         {
-                                            case "succeeded":
-                                                paymentSystem?.Invoke(Shared_Data.PaymentStatus.PaymentSucceeded, paymentResult);
-                                                break;
-                                            case "requires_action":
-                                                paymentSystem?.Invoke(Shared_Data.PaymentStatus.RequiresAction, paymentResult);
-                                                break;
-                                            default:
-                                                break;
+                                            try
+                                            {
+                                                PaymentSessionResult? paymentResult = Newtonsoft.Json.JsonConvert.DeserializeObject<PaymentSessionResult>(payment_result);
+
+                                                switch (paymentResult?.status)
+                                                {
+                                                    case "succeeded":
+                                                        paymentSystem?.Invoke(Shared_Data.PaymentStatus.PaymentSucceeded, paymentResult);
+                                                        break;
+                                                    case "requires_action":
+                                                        paymentSystem?.Invoke(Shared_Data.PaymentStatus.RequiresAction, paymentResult);
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            }
+                                            catch
+                                            {
+                                                notificationSystem?.Invoke(Shared_Data.BookingError.PaymentError);
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            notificationSystem?.Invoke(Shared_Data.BookingError.InvalidHallObject);
                                         }
                                     }
-                                    catch
+                                    else
                                     {
                                         notificationSystem?.Invoke(Shared_Data.BookingError.PaymentError);
                                     }
-
                                 }
                                 else
                                 {
-                                    notificationSystem?.Invoke(Shared_Data.BookingError.InvalidHallObject);
+                                    notificationSystem?.Invoke(Shared_Data.BookingError.MissingRequiredData);
                                 }
                             }
                             else
@@ -177,12 +198,12 @@
                         }
                         else
                         {
-                            notificationSystem?.Invoke(Shared_Data.BookingError.MissingRequiredData);
+                            notificationSystem?.Invoke(Shared_Data.BookingError.LogInSessionKeyExpired);
                         }
                     }
                     else
                     {
-                        notificationSystem?.Invoke(Shared_Data.BookingError.PaymentError);
+                        notificationSystem?.Invoke(Shared_Data.BookingError.LogInSessionKeyExpired);
                     }
                 }
             }

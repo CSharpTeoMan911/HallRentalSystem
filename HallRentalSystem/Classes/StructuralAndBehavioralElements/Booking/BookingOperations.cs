@@ -41,7 +41,6 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
 
                                 string? log_in_session_key_verification_result = await Shared_Data.log_in_session.Get<string>(data.key);
 
-
                                 if (log_in_session_key_verification_result != "Internal server error" && log_in_session_key_verification_result != "Invalid login session key" && log_in_session_key_verification_result != "Log in session key expired")
                                 {
 
@@ -215,8 +214,9 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
                     return (ReturnType)(object)"Missing required data";
                 }
             }
-            catch
+            catch(Exception E)
             {
+                Console.WriteLine(E.Message);
                 return (ReturnType)(object)"Internal server error";
             }
         }
