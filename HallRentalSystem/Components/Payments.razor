@@ -1,4 +1,5 @@
-﻿@using HallRentalSystem.Components;
+﻿@using HallRentalSystem.Classes.StructuralAndBehavioralElements.Stripe_Payment
+@using HallRentalSystem.Components;
 @using System.Text;
 @using HallRentalSystem.Classes.Models;
 @using HallRentalSystem.Classes.API_Parameters;
@@ -66,6 +67,9 @@
     public delegate void CloseNotificationSystem();
     [Parameter] public CloseNotificationSystem? closeNotificationSystem { get; set; }
 
+    public delegate void PaymentSystem(Shared_Data.PaymentStatus status, PaymentSessionResult result);
+    [Parameter] public PaymentSystem? paymentSystem { get; set; }
+
     [Parameter] public string? hall_id { get; set; }
 
     [Parameter] public FirebaseKey? key { get; set; }
@@ -131,9 +135,54 @@
 
                     Console.WriteLine(payment_result);
 
-                    switch (payment_result)
+                    if (payment_result != "Internal server error")
                     {
-                        
+                        if (payment_result != "Missing required data")
+                        {
+                            if (payment_result != "Payment unsuccessful")
+                            {
+                                if (payment_result != "Invalid hall object")
+                                {
+                                    try
+                                    {
+                                        PaymentSessionResult? paymentResult = Newtonsoft.Json.JsonConvert.DeserializeObject<PaymentSessionResult>(payment_result);
+
+                                        switch (paymentResult?.status)
+                                        {
+                                            case "succeeded":
+                                                paymentSystem?.Invoke(Shared_Data.PaymentStatus.PaymentSucceeded, paymentResult);
+                                                break;
+                                            case "requires_action":
+                                                paymentSystem?.Invoke(Shared_Data.PaymentStatus.RequiresAction, paymentResult);
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+                                    catch
+                                    {
+                                        notificationSystem?.Invoke(Shared_Data.BookingError.PaymentError);
+                                    }
+
+                                }
+                                else
+                                {
+                                    notificationSystem?.Invoke(Shared_Data.BookingError.InvalidHallObject);
+                                }
+                            }
+                            else
+                            {
+                                notificationSystem?.Invoke(Shared_Data.BookingError.PaymentError);
+                            }
+                        }
+                        else
+                        {
+                            notificationSystem?.Invoke(Shared_Data.BookingError.MissingRequiredData);
+                        }
+                    }
+                    else
+                    {
+                        notificationSystem?.Invoke(Shared_Data.BookingError.PaymentError);
                     }
                 }
             }

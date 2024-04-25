@@ -2,8 +2,10 @@
 @using Radzen.Blazor.Rendering;
 @using System.Text;
 @using HallRentalSystem.Classes;
+@using HallRentalSystem.Classes.Models;
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 @using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
+@using HallRentalSystem.Classes.API_Parameters;
 @inject NavigationManager NavigationManager;
 @inject IJSRuntime JS;
 
@@ -35,7 +37,8 @@
 
 @code {
     long price;
-    List<DateOnly> disabled_dates = new List<DateOnly>() { DateOnly.FromDateTime(DateTime.Now.AddDays(1)), DateOnly.FromDateTime(DateTime.Now.AddDays(3)), DateOnly.FromDateTime(DateTime.Now.AddDays(5)) };
+
+    [Parameter] public List<DateOnly> disabled_dates { get; set; } = new List<DateOnly>();
     List<DateOnly> selected_dates = new List<DateOnly>();
 
 

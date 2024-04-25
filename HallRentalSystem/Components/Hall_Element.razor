@@ -1,7 +1,9 @@
-﻿@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+﻿@using HallRentalSystem.Classes.StructuralAndBehavioralElements.Stripe_Payment;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 @using HallRentalSystem.Classes.API_Parameters;
 @using HallRentalSystem.Classes.Models;
 @using HallRentalSystem.Components;
+@using System.Text
 
 @inject IJSRuntime JS;
 @inject NavigationManager NavigationManager;
@@ -99,11 +101,18 @@
                 <Component>
                     @if (PaymentInitiated == true)
                     {
-                        <Payments HallName="@value?.Name" SelectedDates="@_selected_dates" Price="@value?.Price" notificationSystem="new Payments.NotificationSystem(BookingError)" closeNotificationSystem="new Payments.CloseNotificationSystem(CloseNotification)" hall_id="@hall_id" key="@key"/>
+                        @if (ConfirmPayment == true)
+                        {
+                            <PaymentConfirmation payment_session_result="@paymentSessionResult"/>
+                        }
+                        else
+                        {
+                            <Payments HallName="@value?.Name" SelectedDates="@_selected_dates" Price="@value?.Price" notificationSystem="new Payments.NotificationSystem(BookingError)" closeNotificationSystem="new Payments.CloseNotificationSystem(CloseNotification)" paymentSystem="new Payments.PaymentSystem(OnPayment)" hall_id="@hall_id" key="@key" />
+                        }
                     }
-                    @if (PaymentInitiated == false)
+                    else
                     {
-                        <HallRezervation Price="@value?.Price" hallName="@value?.Name" initiatePayment="new HallRezervation.InitiatePayment(PaymentProcedureInitiated)" notificationSystem="new HallRezervation.NotificationSystem(BookingError)" closeNotificationSystem="new HallRezervation.CloseNotificationSystem(CloseNotification)"/>
+                        <HallRezervation Price="@value?.Price" hallName="@value?.Name" disabled_dates="@disabled_dates" initiatePayment="new HallRezervation.InitiatePayment(PaymentProcedureInitiated)" notificationSystem="new HallRezervation.NotificationSystem(BookingError)" closeNotificationSystem="new HallRezervation.CloseNotificationSystem(CloseNotification)"/>
                     }
                 </Component>
             </FocusPanel>
@@ -116,14 +125,20 @@
     private System.Timers.Timer timer = new System.Timers.Timer();
     private bool ShowNotification;
     private bool ReserveHall;
+    private bool ConfirmPayment;
     private string? MessageContent;
     private Notification_System.NotificationType type;
     private bool PaymentInitiated;
     private List<DateOnly>? _selected_dates { get; set; }
     private DateTime? permission_error_initial_time;
     private DateTime? booking_error_initial_time;
+    private DateTime? payment_initial_time;
     private FirebaseKey? key { get; set; }
     private string toggle_state { get; set; }  = "dropdown";
+
+    private PaymentSessionResult? paymentSessionResult{ get; set; }
+
+    private List<DateOnly> disabled_dates = new List<DateOnly>();
 
     [Parameter]
     public Hall_ID_Value? value { get; set; }
@@ -168,6 +183,18 @@
                 });
                 booking_error_initial_time = null;
             }
+
+        if (payment_initial_time != null)
+            if ((DateTime.Now - payment_initial_time).Value.TotalSeconds >= 5)
+            {
+                await InvokeAsync(() =>
+                {
+                    PaymentInitiated = false;
+                    ReserveHall = false;
+                    CloseNotification();
+                });
+                payment_initial_time = null;
+            }
     }
 
 
@@ -193,6 +220,8 @@
 
         PaymentInitiated = false;
 
+        ConfirmPayment = false;
+
         StateHasChanged();
     }
 
@@ -212,6 +241,7 @@
 
                     if (key != null)
                     {
+                        await GetDisabledDates();
                         ReserveHall = true;
                         StateHasChanged();
                     }
@@ -229,6 +259,25 @@
         catch { }
     }
 
+    private void OnPayment(Shared_Data.PaymentStatus status, PaymentSessionResult result)
+    {
+        switch (status)
+        {
+            case Shared_Data.PaymentStatus.PaymentSucceeded:
+                MessageContent = "Payment successful";
+                type = Notification_System.NotificationType.Notification;
+                ShowNotification = true;
+                payment_initial_time = DateTime.Now;
+                break;
+            case Shared_Data.PaymentStatus.RequiresAction:
+                paymentSessionResult = result;
+                ConfirmPayment = true;
+                break;
+        }
+
+        StateHasChanged();
+    }
+
     public void BookingError(Shared_Data.BookingError error)
     {
         switch (error)
@@ -240,6 +289,16 @@
                 break;
             case Shared_Data.BookingError.PaymentError:
                 MessageContent = "Please fill all the fields";
+                type = Notification_System.NotificationType.Error;
+                ShowNotification = true;
+                break;
+            case Shared_Data.BookingError.MissingRequiredData:
+                MessageContent = "Please fill all credit card fields";
+                type = Notification_System.NotificationType.Error;
+                ShowNotification = true;
+                break;
+            case Shared_Data.BookingError.InvalidHallObject:
+                MessageContent = "The hall selected is invalid";
                 type = Notification_System.NotificationType.Error;
                 ShowNotification = true;
                 break;
@@ -274,6 +333,38 @@
         }
 
         StateHasChanged();
+    }
+
+    private async Task<bool> GetDisabledDates()
+    {
+        try
+        {
+            StringBuilder url_builder = new StringBuilder();
+            url_builder.Append("/total-booking-dates/get?");
+            url_builder.Append("data=");
+            url_builder.Append(hall_id);
+
+            HttpClient client = Shared_Data.GenerateHttpCLient();
+            client.BaseAddress = new Uri(NavigationManager.Uri);
+
+            HttpResponseMessage response = await client.GetAsync(url_builder.ToString());
+            string serialised_dates = await response.Content.ReadAsStringAsync();
+
+            if (serialised_dates != null)
+            {
+                Total_Booking_Dates_Values? values = Newtonsoft.Json.JsonConvert.DeserializeObject<Total_Booking_Dates_Values>(serialised_dates);
+
+                if (values != null)
+                    foreach (long date in values.Keys)
+                    {
+                        DateOnly disabled_date = DateOnly.ParseExact(Convert.ToString(date), "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
+                        disabled_dates.Add(disabled_date);
+                    }
+            }
+        }
+        catch { }
+
+        return true;
     }
 }
 

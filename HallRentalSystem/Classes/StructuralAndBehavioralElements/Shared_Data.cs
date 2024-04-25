@@ -18,7 +18,15 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
         public enum BookingError
         {
             InsufficientDates,
-            PaymentError
+            PaymentError,
+            InvalidHallObject,
+            MissingRequiredData,
+        }
+
+        public enum PaymentStatus
+        {
+            PaymentSucceeded,
+            RequiresAction
         }
 
 
@@ -28,6 +36,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements
         public static CRUD_Context<Log_In_Session_ID_Value, FirebaseKey, string, FirebaseKey> log_in_session = new CRUD_Context<Log_In_Session_ID_Value, FirebaseKey, string, FirebaseKey>(new LoginSessionKeyOperations());
         public static CRUD_Context<Booking_Parameters, string, Bookings, string> bookings = new CRUD_Context<Booking_Parameters, string, Bookings, string>(new BookingOperations());
         public static CRUD_Context<Booking_Parameters, string, string, string> stripe_payments = new CRUD_Context<Booking_Parameters, string, string, string>(new Stripe_Operations());
+        public static CRUD_Context<TotalBookingDatesParameters, string, TotalBookingDatesParameters, string> total_bookings = new CRUD_Context<TotalBookingDatesParameters, string, TotalBookingDatesParameters, string>(new BookingDatesOperations());
 
         public static HttpClient GenerateHttpCLient(){
             if(Program.EnableSSL == true)
