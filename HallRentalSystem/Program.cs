@@ -10,10 +10,15 @@ namespace HallRentalSystem
 
     internal class Program:Firebase_Database
     {
+        private static ServerUtilityThreadpoolLoops threadPoolLoops = new ServerUtilityThreadpoolLoops();
         public static bool Is_API_Testing_Mode;
         public static bool EnableSSL;
+
         private static void Main(string[] args)
         {
+
+            threadPoolLoops.InitiateThreadPoolLoops();
+
             // COMMAND LINE SWAGGER API TESTING MODE
             //
             //Enable_Or_Disable_Https_Certificate_Validation();

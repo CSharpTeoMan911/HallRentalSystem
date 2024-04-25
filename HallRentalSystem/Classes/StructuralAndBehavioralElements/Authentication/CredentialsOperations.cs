@@ -43,14 +43,12 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
                         // IF THE RESULT OBJECT IS NOT EQUAL TO "Invalid email or password"
                         if (result != "Invalid email or password")
                         {
-                            // GET THE DATABASE REFERENCE TO THE DATABASE NODE THAT STORES THE LOG IN SESSIONS
-                            ChildQuery reference = Firebase_Database.firebaseClient.Child("Log_In_Sessions/Log_In_Session_ID");
 
                             // CREATE A "Log_In_Session_ID_Value" OBJECT AND SET THE "Customer_ID" PROPRIETY FIELD
                             // AND THE "Expiration_Date" PROPRIETY FIELD AS THE CURRENT DATE AND TIME
                             Log_In_Session_ID_Value log_In_Session = new Log_In_Session_ID_Value();
                             log_In_Session.Customer_ID = result;
-                            log_In_Session.Expiration_Date = DateTime.Now.AddHours(18);
+                            log_In_Session.Expiration_Date = Convert.ToInt64(DateTime.Now.AddHours(18).ToString("yyyyMMddHHmm"));
 
                             // GENERATE AND INSERT A LOG IN SESSION KEY IN THE DATABASE
                             string? log_in_key = await Shared_Data.log_in_session.Insert<string>(log_In_Session);

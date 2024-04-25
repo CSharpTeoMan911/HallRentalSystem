@@ -4,6 +4,7 @@ using HallRentalSystem.Classes.API_Parameters;
 using HallRentalSystem.Classes.Models;
 using HallRentalSystem.Classes.StructuralAndBehavioralElements.Firebase;
 using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
+using System.Globalization;
 using System.Security.Cryptography.Xml;
 
 namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authentication
@@ -72,7 +73,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
 
                             if (deserialised_log_in_session_key != null)
                             {
-                                if (DateTime.Now >= deserialised_log_in_session_key.Expiration_Date == false)
+                                if ((Convert.ToInt64(DateTime.Now.ToString("yyyyMMddHHmm")) >= deserialised_log_in_session_key.Expiration_Date) == false)
                                 {
                                     Tuple<string, Type> hashed_key = await Sha512Hasher.Hash(key.log_in_session_key);
 
@@ -189,7 +190,6 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
                                     // POST THE "Log_In_Session_ID_Value" OBJECT IN THE DATABASE NODE THAT STORES LOG IN SESSION KEYS 
                                     FirebaseObject<Log_In_Session_ID_Value> post_result = await reference.PostAsync(data);
 
-
                                     // CREATE A FIREBASE KEY OBJECT 
                                     FirebaseKey key = new FirebaseKey();
 
@@ -232,6 +232,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
             }
             catch (Exception E)
             {
+                Console.WriteLine(E.Message);
                 // CREATE ERROR LOGGING 
                 return (ReturnType)(object)"Internal server error";
             }

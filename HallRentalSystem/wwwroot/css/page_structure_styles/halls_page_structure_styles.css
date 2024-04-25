@@ -25,17 +25,21 @@ div.halls_container {
     width: 100%;
     height: 100%;
     overflow-y: auto;
-    background: linear-gradient(to right, white, #f5f5f5);
+    background: linear-gradient(to right, rgba(168,168,168,0.8), rgba(131,131,131, 0.8));
 }
 
 div.hall_element {
-    padding:15px;
+    padding: 15px;
     display: inline-block;
-    align-self:center;
-    width: 100%;
+    align-self: center;
+    width: 90%;
     height: fit-content;
     background: linear-gradient(to right, white, #f5f5f5);
-    border: 1px solid black;
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 0, .3);
+    border: 5px solid black;
+    border-radius: 8px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 div.hall_element_inner{
@@ -82,7 +86,8 @@ div.custom_carousel {
     justify-content: center;
     align-items: center;
     text-align: center;
-    border-radius: 10px;
+    border-radius: 6px;
+    border: solid 5px black ;
 }
 
 div.details_div{
@@ -131,9 +136,7 @@ div.date_picker {
 div.amenities_item {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 500;
-    margin-left: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin:10px;
     padding: 5px;
     color: black;
     background: linear-gradient(to right, #fafafa, #e5e5e3);
@@ -141,9 +144,9 @@ div.amenities_item {
     align-self: center;
     justify-self: center;
     text-align: center;
-    font-size: calc(6px + 1vw);
+    font-size: calc(8px + 1vw);
     font-weight:600;
-    border: 2px solid black;
+    border: 1px solid black;
     border-radius: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -181,7 +184,7 @@ div.reservation-content {
     min-width: 250px;
     max-width: 400px;
     flex-direction: column;
-    padding: calc(5px + 0.5vw);
+    padding: calc(20px + 0.5vw);
     display: flex;
     align-self: center;
     width: fit-content;
@@ -197,14 +200,19 @@ div.hour_picker_row
     align-self:center;
 }
 
+div.super_sub_section {
+    display: inline-block;
+    margin-bottom:10px;
+}
+
 div.main_sub_section {
     display: inline-block;
-    margin-bottom: 10px;
     margin-left: 20px;
 }
 
 div.sub_section {
     display: inline-block;
+    margin-bottom: 0px;
 }
 
 div.datepicker_scroller {
@@ -219,6 +227,12 @@ div.datepicker_scroller {
     overflow-x: auto;
 }
 
+div.dropdown-menu-custom {
+    position: absolute;
+    border: solid 1px black;
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 0, .5);
+}
+
 /* width */
 .datepicker_scroller::-webkit-scrollbar {
     width: 0px;
@@ -230,8 +244,9 @@ h2.element_name {
     align-self: center;
     word-wrap: break-word;
     margin-top: 2px;
-    margin-bottom: 55px;
-    font-size: calc(35px + 1vw);
+    margin-top: 10px;
+    margin-bottom: 35px;
+    font-size: calc(30px + 1vw);
     text-align: center;
     color: black;
 }
@@ -249,26 +264,6 @@ select.select-location {
     align-self: flex-end;
 }
 
-button.booking_button {
-    font-family: 'JetBrains Mono', monospace;
-    margin-top: 45px;
-    margin-bottom: 20px;
-    font-weight: 700;
-    align-self: center;
-    border-radius: 5px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 25px;
-    padding-right: 25px;
-    font-size: calc(16px + 1vw);
-    color: white;
-    -webkit-text-stroke: 0.8px #212121;
-    text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
-    background: linear-gradient(to right, green, #34ca01);
-    border-width: 0px;
-    border: 2px solid black;
-}
-
 p.propriety_label {
     font-family: 'JetBrains Mono', monospace;
     font-weight: 700;
@@ -277,6 +272,8 @@ p.propriety_label {
     align-self: center;
     justify-self: center;
     color: black;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 p.value_label {
@@ -288,6 +285,8 @@ p.value_label {
     word-break: break-word;
     color: #343434;
     margin-left: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 p.price_unit {
@@ -324,6 +323,26 @@ p.total_price {
 
 input.datetime {
     align-self: center;
+}
+
+button.booking_button {
+    font-family: 'JetBrains Mono', monospace;
+    margin-top: 45px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    align-self: center;
+    border-radius: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-size: calc(16px + 1vw);
+    color: white;
+    -webkit-text-stroke: 0.8px #212121;
+    text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
+    background: linear-gradient(to right, #b1b1b1, #787878);
+    border-width: 0px;
+    border: 2px solid black;
 }
 
 button.hour_item {
@@ -366,3 +385,18 @@ button.clear_dates {
     margin-bottom:20px;
     border:solid 1px black;
 }
+
+button.dropdown_amenities_button {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    margin-left: 20px;
+    font-size: calc(12px + 1vw);
+    color: white;
+    background: linear-gradient(to right, #555555, #2a2a2a);
+    border-width: 0px;
+    border: solid 1px black;
+    border-radius: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
