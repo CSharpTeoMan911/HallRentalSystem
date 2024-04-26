@@ -1,0 +1,10 @@
+﻿@using HallRentalSystem.Classes.StructuralAndBehavioralElements.Stripe_Payment
+
+<div>
+
+</div>
+<iframe width="560" height="315" src="@payment_session_result?.redirection_url" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+@code {
+    [Parameter] public PaymentSessionResult? payment_session_result { get; set; }
+}

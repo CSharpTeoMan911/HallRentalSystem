@@ -41,8 +41,7 @@ namespace HallRentalSystem
             builder.Services.AddSwaggerGen();
             builder.Services.AddMvcCore().AddApiExplorer();
             builder.Services.AddControllers();
-            
-
+        
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
