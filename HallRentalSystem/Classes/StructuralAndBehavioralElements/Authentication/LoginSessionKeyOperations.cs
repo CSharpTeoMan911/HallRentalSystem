@@ -87,7 +87,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
                                             }
                                             else
                                             {
-                                                return (ReturnType)(object)"Internal server error";
+                                                return (ReturnType)(object)"Invalid login session key";
                                             }
                                         }
                                         else
@@ -116,7 +116,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
                             }
                             else
                             {
-                                return (ReturnType)(object)"Internal server error";
+                                return (ReturnType)(object)"Invalid login session key";
                             }
                         }
                         else
@@ -135,7 +135,7 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Authenticatio
                 }
             }
             catch (Exception E)
-            {
+            { 
                 // CREATE ERROR LOGGING 
                 return (ReturnType)(object)"Internal server error";
             }
