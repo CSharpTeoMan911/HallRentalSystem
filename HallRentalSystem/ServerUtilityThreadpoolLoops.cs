@@ -62,7 +62,7 @@ namespace HallRentalSystem
                 {
                     ChildQuery? reference = Firebase_Database.firebaseClient?.Child("Pending_Transactions/Pending_Transaction_ID");
 
-                    FilterQuery? query = reference.OrderBy("Expiration_Date").EndAt(Convert.ToInt64(DateTime.Now.ToString("yyyyMMddHHmm"))).LimitToFirst(1);
+                    FilterQuery? query = reference.OrderBy("Expiration_Date").EndAt(Convert.ToInt64(DateTime.Now.ToString("yyyyMMddHHmm"))).LimitToFirst(1000);
 
                     Pending_Transactions? values = Newtonsoft.Json.JsonConvert.DeserializeObject<Pending_Transactions>(await query.OnceAsJsonAsync());
 
@@ -71,6 +71,33 @@ namespace HallRentalSystem
 
                     if (Firebase_Database.firebaseClient != null)
                         values?.Keys.ToList().ForEach(async key => await Firebase_Database.firebaseClient.Child("Pending_Transactions/Pending_Transaction_ID/" + key).DeleteAsync());
+
+                }
+
+            }
+            catch (Exception E) { }
+
+            return true;
+        }
+
+
+        private async Task<bool> RemoveExpiredTotalBookingDates()
+        {
+            try
+            {
+                while (true)
+                {
+                    ChildQuery? reference = Firebase_Database.firebaseClient?.Child("Total_Booking_Dates");
+
+                    FilterQuery? query = reference.OrderBy("Booking_Dates").EndAt(Convert.ToInt64(DateOnly.FromDateTime(DateTime.Now).ToString("yyyyMMdd"))).LimitToFirst(1000);
+
+                    //Total_Booking_Dates? values = Newtonsoft.Json.JsonConvert.DeserializeObject<Total_Booking_Dates>(await query.OnceAsJsonAsync());
+
+                    //if (values == null)
+                    //    break;
+
+                    //if (Firebase_Database.firebaseClient != null)
+                    //    values?.Keys.ToList().ForEach(async key => await Firebase_Database.firebaseClient.Child("Pending_Transactions/Pending_Transaction_ID/" + key).DeleteAsync());
 
                 }
 
