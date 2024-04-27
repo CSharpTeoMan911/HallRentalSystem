@@ -7,36 +7,47 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
     {
         public static async Task<string> VerifyIfBookingIsValid(List<DateOnly> rental_dates, string hall_id)
         {
-            string result = "Booking verification successful";
-
             string? serialised_reserved_dates = await Shared_Data.total_bookings.Get<string>(hall_id);
+
 
             if (serialised_reserved_dates != "Internal server error" && serialised_reserved_dates != null)
             {
-                Total_Booking_Dates_Values? reserved_dates = Newtonsoft.Json.JsonConvert.DeserializeObject<Total_Booking_Dates_Values>(serialised_reserved_dates);
+                Total_Booking_Dates? reserved_dates = Newtonsoft.Json.JsonConvert.DeserializeObject<Total_Booking_Dates>(serialised_reserved_dates);
 
                 if (reserved_dates != null)
                 {
-                    foreach (long Date in reserved_dates.Keys)
+                    foreach (string key in reserved_dates.Keys)
                     {
-                        foreach (DateOnly date in rental_dates)
+                        Total_Booking_Dates_Values? total_Booking_Dates_Values = new Total_Booking_Dates_Values();
+                        reserved_dates.TryGetValue(key, out total_Booking_Dates_Values);
+
+                        if (total_Booking_Dates_Values != null)
                         {
-                            if (Convert.ToInt64(date.ToString("yyyyMMdd")) == Date)
+                            foreach (DateOnly date in rental_dates)
                             {
-                                result = "Internal server error";
-                                break;
+                                if (Convert.ToInt64(date.ToString("yyyyMMdd")) == total_Booking_Dates_Values.Booking_Date)
+                                {
+                                    return "Date already in use";
+                                }
                             }
                         }
+                        else
+                        {
+                            return "Internal server error";
+                        }
                     }
-                }
 
+                    return "Booking verification successful";
+                }
+                else
+                {
+                    return "Booking verification successful";
+                }
             }
             else
             {
-                result = "Internal server error";
+                return "Internal server error";
             }
-
-            return result;
         }
     }
 }

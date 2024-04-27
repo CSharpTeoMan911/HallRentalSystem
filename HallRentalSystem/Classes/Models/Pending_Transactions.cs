@@ -7,7 +7,7 @@
         public string? Customer_ID { get; set; }
         public string? Hall_ID { get; set; }
         public long Amount { get; set; }
-        public List<DateOnly>? Rental_Dates { get; set; }
+        public List<long>? Rental_Dates { get; set; }
     }
 
     public class Pending_Transactions:Dictionary<string, Pending_Transactions_Values> { }
