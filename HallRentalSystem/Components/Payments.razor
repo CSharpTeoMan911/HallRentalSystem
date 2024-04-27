@@ -111,6 +111,7 @@
                 }
                 else
                 {
+                    Console.WriteLine(paymentMethodResult);
                     notificationSystem?.Invoke(Shared_Data.BookingError.PaymentError);
                 }
             }
@@ -125,12 +126,16 @@
 
                     StringBuilder url_builder = new StringBuilder("/booking/insert-booking?");
 
+                    StringBuilder return_uri_builder = new StringBuilder();
+                    return_uri_builder.Append(NavigationManager.BaseUri);
+                    return_uri_builder.Append("/stripe-payment-confirmation");
 
                     Booking_Parameters parameters = new Booking_Parameters();
                     parameters.Hall_ID = hall_id;
                     parameters.stripe_payment_method = paymentMethodResult;
                     parameters.rental_dates = SelectedDates;
                     parameters.key = key;
+                    parameters.return_uri = return_uri_builder.ToString();
 
                     string formatted_url_parameters = await Query_Formater.ObjectQueryFormatter(parameters);
                     url_builder.Append(formatted_url_parameters);
@@ -167,6 +172,7 @@
                                                         paymentSystem?.Invoke(Shared_Data.PaymentStatus.RequiresAction, paymentResult);
                                                         break;
                                                     default:
+                                                        notificationSystem?.Invoke(Shared_Data.BookingError.PaymentError);
                                                         break;
                                                 }
                                             }

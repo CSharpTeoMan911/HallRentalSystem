@@ -1,10 +1,31 @@
-﻿@using HallRentalSystem.Classes.StructuralAndBehavioralElements.Stripe_Payment
+﻿@using HallRentalSystem.Classes.StructuralAndBehavioralElements.Stripe_Payment;
+@using System.Text;
 
 <div>
 
 </div>
-<iframe width="560" height="315" src="@payment_session_result?.redirection_url" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="@(redirection_url)" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 @code {
     [Parameter] public PaymentSessionResult? payment_session_result { get; set; }
+    private string? redirection_url { get; set; }
+
+    protected override void OnInitialized()
+    {
+        StringBuilder url_builder = new StringBuilder(payment_session_result?.redirection_url);
+        url_builder.Append("?database_key=");
+        url_builder.Append(payment_session_result?.payment_intent_id_database_key);
+
+        Console.WriteLine(payment_session_result?.payment_intent_id_database_key);
+
+        redirection_url = url_builder.ToString();
+
+        base.OnInitialized();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+        Console.WriteLine(redirection_url);
+    }
 }

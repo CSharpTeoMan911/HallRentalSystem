@@ -3,6 +3,7 @@ using Firebase.Database.Query;
 using HallRentalSystem.Classes.Models;
 using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 using HallRentalSystem.Classes.StructuralAndBehavioralElements.Firebase;
+using Newtonsoft.Json.Linq;
 using System.Text;
 
 namespace HallRentalSystem
@@ -25,6 +26,7 @@ namespace HallRentalSystem
         {
             await RemoveExpiredLogInSessionKeys();
             await RemoveExpiredPendingTransactions();
+            await RemoveExpiredTotalBookingDates();
         }
 
         private async Task<bool> RemoveExpiredLogInSessionKeys()
@@ -87,18 +89,37 @@ namespace HallRentalSystem
             {
                 while (true)
                 {
-                    ChildQuery? reference = Firebase_Database.firebaseClient?.Child("Total_Booking_Dates");
+                    ChildQuery? reference = Firebase_Database.firebaseClient?.Child("Total_Booking_Dates_Keys/Total_Booking_Dates_Keys_ID");
+                    FilterQuery? query = reference.OrderBy("Booking_Date").EndAt(Convert.ToInt64(DateTime.Now.AddDays(-1).ToString("yyyyMMdd"))).LimitToFirst(1000);
 
-                    FilterQuery? query = reference.OrderBy("Booking_Dates").EndAt(Convert.ToInt64(DateOnly.FromDateTime(DateTime.Now).ToString("yyyyMMdd"))).LimitToFirst(1000);
+                    Total_Booking_Dates_Keys? values = Newtonsoft.Json.JsonConvert.DeserializeObject<Total_Booking_Dates_Keys>(await query.OnceAsJsonAsync());
 
-                    //Total_Booking_Dates? values = Newtonsoft.Json.JsonConvert.DeserializeObject<Total_Booking_Dates>(await query.OnceAsJsonAsync());
+                    if (values == null)
+                        break;
 
-                    //if (values == null)
-                    //    break;
+                    if (Firebase_Database.firebaseClient != null)
+                        values?.Keys.ToList().ForEach(async (key) =>
+                        {
+                            Total_Booking_Dates_Keys_Values? total_Booking_Dates_Keys_Values = null;
+                            values.TryGetValue(key, out total_Booking_Dates_Keys_Values);
 
-                    //if (Firebase_Database.firebaseClient != null)
-                    //    values?.Keys.ToList().ForEach(async key => await Firebase_Database.firebaseClient.Child("Pending_Transactions/Pending_Transaction_ID/" + key).DeleteAsync());
+                            if(total_Booking_Dates_Keys_Values != null)
+                            {
+                                StringBuilder query_builder = new StringBuilder();
+                                query_builder.Append("Total_Booking_Dates/");
+                                query_builder.Append(total_Booking_Dates_Keys_Values.Hall_ID);
+                                query_builder.Append("/Booking_Dates/");
+                                query_builder.Append(total_Booking_Dates_Keys_Values.Total_Booking_Dates_Child_Database_Key);
 
+                                await Firebase_Database.firebaseClient.Child(query_builder.ToString()).DeleteAsync();
+
+                                query_builder.Clear();
+                                query_builder.Append("Total_Booking_Dates_Keys/Total_Booking_Dates_Keys_ID/");
+                                query_builder.Append(key);
+
+                                await Firebase_Database.firebaseClient.Child(query_builder.ToString()).DeleteAsync();
+                            }
+                        });
                 }
 
             }

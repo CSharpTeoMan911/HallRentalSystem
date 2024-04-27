@@ -6,5 +6,6 @@
         public string? stripe_payment_method { get; set; }
         public List<DateOnly>? rental_dates { get; set; }
         public FirebaseKey? key { get; set; }
+        public string? return_uri { get; set; }
     }
 }

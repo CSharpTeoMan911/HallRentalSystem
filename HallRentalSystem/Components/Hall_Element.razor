@@ -376,13 +376,18 @@
 
             if (serialised_dates != null)
             {
-                Total_Booking_Dates_Values? values = Newtonsoft.Json.JsonConvert.DeserializeObject<Total_Booking_Dates_Values>(serialised_dates);
+                Total_Booking_Dates? values = Newtonsoft.Json.JsonConvert.DeserializeObject<Total_Booking_Dates>(serialised_dates);
 
                 if (values != null)
-                    foreach (long date in values.Keys)
+                    foreach (string key in values.Keys)
                     {
-                        DateOnly disabled_date = DateOnly.ParseExact(Convert.ToString(date), "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
-                        disabled_dates.Add(disabled_date);
+                        Total_Booking_Dates_Values? value = null;
+                        values.TryGetValue(key, out value);
+                        if(value != null)
+                        {
+                            DateOnly disabled_date = DateOnly.ParseExact(Convert.ToString(value.Booking_Date), "yyyyMMdd", System.Globalization.CultureInfo.InvariantCulture);
+                            disabled_dates.Add(disabled_date);
+                        }
                     }
             }
         }
