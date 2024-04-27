@@ -1,0 +1,30 @@
+﻿@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+@using Microsoft.AspNetCore.WebUtilities;
+@using Microsoft.Extensions.Primitives
+@inject NavigationManager NavigationManager;
+@page "/stripe-payment-confirmation";
+
+
+@code {
+
+    [Parameter]
+    public string? database_key { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Console.WriteLine("Absolute uri: " + NavigationManager.Uri);
+
+        StringValues query_parameters = new StringValues();
+
+        QueryHelpers.ParseQuery(NavigationManager.Uri).TryGetValue("database_key", out query_parameters);
+        string? database_key = query_parameters.ElementAt(0);
+
+        Console.WriteLine("Database key: " + database_key);
+
+        base.OnAfterRender(firstRender);
+
+        HttpClient client = Shared_Data.GenerateHttpCLient();
+        client.BaseAddress = new Uri(NavigationManager.BaseUri);
+
+    }
+}

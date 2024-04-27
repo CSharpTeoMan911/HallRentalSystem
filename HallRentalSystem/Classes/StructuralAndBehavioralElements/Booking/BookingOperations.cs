@@ -111,7 +111,13 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
                                                         pending_Transactions_Values.Payment_Intent_ID = stripe_payment_result?.payment_intent?.Id;
                                                         pending_Transactions_Values.Expiration_Date = Convert.ToInt64(current_date_time.ToString("yyyyMMddHHmm"));
                                                         pending_Transactions_Values.Customer_ID = log_in_session_key_verification_result;
-                                                        pending_Transactions_Values.Rental_Dates = data.rental_dates;
+                                                        pending_Transactions_Values.Rental_Dates = new List<long>();
+
+                                                        foreach (DateOnly date in data.rental_dates)
+                                                        {
+                                                            pending_Transactions_Values.Rental_Dates.Add(Convert.ToInt64(date.ToString("yyyyMMdd")));
+                                                        }
+
                                                         pending_Transactions_Values.Hall_ID = data.Hall_ID;
                                                         pending_Transactions_Values.Amount = deserialised_values.Price * data.rental_dates.Count;
 
