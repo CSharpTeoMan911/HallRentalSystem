@@ -1,6 +1,9 @@
-﻿using Firebase.Database.Query;
+﻿using Firebase.Database;
+using Firebase.Database.Query;
 using HallRentalSystem.Classes.API_Parameters;
+using HallRentalSystem.Classes.Models;
 using HallRentalSystem.Classes.StructuralAndBehavioralElements.Firebase;
+using Microsoft.Extensions.Primitives;
 using System.Text;
 
 namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
@@ -75,10 +78,28 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
                                 query_builder.Append("Total_Booking_Dates/");
                                 query_builder.Append(data.Hall_ID);
                                 query_builder.Append("/Booking_Dates/");
-                                query_builder.Append(date.ToString("yyyyMMdd"));
+
+                                Total_Booking_Dates_Values total_Booking_Dates_Values = new Total_Booking_Dates_Values();
+                                total_Booking_Dates_Values.Booking_Date = Convert.ToInt64(date.ToString("yyyyMMdd"));
 
                                 ChildQuery? total_dates_database_reference = Firebase_Database.firebaseClient?.Child(query_builder.ToString());
-                                await total_dates_database_reference.PostAsync(true);
+                                FirebaseObject<Total_Booking_Dates_Values>? query_result = await total_dates_database_reference.PostAsync(total_Booking_Dates_Values);
+                                
+                                if(query_result != null)
+                                {
+                                    Total_Booking_Dates_Keys_Values total_Booking_Dates_Keys_Values = new Total_Booking_Dates_Keys_Values();
+                                    total_Booking_Dates_Keys_Values.Total_Booking_Dates_Child_Database_Key = query_result.Key;
+                                    total_Booking_Dates_Keys_Values.Booking_Date = Convert.ToInt64(date.ToString("yyyyMMdd"));
+                                    total_Booking_Dates_Keys_Values.Hall_ID = data.Hall_ID;
+
+                                    ChildQuery? total_dates_database_keys_reference = Firebase_Database.firebaseClient?.Child("Total_Booking_Dates_Keys/Total_Booking_Dates_Keys_ID");
+                                    await total_dates_database_keys_reference.PostAsync(total_Booking_Dates_Keys_Values);
+                                }
+                                else
+                                {
+                                    result = "Internal server error";
+                                }
+
                             }
                         }
                         else
@@ -123,10 +144,28 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
                                 query_builder.Append("Total_Booking_Dates/");
                                 query_builder.Append(data.Hall_ID);
                                 query_builder.Append("/Booking_Dates/");
-                                query_builder.Append(date.ToString("yyyyMMdd"));
+
+                                Total_Booking_Dates_Values total_Booking_Dates_Values = new Total_Booking_Dates_Values();
+                                total_Booking_Dates_Values.Booking_Date = Convert.ToInt64(date.ToString("yyyyMMdd"));
 
                                 ChildQuery? total_dates_database_reference = Firebase_Database.firebaseClient?.Child(query_builder.ToString());
-                                await total_dates_database_reference.PostAsync(true);
+                                FirebaseObject<Total_Booking_Dates_Values>? query_result = await total_dates_database_reference.PostAsync(total_Booking_Dates_Values);
+
+                                if (query_result != null)
+                                {
+                                    Total_Booking_Dates_Keys_Values total_Booking_Dates_Keys_Values = new Total_Booking_Dates_Keys_Values();
+                                    total_Booking_Dates_Keys_Values.Total_Booking_Dates_Child_Database_Key = query_result.Key;
+                                    total_Booking_Dates_Keys_Values.Booking_Date = Convert.ToInt64(date.ToString("yyyyMMdd"));
+                                    total_Booking_Dates_Keys_Values.Hall_ID = data.Hall_ID;
+
+                                    ChildQuery? total_dates_database_keys_reference = Firebase_Database.firebaseClient?.Child("Total_Booking_Dates_Keys/Total_Booking_Dates_Keys_ID");
+                                    await total_dates_database_keys_reference.PostAsync(total_Booking_Dates_Keys_Values);
+                                }
+                                else
+                                {
+                                    result = "Internal server error";
+                                }
+
                             }
                         }
                         else

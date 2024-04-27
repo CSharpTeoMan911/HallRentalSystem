@@ -340,7 +340,7 @@ button.booking_button {
     color: white;
     -webkit-text-stroke: 0.8px #212121;
     text-shadow: calc(1px + 0.03vw) calc(1px + 0.05vw) 1px black;
-    background: linear-gradient(to right, #b1b1b1, #787878);
+    background: linear-gradient(to right, #d3d1d1, #adadad);
     border-width: 0px;
     border: 2px solid black;
 }
