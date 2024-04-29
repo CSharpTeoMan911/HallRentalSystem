@@ -544,7 +544,7 @@ function BookingElementResize() {
             let hall_element = hall_elements[i];
 
             // IF THE WIDTH OF THE HALLS CONTAINER IS LESS THAN 1400px
-            if (window.screen.width < 400) {
+            if (window.screen.width < 350) {
 
                 if (hall_element.style.width != "99.9%") {
                     hall_element.style.width = "99.9%";
