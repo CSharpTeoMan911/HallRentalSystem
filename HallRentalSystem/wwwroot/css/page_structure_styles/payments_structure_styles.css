@@ -68,6 +68,11 @@ div.payment_detail_input_div {
     margin-top: 10px;
 }
 
+div.payment_confirmation_page_skeleton {
+    display:flex;
+    flex-direction: column;
+}
+
 img.graphical_effect {
     height: 80px;
     width: 80px;
