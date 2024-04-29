@@ -7,20 +7,23 @@
 @inject ProtectedLocalStorage LocalStorage;
 @inject IJSRuntime JS;
 
-<nav id="main_nav" class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" style="margin-left:20px;font-size:28px;" href="/" @onclick=@(()=>OnPageNavigation(false))>Hall Rentals</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation" style="margin-left:20px;margin-right:20px;">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav" style="margin-left:20px;">
-            <a id="/" style="font-size:23px;" class="nav-link active" @onclick=@(()=>OnPageNavigation(false)) href="/">Home</a>
-            <a id="/book" style="font-size:23px;" class="nav-link" @onclick=@(()=>OnPageNavigation(false)) href="/book">Booking</a>
-            <a id="/contacts" style="font-size:23px;" class="nav-link" @onclick=@(()=>OnPageNavigation(false)) href="/contacts">Contacts</a>
-            <a id="/auth" style="font-size:23px;" class="nav-link" href="/" @onclick=@(()=>OnPageNavigation(true))>@authentication_state</a>
+@if (Navigation_Manager.ToBaseRelativePath(Navigation_Manager.Uri).IndexOf("stripe-payment-confirmation") == -1)
+{
+    <nav id="main_nav" class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" style="margin-left:20px;font-size:28px;" href="/" @onclick=@(()=>OnPageNavigation(false))>Hall Rentals</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation" style="margin-left:20px;margin-right:20px;">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav" style="margin-left:20px;">
+                <a id="/" style="font-size:23px;" class="nav-link active" @onclick=@(()=>OnPageNavigation(false)) href="/">Home</a>
+                <a id="/book" style="font-size:23px;" class="nav-link" @onclick=@(()=>OnPageNavigation(false)) href="/book">Booking</a>
+                <a id="/contacts" style="font-size:23px;" class="nav-link" @onclick=@(()=>OnPageNavigation(false)) href="/contacts">Contacts</a>
+                <a id="/auth" style="font-size:23px;" class="nav-link" href="/" @onclick=@(()=>OnPageNavigation(true))>@authentication_state</a>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
+}
 
 @code{
     public enum AuthState
