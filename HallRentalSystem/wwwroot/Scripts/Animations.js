@@ -55,7 +55,7 @@ export function SetBackgroundImage() {
 //
 // [ BEGIN ]
 
-function GradientFluctuationAnimationImplementation(element_id, initial_gradient, final_gradient) {
+async function GradientFluctuationAnimationImplementation(element_id, initial_gradient, final_gradient) {
     // GET THE HTML ELEMENT ON WHICH THE GRADIENT FLUCTUATION WILL BE APPLIED
     let element = document.getElementById(element_id);
 
@@ -86,16 +86,16 @@ function GradientFluctuationAnimationImplementation(element_id, initial_gradient
 }
 
 // CLEAR THE INTERVAL THAT CALLS "GradientFluctuationAnimationImplementation" FUNCTION AT A CERTAIN INTERVAL
-export function GradientFluctuationAnimationCancellation() {
+export async function GradientFluctuationAnimationCancellation() {
     if (gradient_fluctuation_interval !== undefined) {
-        clearInterval(gradient_fluctuation_interval);
+        await clearInterval(gradient_fluctuation_interval);
     }
 }
 
 // SET THE "GradientFluctuationAnimationImplementation" FUNCTION TO BE CALLED AT A CERTAIN INTERVAL
-export function GradientFluctuationAnimation(element_id, initial_gradient, final_gradient, interval) {
+export async function GradientFluctuationAnimation(element_id, initial_gradient, final_gradient, interval) {
     current_gradient = initial_gradient;
-    gradient_fluctuation_interval = setInterval(() => { GradientFluctuationAnimationImplementation(element_id, initial_gradient, final_gradient); }, interval);
+    gradient_fluctuation_interval = await setInterval(async() => { await GradientFluctuationAnimationImplementation(element_id, initial_gradient, final_gradient); }, interval);
 }
 
 // [ END ]
@@ -116,7 +116,7 @@ export function GradientFluctuationAnimation(element_id, initial_gradient, final
 // ELEMENT EXPANSION ANIMATION
 //
 // [ BEGIN ]
-function ExpansionAnimationImplementation(element_id, max_width, size_unit) {
+async function ExpansionAnimationImplementation(element_id, max_width, size_unit) {
     // GET THE HTML ELEMENT ON WHICH THE EXPANSION ANIMATION WILL BE APPLIED
     let element = document.getElementById(element_id);
 
@@ -129,23 +129,23 @@ function ExpansionAnimationImplementation(element_id, max_width, size_unit) {
         }
         else
         {
-            clearInterval(expansion_animation_interval);
+            await ClearExpansionAnimation();
         }
         current_width++;
     }
 }
 
 // CLEAR THE INTERVAL THAT CALLS "ExpansionAnimation" FUNCTION AT A CERTAIN INTERVAL
-export function ClearExpansionAnimation() {
+export async function ClearExpansionAnimation() {
     if (expansion_animation_interval !== undefined) {
-        clearInterval(expansion_animation_interval);
+        await clearInterval(expansion_animation_interval);
     }
 }
 
 // SET THE "ExpansionAnimation" FUNCTION TO BE CALLED AT A CERTAIN INTERVAL
-export function ExpansionAnimation(element_id, max_width, interval, size_unit) {
+export async function ExpansionAnimation(element_id, max_width, interval, size_unit) {
     current_width = 0;
-    expansion_animation_interval = setInterval(() => { ExpansionAnimationImplementation(element_id, max_width, size_unit) }, interval);
+    expansion_animation_interval = await setInterval(async() => { await ExpansionAnimationImplementation(element_id, max_width, size_unit) }, interval);
 }
 
 // [ END ]

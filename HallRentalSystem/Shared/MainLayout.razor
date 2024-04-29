@@ -9,7 +9,7 @@
 <div id="background_image" class="main_background_image_style"></div>
 <div id="main_page_structure_div" class="main_page_structure">
     <div>
-        <NavMenu/>
+        <NavMenu />
     </div>
     <main>
         <div class="page_content_structure">
@@ -21,155 +21,159 @@
         </div>
     </main>
 </div>
-@code{
+@code {
 
-    private async void InitiateAnimations()
+    private async Task<bool> InitiateAnimations()
     {
-        try
-        {
-            // IMPORT THE "Animations.js" MODULE AND SAVE ITS REFERENCE IN AN "IJSObjectReference"
-            IJSObjectReference animations_module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
-
-            // IF THE "IJSObjectReference" OBJECT IS NOT NULL
-            if (animations_module != null)
+        for (int i = 0; i < 10; i++)
+            try
             {
-                // INVOKE THE NECESARY ANIMATIONS METHODS
-                //
-                // [ BEGIN ]
+                // IMPORT THE "Animations.js" MODULE AND SAVE ITS REFERENCE IN AN "IJSObjectReference"
+                IJSObjectReference animations_module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Animations.js");
 
-                try
+                // IF THE "IJSObjectReference" OBJECT IS NOT NULL
+                if (animations_module != null)
                 {
-                    IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
-                    await module.InvokeAsync<string>("ChangeNavState");
-                }
-                catch{ }
+                    // INVOKE THE NECESARY ANIMATIONS METHODS
+                    //
+                    // [ BEGIN ]
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("SetBookingElementResize");
-                }
-                catch { }
+                    try
+                    {
+                        IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+                        await module.InvokeAsync<string>("ChangeNavState");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("ClearBookingElementsContainerResize");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("SetBookingElementResize");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("SetBackgroundImage");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("ClearBookingElementsContainerResize");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("GradientFluctuationAnimationCancellation");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("SetBackgroundImage");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("Clear_Background_Image_Sizing");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("GradientFluctuationAnimationCancellation");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("ClearExpansionAnimation", "main_page_structure_div");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("Clear_Background_Image_Sizing");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("Clear_Set_Button_Focus_Effect", "button_cover_1");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("ClearExpansionAnimation", "main_page_structure_div");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("Clear_Set_Button_Focus_Effect", "button_cover_2");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("Clear_Set_Button_Focus_Effect", "button_cover_1");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("Clear_Resize_Home_Page_Elements");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("Clear_Set_Button_Focus_Effect", "button_cover_2");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("Clear_Resize_Contacts_Page_Elemets");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("Clear_Resize_Home_Page_Elements");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("ClearAuthGradientFluctuation");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("Clear_Resize_Contacts_Page_Elemets");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("SetBookingElementResize");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("ClearAuthGradientFluctuation");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("ExpansionAnimation", "index_page_jumbotron", "90", "10", "%");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("SetBookingElementResize");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("GradientFluctuationAnimation", "main_page_structure_div", "40", "65", "50");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("ExpansionAnimation", "index_page_jumbotron", "90", "10", "%");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("SetBookingElementsContainerResize");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("GradientFluctuationAnimation", "main_page_structure_div", "40", "65",
+                        "50");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("Set_Background_Image_Sizing");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("SetBookingElementsContainerResize");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("Set_Resize_Home_Page_Elements");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("Set_Background_Image_Sizing");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("Set_Resize_Contacts_Page_Elemets");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("Set_Resize_Home_Page_Elements");
+                    }
+                    catch { }
 
-                try
-                {
-                    await animations_module.InvokeAsync<string>("SetAuthGradientFluctuation");
-                }
-                catch { }
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("Set_Resize_Contacts_Page_Elemets");
+                    }
+                    catch { }
 
-                // [ END ]
+                    try
+                    {
+                        await animations_module.InvokeAsync<string>("SetAuthGradientFluctuation");
+                    }
+                    catch { }
+
+                    // [ END ]
+                }
             }
-        }
-        catch { }
+            catch { }
     }
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override async Task<bool> OnAfterRenderAsync(bool firstRender)
     {
-        base.OnAfterRender(firstRender);
+        await base.OnAfterRenderAsync(firstRender);
+
         if (Program.Is_API_Testing_Mode == true)
             Navigation_Manager.NavigateTo("/swagger/index.html", forceLoad: true);
-        InitiateAnimations();
-    }
 
+        InitiateAnimations();
+        return true;
+    }
 }
