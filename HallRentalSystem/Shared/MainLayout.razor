@@ -96,7 +96,7 @@
         if (Program.Is_API_Testing_Mode == true)
             Navigation_Manager.NavigateTo("/swagger/index.html", forceLoad: true);
 
-        InitiateAnimations();
+        await InitiateAnimations();
         return true;
     }
 }
