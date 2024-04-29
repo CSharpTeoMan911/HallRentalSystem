@@ -1,30 +1,45 @@
 ﻿@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
 @using Microsoft.AspNetCore.WebUtilities;
-@using Microsoft.Extensions.Primitives
+@using Microsoft.Extensions.Primitives;
+@using System.Text;
 @inject NavigationManager NavigationManager;
+@inject IJSRuntime JS;
 @page "/stripe-payment-confirmation";
 
 
+
 @code {
-
-    [Parameter]
-    public string? database_key { get; set; }
-
-    protected override void OnAfterRender(bool firstRender)
+    protected override async void OnAfterRender(bool firstRender)
     {
-        Console.WriteLine("Absolute uri: " + NavigationManager.Uri);
+        try
+        {
+            IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+            string database_key_value = await module.InvokeAsync<string>("StripeCache", null, "Get");
 
-        StringValues query_parameters = new StringValues();
+            StringBuilder url_builder = new StringBuilder("/stripe/get");
+            url_builder.Append("?data=");
+            url_builder.Append(database_key_value);
 
-        QueryHelpers.ParseQuery(NavigationManager.Uri).TryGetValue("database_key", out query_parameters);
-        string? database_key = query_parameters.ElementAt(0);
+            HttpClient client = Shared_Data.GenerateHttpCLient();
+            client.BaseAddress = new Uri(NavigationManager.BaseUri);
 
-        Console.WriteLine("Database key: " + database_key);
+            HttpResponseMessage response = await client.GetAsync(url_builder.ToString());
+            string response_message = await response.Content.ReadAsStringAsync();
 
-        base.OnAfterRender(firstRender);
+            await module.InvokeAsync<string>("StripeCache", null, "Delete");
 
-        HttpClient client = Shared_Data.GenerateHttpCLient();
-        client.BaseAddress = new Uri(NavigationManager.BaseUri);
+            if (response_message == "Payment confirmation successful")
+            {
 
+            }
+            else
+            {
+
+            }
+        }
+        catch (Exception E)
+        {
+            Console.WriteLine("Error: " + E.Message);
+        }
     }
 }
