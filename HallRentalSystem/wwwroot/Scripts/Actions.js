@@ -54,6 +54,19 @@ export function AuthCache(key, option){
     }
 }
 
+export function StripeCache(database_id, option) {
+    switch (option) {
+        case "Insert":
+            window.localStorage.setItem("Stripe_Database_Cache", database_id);
+            break;
+        case "Delete":
+            window.localStorage.removeItem("Stripe_Database_Cache");
+            break;
+        case "Get":
+            return window.localStorage.getItem("Stripe_Database_Cache");
+    }
+}
+
 
 export function ChangeNavState() {
     let elements = document.getElementsByClassName("nav-link");
