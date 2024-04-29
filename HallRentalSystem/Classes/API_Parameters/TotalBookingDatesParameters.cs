@@ -2,7 +2,7 @@
 {
     public class TotalBookingDatesParameters
     {
-        public string Hall_ID { get; set; }
-        public List<DateOnly>? booking_dates { get; set; }
+        public string? Hall_ID { get; set; }
+        public List<long>? booking_dates { get; set; }
     }
 }
