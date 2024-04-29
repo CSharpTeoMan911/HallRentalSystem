@@ -75,7 +75,13 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
 
                                                         Booking_ID_Value booking = new Booking_ID_Value();
                                                         booking.Customer_ID = log_in_session_key_verification_result;
-                                                        booking.Rental_Dates = data.rental_dates;
+                                                        booking.Rental_Dates = new List<long>();
+
+                                                        foreach (DateOnly date in data.rental_dates)
+                                                        {
+                                                            booking.Rental_Dates?.Add(Convert.ToInt64(date.ToString("yyyyMMdd")));
+                                                        }
+
                                                         booking.Hall_ID = data.Hall_ID;
                                                         booking.Amount = deserialised_values.Price * data.rental_dates.Count;
                                                         booking.Payment_Intent_ID = stripe_payment_result?.payment_intent?.Id;
@@ -87,7 +93,13 @@ namespace HallRentalSystem.Classes.StructuralAndBehavioralElements.Booking
 
 
                                                         TotalBookingDatesParameters totalBookingDates = new TotalBookingDatesParameters();
-                                                        totalBookingDates.booking_dates = data.rental_dates;
+                                                        totalBookingDates.booking_dates = new List<long>();
+
+                                                        foreach (DateOnly date in data.rental_dates)
+                                                        {
+                                                            totalBookingDates.booking_dates?.Add(Convert.ToInt64(date.ToString("yyyyMMdd")));
+                                                        }
+
                                                         totalBookingDates.Hall_ID = data.Hall_ID;
 
 
