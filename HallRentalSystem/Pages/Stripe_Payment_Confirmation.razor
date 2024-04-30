@@ -1,4 +1,6 @@
-﻿@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+﻿@using HallRentalSystem.Classes.API_Parameters
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements;
+@using HallRentalSystem.Classes.StructuralAndBehavioralElements.Formaters;
 @using Microsoft.AspNetCore.WebUtilities;
 @using Microsoft.Extensions.Primitives;
 @using System.Text;
@@ -6,40 +8,80 @@
 @inject IJSRuntime JS;
 @page "/stripe-payment-confirmation";
 
+<div class="payment_confirmation_function_page">
+    <div class="payment_confirmation_function_page_content">
+        <img src="@payment_confirmation_image_src" class="payment_confirmation_image" />
+
+        <div class="payments_container_confirmation_result_subtitle_div">
+            <h1 class="payments_container_confirmation_result_subtitle">
+                @payments_container_confirmation_result_subtitle
+            </h1>
+        </div>
+    </div>
+</div>
 
 
 @code {
+    private string? payments_container_confirmation_result_subtitle { get; set; }
+    private string? payments_container_confirmation_result_content { get; set; }
+    private string? payment_confirmation_image_src { get; set; }
+
     protected override async void OnAfterRender(bool firstRender)
     {
-        try
-        {
-            IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
-            string database_key_value = await module.InvokeAsync<string>("StripeCache", null, "Get");
-
-            StringBuilder url_builder = new StringBuilder("/stripe/get");
-            url_builder.Append("?data=");
-            url_builder.Append(database_key_value);
-
-            HttpClient client = Shared_Data.GenerateHttpCLient();
-            client.BaseAddress = new Uri(NavigationManager.BaseUri);
-
-            HttpResponseMessage response = await client.GetAsync(url_builder.ToString());
-            string response_message = await response.Content.ReadAsStringAsync();
-
-            await module.InvokeAsync<string>("StripeCache", null, "Delete");
-
-            if (response_message == "Payment confirmation successful")
+        if(firstRender == true)
+            try
             {
+                IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+                string database_key_value = await module.InvokeAsync<string>("StripeCache", null, "Get");
+                string serialised_log_in_session_key = await module.InvokeAsync<string>("AuthCache", null, "Get");
 
+
+                FirebaseKey? log_in_session_key = null;
+                log_in_session_key = Newtonsoft.Json.JsonConvert.DeserializeObject<FirebaseKey>(serialised_log_in_session_key);
+
+
+                if (log_in_session_key != null)
+                {
+                    Payment_Parameters payment_Parameters = new Payment_Parameters();
+                    payment_Parameters.log_in_session_key = log_in_session_key;
+                    payment_Parameters.payment_intent_id_database_key = database_key_value;
+
+                    string formatted_query_parameters = await Query_Formater.ObjectQueryFormatter(payment_Parameters);
+
+                    StringBuilder url_builder = new StringBuilder("/stripe/get?");
+                    url_builder.Append(formatted_query_parameters);
+
+                    HttpClient client = Shared_Data.GenerateHttpCLient();
+                    client.BaseAddress = new Uri(NavigationManager.BaseUri);
+
+                    HttpResponseMessage response = await client.GetAsync(url_builder.ToString());
+                    string response_message = await response.Content.ReadAsStringAsync();
+
+                    await module.InvokeAsync<string>("StripeCache", null, "Delete");
+
+                    if (response_message == "Payment confirmation successful")
+                    {
+                        payment_confirmation_image_src = "./Images/green_checkmark.webp";
+                        payments_container_confirmation_result_subtitle = "Payment Successful";
+                    }
+                    else
+                    {
+                        payment_confirmation_image_src = "./Images/cross.webp";
+                        payments_container_confirmation_result_subtitle = "Payment Unsuccessful";
+                    }
+                }
+                else
+                {
+                    payment_confirmation_image_src = "./Images/cross.webp";
+                    payments_container_confirmation_result_subtitle = "Log in session key expired";
+                }
+
+                StateHasChanged();
             }
-            else
+            catch
             {
-
+                payment_confirmation_image_src = "./Images/cross.webp";
+                payments_container_confirmation_result_subtitle = "Payment Error";
             }
-        }
-        catch (Exception E)
-        {
-            Console.WriteLine("Error: " + E.Message);
-        }
     }
 }
