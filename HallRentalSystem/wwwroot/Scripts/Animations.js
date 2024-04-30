@@ -95,7 +95,7 @@ export async function GradientFluctuationAnimationCancellation() {
 // SET THE "GradientFluctuationAnimationImplementation" FUNCTION TO BE CALLED AT A CERTAIN INTERVAL
 export async function GradientFluctuationAnimation(element_id, initial_gradient, final_gradient, interval) {
     current_gradient = initial_gradient;
-    gradient_fluctuation_interval = await setInterval(async() => { await GradientFluctuationAnimationImplementation(element_id, initial_gradient, final_gradient); }, interval);
+    gradient_fluctuation_interval = await setInterval(async () => { await window.requestAnimationFrame(async() => { await GradientFluctuationAnimationImplementation(element_id, initial_gradient, final_gradient); }); }, interval);
 }
 
 // [ END ]
@@ -145,7 +145,7 @@ export async function ClearExpansionAnimation() {
 // SET THE "ExpansionAnimation" FUNCTION TO BE CALLED AT A CERTAIN INTERVAL
 export async function ExpansionAnimation(element_id, max_width, interval, size_unit) {
     current_width = 0;
-    expansion_animation_interval = await setInterval(async() => { await ExpansionAnimationImplementation(element_id, max_width, size_unit) }, interval);
+    expansion_animation_interval = await setInterval(async () => { await window.requestAnimationFrame(async () => { await ExpansionAnimationImplementation(element_id, max_width, size_unit); }); }, interval);
 }
 
 // [ END ]
@@ -167,7 +167,7 @@ export async function ExpansionAnimation(element_id, max_width, interval, size_u
 //
 // [ BEGIN ]
 
-function Background_Image_Sizing() {
+async function Background_Image_Sizing() {
     // GET THE HTML ELEMENT ON WHICH THE SIZING ANIMATION WILL BE APPLIED
     let background = document.getElementById("background_image");
 
@@ -185,15 +185,15 @@ function Background_Image_Sizing() {
 }
 
 // CLEAR THE INTERVAL THAT CALLS "Set_Background_Image_Sizing" FUNCTION AT A CERTAIN INTERVAL
-export function Clear_Background_Image_Sizing() {
+export async function Clear_Background_Image_Sizing() {
     if (background_image_sizing !== undefined) {
-        clearInterval(background_image_sizing);
+        await clearInterval(background_image_sizing);
     }
 }
 
 // SET THE "Set_Background_Image_Sizing" FUNCTION TO BE CALLED AT A CERTAIN INTERVAL
-export function Set_Background_Image_Sizing() {
-    background_image_sizing = setInterval(() => { Background_Image_Sizing(); }, 1);
+export async function Set_Background_Image_Sizing() {
+    background_image_sizing = await setInterval(async () => { await window.requestAnimationFrame(async () => { await Background_Image_Sizing(); }); }, 1);
 }
 
 // [ END ]
@@ -215,7 +215,7 @@ export function Set_Background_Image_Sizing() {
 //
 // [ START ]
 
-function Resize_Home_Page_Elements() {
+async function Resize_Home_Page_Elements() {
     // GET THE HTML ELEMENTS OF THE HOME PAGE CONTAINER
     let main_page_button_1 = document.getElementById("main_page_button_1");
     let main_page_button_2 = document.getElementById("main_page_button_2");
@@ -269,15 +269,15 @@ function Resize_Home_Page_Elements() {
 }
 
 // CLEAR THE INTERVAL THAT CALLS "Set_Resize_Home_Page_Elements" FUNCTION AT A CERTAIN INTERVAL
-export function Clear_Resize_Home_Page_Elements() {
+export async function Clear_Resize_Home_Page_Elements() {
     if (home_page_elements_resizing !== undefined) {
-        clearInterval(home_page_elements_resizing);
+        await clearInterval(home_page_elements_resizing);
     }
 }
 
 // SET THE "Set_Resize_Home_Page_Elements" FUNCTION TO BE CALLED AT A CERTAIN INTERVAL
-export function Set_Resize_Home_Page_Elements() {
-    home_page_elements_resizing = setInterval(() => { Resize_Home_Page_Elements(); }, 100);
+export async function Set_Resize_Home_Page_Elements() {
+    home_page_elements_resizing = await setInterval(async () => { await window.requestAnimationFrame(async () => { Resize_Home_Page_Elements(); }); }, 100);
 }
 
 // [ END ]
@@ -299,7 +299,7 @@ export function Set_Resize_Home_Page_Elements() {
 //
 // [ START ]
 
-function Resize_Contacts_Page_Elemets() {
+async function Resize_Contacts_Page_Elemets() {
     let contacts_page_jumbotron = document.getElementById("contacts_page_jumbotron");
     let main_container_segment_1 = document.getElementById("main_container_segment_1");
     let main_container_segment_2 = document.getElementById("main_container_segment_2");
@@ -327,14 +327,14 @@ function Resize_Contacts_Page_Elemets() {
     }
 }
 
-export function Clear_Resize_Contacts_Page_Elemets() {
+export async function Clear_Resize_Contacts_Page_Elemets() {
     if (contacts_page_elements_resizing !== null) {
-        clearInterval(contacts_page_elements_resizing);
+        await clearInterval(contacts_page_elements_resizing);
     }
 }
 
-export function Set_Resize_Contacts_Page_Elemets() {
-    contacts_page_elements_resizing = setInterval(() => { Resize_Contacts_Page_Elemets(); }, 100)
+export async function Set_Resize_Contacts_Page_Elemets() {
+    contacts_page_elements_resizing = await setInterval(async () => { await window.requestAnimationFrame(async () => { Resize_Contacts_Page_Elemets() }); }, 100)
 }
 
 // [ END ]
@@ -356,7 +356,7 @@ export function Set_Resize_Contacts_Page_Elemets() {
 //
 // [ START ]
 
-function Button_Focus_Effect(element_id) {
+async function Button_Focus_Effect(element_id) {
     // GET THE SELECTED HTML BUTTON ELEMENT OF THE HOME PAGE CONTAINER
     let button_cover = document.getElementById(element_id);
 
@@ -373,16 +373,16 @@ function Button_Focus_Effect(element_id) {
                 button_cover.style.background = "linear-gradient(to right, rgba(61, 57, 50, " + current_alpha + "), rgba(91, 90, 90, " + current_alpha + "))";
             }
             catch {
-                clearInterval(home_page_button_focus);
+                await clearInterval(home_page_button_focus);
             }
         }
     }
 }
 
 // CLEAR THE "Set_Button_Focus_Effect" FUNCTION TO BE CALLED AT A CERTAIN INTERVAL
-export function Clear_Set_Button_Focus_Effect(element_id) {
+export async function Clear_Set_Button_Focus_Effect(element_id) {
     if (home_page_button_focus !== undefined) {
-        clearInterval(home_page_button_focus);
+        await clearInterval(home_page_button_focus);
     }
     let button_cover = document.getElementById(element_id);
     if (button_cover != null) {
@@ -391,9 +391,9 @@ export function Clear_Set_Button_Focus_Effect(element_id) {
 }
 
 // SET THE "Set_Button_Focus_Effect" FUNCTION TO BE CALLED AT A CERTAIN INTERVAL
-export function Set_Button_Focus_Effect(element_id) {
+export async function Set_Button_Focus_Effect(element_id) {
     current_alpha = 0.55;
-    home_page_button_focus = setInterval(() => { Button_Focus_Effect(element_id); }, 10);
+    home_page_button_focus = await setInterval(async () => { await window.requestAnimationFrame(async () => { Button_Focus_Effect(element_id); }); }, 10);
 }
 
 // [ END ]
@@ -415,7 +415,7 @@ export function Set_Button_Focus_Effect(element_id) {
 //
 //
 
-function AuthGradientFluctuation() {
+async function AuthGradientFluctuation() {
     let auth_jumbotron = document.getElementById("auth_jumbotron");
 
     if (auth_jumbotron !== null) {
@@ -446,15 +446,15 @@ function AuthGradientFluctuation() {
     }
 }
 
-export function ClearAuthGradientFluctuation() {
+export async function ClearAuthGradientFluctuation() {
     if (auth_gradient_fluctuation_interval != null) {
-        clearInterval(auth_gradient_fluctuation_interval);
+        await clearInterval(auth_gradient_fluctuation_interval);
     }
 }
 
-export function SetAuthGradientFluctuation() {
+export async function SetAuthGradientFluctuation() {
     current_auth_gradient = 60;
-    auth_gradient_fluctuation_interval = setInterval(() => { AuthGradientFluctuation(); }, 20)
+    auth_gradient_fluctuation_interval = await setInterval(async () => { await window.requestAnimationFrame(async () => { AuthGradientFluctuation(); }); }, 20)
 }
 
 // [ END ]
@@ -476,7 +476,7 @@ export function SetAuthGradientFluctuation() {
 //
 // [ START ]
 
-function BookingElementsContainerResize() {
+async function BookingElementsContainerResize() {
     // GET THE HALLS CONATINER ELEMENTS BAR HTML ELEMENT
     let halls_container = document.getElementById("halls_container");
 
@@ -498,15 +498,15 @@ function BookingElementsContainerResize() {
 }
 
 // CLEAR THE BookingElementsContainerResize INTERVAL
-export function ClearBookingElementsContainerResize() {
+export async function ClearBookingElementsContainerResize() {
     if (booking_elements_container_resize != null) {
-        clearInterval(booking_elements_container_resize);
+        await clearInterval(booking_elements_container_resize);
     }
 }
 
 // SET THE METHOD BookingElementsContainerResize TO BE CALLED AT A CERTAIN INTERVAL
-export function SetBookingElementsContainerResize() {
-    booking_elements_container_resize = setInterval(() => { BookingElementsContainerResize(); }, 20)
+export async function SetBookingElementsContainerResize() {
+    booking_elements_container_resize = await setInterval(async () => { await window.requestAnimationFrame(async () => { BookingElementsContainerResize(); }); }, 20)
 }
 
 // [ END ]
@@ -528,7 +528,7 @@ export function SetBookingElementsContainerResize() {
 //
 // [ START ]
 
-function BookingElementResize() {
+async function BookingElementResize() {
     // GET THE HALLS CONTAINER HTML ELEMENT
     let halls_container = document.getElementById("halls_container");
 
@@ -621,14 +621,14 @@ function BookingElementResize() {
 
     }
 }
-export function ClearSetBookingElementResize() {
+export async function ClearSetBookingElementResize() {
     if (booking_elements_container_resize != null) {
-        clearInterval(booking_elements_resize);
+        await clearInterval(booking_elements_resize);
     }
 }
 
-export function SetBookingElementResize() {
-    booking_elements_resize = setInterval(() => { BookingElementResize(); }, 1)
+export async function SetBookingElementResize() {
+    booking_elements_resize = await setInterval(async () => { await window.requestAnimationFrame(async () => { await BookingElementResize(); }); }, 1)
 }
 
 // [ END ]

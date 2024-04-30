@@ -276,10 +276,14 @@
                 payment_initial_time = DateTime.Now;
                 break;
             case Shared_Data.PaymentStatus.RequiresAction:
-                IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
-                await module.InvokeAsync<string>("StripeCache", result?.payment_intent_id_database_key, "Insert");
-                paymentSessionResult = result;
-                ConfirmPayment = true;
+                try
+                {
+                    IJSObjectReference module = await JS.InvokeAsync<IJSObjectReference>("import", "./Scripts/Actions.js");
+                    await module.InvokeAsync<string>("StripeCache", result?.payment_intent_id_database_key, "Insert");
+                    paymentSessionResult = result;
+                    ConfirmPayment = true;
+                }
+                catch { }
                 break;
         }
 
